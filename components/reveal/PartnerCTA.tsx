@@ -128,7 +128,7 @@ export default function PartnerCTA({ archetype, onViewDashboard, coupleId, isInv
       {isPartner2 ? (
         <div className="w-full flex flex-col gap-4">
           <a
-            href={`/couple/${coupleId}`}
+            href="/dashboard"
             className="flex items-center justify-center w-full py-4 px-8 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold text-base
               hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98] shadow-card"
           >

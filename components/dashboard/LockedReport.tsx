@@ -100,7 +100,7 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
           </p>
           {(isInvited || partner2Done) && coupleId ? (
             <a
-              href={`/couple/${coupleId}`}
+              href="/dashboard"
               className="mt-5 px-6 py-3 rounded-2xl bg-pp-accent text-pp-bg-dark text-sm font-semibold
                 hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]
                 focus:outline-none focus-visible:ring-2 focus-visible:ring-pp-accent/60"
@@ -171,7 +171,7 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
 
             {coupleId && (
               <a
-                href={`/couple/${coupleId}`}
+                href="/dashboard"
                 className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-2xl
                   border border-pp-secondary/30 text-pp-secondary text-sm font-medium
                   hover:border-pp-secondary/60 hover:text-white transition-colors active:scale-[0.98]"
