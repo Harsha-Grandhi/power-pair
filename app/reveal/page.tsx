@@ -74,6 +74,7 @@ export default function RevealPage() {
             archetype={archetypeResult.primary}
             onViewDashboard={handleViewDashboard}
             coupleId={state.coupleId}
+            isInvited={state.isInvited}
           />
         );
       default:

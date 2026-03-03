@@ -9,11 +9,12 @@ interface PartnerCTAProps {
   archetype: Archetype;
   onViewDashboard: () => void;
   coupleId?: string | null;
+  isInvited?: boolean;
 }
 
 type ShareState = 'idle' | 'loading' | 'shared' | 'copied' | 'failed';
 
-export default function PartnerCTA({ archetype, onViewDashboard, coupleId }: PartnerCTAProps) {
+export default function PartnerCTA({ archetype, onViewDashboard, coupleId, isInvited }: PartnerCTAProps) {
   const [visible, setVisible] = useState(false);
   const [shareState, setShareState] = useState<ShareState>('idle');
   const [nativeShare, setNativeShare] = useState(false);
@@ -63,7 +64,7 @@ export default function PartnerCTA({ archetype, onViewDashboard, coupleId }: Par
     return '';
   };
 
-  const isPartner2 = Boolean(coupleId);
+  const isPartner2 = Boolean(isInvited);
 
   return (
     <div

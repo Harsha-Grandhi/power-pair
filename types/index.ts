@@ -173,6 +173,7 @@ export interface AppState {
   currentRevealStep: number;
   profile: UserProfile | null;
   coupleId: string | null;
+  isInvited: boolean;
 }
 
 // ─── Question Types ────────────────────────────────────────────────────────────

@@ -25,6 +25,7 @@ const initialState: AppState = {
   currentRevealStep: 0,
   profile: null,
   coupleId: null,
+  isInvited: false,
 };
 
 // ─── Actions ───────────────────────────────────────────────────────────────────
@@ -38,6 +39,7 @@ type AppAction =
   | { type: 'SET_REVEAL_STEP'; payload: number }
   | { type: 'SET_PROFILE'; payload: UserProfile }
   | { type: 'SET_COUPLE_ID'; payload: string }
+  | { type: 'SET_IS_INVITED'; payload: boolean }
   | { type: 'RESTORE'; payload: Partial<AppState> }
   | { type: 'RESET' };
 
@@ -64,6 +66,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, profile: action.payload };
     case 'SET_COUPLE_ID':
       return { ...state, coupleId: action.payload };
+    case 'SET_IS_INVITED':
+      return { ...state, isInvited: action.payload };
     case 'RESTORE':
       return { ...state, ...action.payload };
     case 'RESET':
@@ -87,6 +91,7 @@ interface AppContextValue {
   advanceRevealStep: () => void;
   computeAndSaveProfile: () => Promise<UserProfile>;
   setCoupleId: (id: string) => void;
+  setIsInvited: (value: boolean) => void;
   resetApp: () => void;
 }
 
@@ -126,6 +131,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         currentAssessmentStep: state.currentAssessmentStep,
         currentRevealStep: state.currentRevealStep,
         coupleId: state.coupleId,
+        isInvited: state.isInvited,
       });
     }
   }, [state]);
@@ -205,6 +211,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     saveAppState({ coupleId: id });
   }, []);
 
+  const setIsInvited = useCallback((value: boolean) => {
+    dispatch({ type: 'SET_IS_INVITED', payload: value });
+    saveAppState({ isInvited: value });
+  }, []);
+
   const resetApp = useCallback(() => {
     clearAllStorage();
     dispatch({ type: 'RESET' });
@@ -223,6 +234,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       advanceRevealStep,
       computeAndSaveProfile,
       setCoupleId,
+      setIsInvited,
       resetApp,
     }),
     [
@@ -237,6 +249,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       advanceRevealStep,
       computeAndSaveProfile,
       setCoupleId,
+      setIsInvited,
       resetApp,
     ]
   );

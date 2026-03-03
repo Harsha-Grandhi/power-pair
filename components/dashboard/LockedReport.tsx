@@ -17,6 +17,7 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
   const nativeShare = typeof window !== 'undefined' && canNativeShare();
 
   const coupleId = state.coupleId;
+  const isInvited = state.isInvited;
   const inviteUrl =
     coupleId && typeof window !== 'undefined'
       ? `${window.location.origin}/invite/${coupleId}`
@@ -80,85 +81,98 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
         {/* Lock overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-pp-bg-dark/96 via-pp-bg-dark/72 to-transparent px-6 text-center">
           <div className="w-14 h-14 rounded-2xl bg-pp-primary/80 border border-pp-secondary/40 flex items-center justify-center mb-4 shadow-card">
-            <span className="text-2xl">🔒</span>
+            <span className="text-2xl">{isInvited ? '💑' : '🔒'}</span>
           </div>
           <h3 className="font-display text-xl text-white mb-2">Couple Chemistry Report</h3>
           <p className="text-sm text-pp-text-muted leading-relaxed max-w-xs">
-            Invite your partner to complete the quiz to unlock your shared compatibility
-            breakdown and growth roadmap.
+            {isInvited
+              ? 'Your couple results are ready. See how you and your partner match across all dimensions.'
+              : 'Invite your partner to complete the quiz to unlock your shared compatibility breakdown and growth roadmap.'}
           </p>
-          <button
-            onClick={() => setOpen((v) => !v)}
-            className="mt-5 px-6 py-3 rounded-2xl bg-pp-accent text-pp-bg-dark text-sm font-semibold
-              hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-pp-accent/60"
-          >
-            {open ? 'Close ✕' : 'Invite Partner →'}
-          </button>
-        </div>
-      </div>
-
-      {/* Expandable share panel */}
-      <div
-        className={`overflow-hidden transition-all duration-400 ease-out ${
-          open ? 'max-h-[30rem] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="px-5 py-5 border-t border-pp-secondary/20 bg-pp-card space-y-4">
-          <p className="text-xs text-pp-text-muted uppercase tracking-widest">
-            Send this to your partner
-          </p>
-
-          {/* Message preview */}
-          <div className="px-4 py-3 rounded-xl bg-pp-primary/60 border border-pp-secondary/25">
-            <p className="text-sm text-white/70 leading-relaxed italic">
-              &ldquo;{message}&rdquo;
-            </p>
-          </div>
-
-          {/* Copy / Share */}
-          <button
-            onClick={handleShare}
-            disabled={shareState === 'loading'}
-            className={[
-              'w-full py-3 px-5 rounded-2xl border text-sm font-medium transition-all duration-200 active:scale-[0.98]',
-              'focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed',
-              shareState === 'copied' || shareState === 'shared'
-                ? 'border-emerald-400/40 text-emerald-400 bg-emerald-400/8'
-                : shareState === 'failed'
-                ? 'border-red-400/40 text-red-400 bg-red-400/8'
-                : 'border-pp-secondary/40 text-pp-secondary hover:border-pp-secondary/70 hover:text-white',
-            ].join(' ')}
-          >
-            {copyLabel()}
-          </button>
-
-          {/* WhatsApp */}
-          <a
-            href={`https://wa.me/?text=${encodeURIComponent(message)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-2xl
-              bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-sm font-medium
-              hover:bg-[#25D366]/15 transition-colors active:scale-[0.98]"
-          >
-            <span>📱</span>
-            Share via WhatsApp
-          </a>
-
-          {/* View Couple Results link (shown when coupleId exists) */}
-          {coupleId && (
+          {isInvited && coupleId ? (
             <a
               href={`/couple/${coupleId}`}
-              className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-2xl
-                border border-pp-secondary/30 text-pp-secondary text-sm font-medium
-                hover:border-pp-secondary/60 hover:text-white transition-colors active:scale-[0.98]"
+              className="mt-5 px-6 py-3 rounded-2xl bg-pp-accent text-pp-bg-dark text-sm font-semibold
+                hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-pp-accent/60"
             >
-              💑 View Couple Results →
+              View Couple Results →
             </a>
+          ) : (
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="mt-5 px-6 py-3 rounded-2xl bg-pp-accent text-pp-bg-dark text-sm font-semibold
+                hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]
+                focus:outline-none focus-visible:ring-2 focus-visible:ring-pp-accent/60"
+            >
+              {open ? 'Close ✕' : 'Invite Partner →'}
+            </button>
           )}
         </div>
       </div>
+
+      {/* Expandable share panel — only for Partner 1 */}
+      {!isInvited && (
+        <div
+          className={`overflow-hidden transition-all duration-400 ease-out ${
+            open ? 'max-h-[30rem] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="px-5 py-5 border-t border-pp-secondary/20 bg-pp-card space-y-4">
+            <p className="text-xs text-pp-text-muted uppercase tracking-widest">
+              Send this to your partner
+            </p>
+
+            {/* Message preview */}
+            <div className="px-4 py-3 rounded-xl bg-pp-primary/60 border border-pp-secondary/25">
+              <p className="text-sm text-white/70 leading-relaxed italic">
+                &ldquo;{message}&rdquo;
+              </p>
+            </div>
+
+            {/* Copy / Share */}
+            <button
+              onClick={handleShare}
+              disabled={shareState === 'loading'}
+              className={[
+                'w-full py-3 px-5 rounded-2xl border text-sm font-medium transition-all duration-200 active:scale-[0.98]',
+                'focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed',
+                shareState === 'copied' || shareState === 'shared'
+                  ? 'border-emerald-400/40 text-emerald-400 bg-emerald-400/8'
+                  : shareState === 'failed'
+                  ? 'border-red-400/40 text-red-400 bg-red-400/8'
+                  : 'border-pp-secondary/40 text-pp-secondary hover:border-pp-secondary/70 hover:text-white',
+              ].join(' ')}
+            >
+              {copyLabel()}
+            </button>
+
+            {/* WhatsApp */}
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(message)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-2xl
+                bg-[#25D366]/10 border border-[#25D366]/30 text-[#25D366] text-sm font-medium
+                hover:bg-[#25D366]/15 transition-colors active:scale-[0.98]"
+            >
+              <span>📱</span>
+              Share via WhatsApp
+            </a>
+
+            {coupleId && (
+              <a
+                href={`/couple/${coupleId}`}
+                className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-2xl
+                  border border-pp-secondary/30 text-pp-secondary text-sm font-medium
+                  hover:border-pp-secondary/60 hover:text-white transition-colors active:scale-[0.98]"
+              >
+                💑 View Couple Results →
+              </a>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

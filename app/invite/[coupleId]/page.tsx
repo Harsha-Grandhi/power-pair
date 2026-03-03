@@ -10,7 +10,7 @@ type LoadState = 'loading' | 'found' | 'not_found';
 export default function InvitePage() {
   const params = useParams();
   const router = useRouter();
-  const { setCoupleId } = useApp();
+  const { setCoupleId, setIsInvited } = useApp();
 
   const coupleId = typeof params.coupleId === 'string' ? params.coupleId : '';
   const [loadState, setLoadState] = useState<LoadState>('loading');
@@ -28,6 +28,7 @@ export default function InvitePage() {
       } else {
         setPartnerName(partner1Name ?? partner1?.introContext.name ?? null);
         setCoupleId(coupleId);
+        setIsInvited(true);
         setLoadState('found');
       }
     });
