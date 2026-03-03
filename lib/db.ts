@@ -37,6 +37,7 @@ export async function saveProfileToSupabase(profile: UserProfile): Promise<void>
         assessment_answers:  profile.assessmentAnswers,
         dimension_scores:    profile.dimensionScores,
         love_style:          profile.loveStyle,
+        full_profile:        profile,
 
         // Archetype top-level columns (easy to query/filter in Supabase dashboard)
         archetype_id:        profile.archetypeResult.primary.id,

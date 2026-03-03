@@ -73,6 +73,7 @@ export default function RevealPage() {
           <PartnerCTA
             archetype={archetypeResult.primary}
             onViewDashboard={handleViewDashboard}
+            coupleId={state.coupleId}
           />
         );
       default:

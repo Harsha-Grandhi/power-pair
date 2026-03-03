@@ -133,6 +133,27 @@ export interface UserProfile {
   archetypeResult: ArchetypeResult;
 }
 
+// ─── Couple Compatibility Types ────────────────────────────────────────────────
+
+export interface DimensionComparison {
+  dimension: string;
+  name: string;
+  icon: string;
+  p1Score: number;
+  p2Score: number;
+  similarity: number;
+}
+
+export interface CoupleCompatibility {
+  overallScore: number;
+  dimensions: DimensionComparison[];
+  loveStyleMatch: boolean;
+  loveStyleNote: string;
+  archetypePairingNote: string;
+  strengthsTogether: string[];
+  growthTogether: string[];
+}
+
 // ─── App Navigation ────────────────────────────────────────────────────────────
 
 export type AppPhase =
@@ -151,6 +172,7 @@ export interface AppState {
   currentAssessmentStep: number;
   currentRevealStep: number;
   profile: UserProfile | null;
+  coupleId: string | null;
 }
 
 // ─── Question Types ────────────────────────────────────────────────────────────

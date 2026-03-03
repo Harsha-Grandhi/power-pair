@@ -80,7 +80,7 @@ export default function AssessmentPage() {
           setIsSubmitting(true);
           // Processing animation delay
           await new Promise((r) => setTimeout(r, 1300));
-          computeAndSaveProfile();
+          await computeAndSaveProfile();
           setPhase('reveal');
           router.push('/reveal');
         } else {

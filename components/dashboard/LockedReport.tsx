@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { shareOrCopy, getInviteMessage, canNativeShare } from '@/lib/share';
+import { useApp } from '@/contexts/AppContext';
 
 interface LockedReportProps {
   archetypeName?: string;
@@ -12,14 +13,21 @@ type ShareState = 'idle' | 'loading' | 'shared' | 'copied' | 'failed';
 export default function LockedReport({ archetypeName = 'Balanced Romantic' }: LockedReportProps) {
   const [open, setOpen] = useState(false);
   const [shareState, setShareState] = useState<ShareState>('idle');
+  const { state } = useApp();
   const nativeShare = typeof window !== 'undefined' && canNativeShare();
 
-  const message = getInviteMessage(archetypeName);
+  const coupleId = state.coupleId;
+  const inviteUrl =
+    coupleId && typeof window !== 'undefined'
+      ? `${window.location.origin}/invite/${coupleId}`
+      : undefined;
+
+  const message = getInviteMessage(archetypeName, inviteUrl);
 
   const handleShare = async () => {
     if (shareState === 'loading') return;
     setShareState('loading');
-    const result = await shareOrCopy(message);
+    const result = await shareOrCopy(message, inviteUrl);
     if (result === 'failed') {
       setShareState('failed');
       setTimeout(() => setShareState('idle'), 2500);
@@ -93,7 +101,7 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
       {/* Expandable share panel */}
       <div
         className={`overflow-hidden transition-all duration-400 ease-out ${
-          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          open ? 'max-h-[30rem] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="px-5 py-5 border-t border-pp-secondary/20 bg-pp-card space-y-4">
@@ -137,6 +145,18 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
             <span>📱</span>
             Share via WhatsApp
           </a>
+
+          {/* View Couple Results link (shown when coupleId exists) */}
+          {coupleId && (
+            <a
+              href={`/couple/${coupleId}`}
+              className="flex items-center justify-center gap-2 w-full py-3 px-5 rounded-2xl
+                border border-pp-secondary/30 text-pp-secondary text-sm font-medium
+                hover:border-pp-secondary/60 hover:text-white transition-colors active:scale-[0.98]"
+            >
+              💑 View Couple Results →
+            </a>
+          )}
         </div>
       </div>
     </div>

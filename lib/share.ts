@@ -53,8 +53,9 @@ export async function shareOrCopy(
   }
 }
 
-export function getInviteMessage(archetypeName: string): string {
-  return `I just discovered I'm a "${archetypeName}" on Power Pair — a relationship intelligence app. Take the 10-min quiz and let's see our couple compatibility! 💑`;
+export function getInviteMessage(archetypeName: string, inviteUrl?: string): string {
+  const urlPart = inviteUrl ? `\n\nTake the 10-min quiz here: ${inviteUrl}` : '';
+  return `I just discovered I'm a "${archetypeName}" on Power Pair — a relationship intelligence app. Take the 10-min quiz and let's see our couple compatibility! 💑${urlPart}`;
 }
 
 /** True if the browser supports the native share sheet */

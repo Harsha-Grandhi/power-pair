@@ -12,6 +12,7 @@ import { AppState, AppPhase, IntroContext, AssessmentAnswers, UserProfile } from
 import { computeAllScores } from '@/lib/scoring';
 import { saveProfile, loadProfile, saveAppState, loadAppState, clearAllStorage } from '@/lib/storage';
 import { saveProfileToSupabase } from '@/lib/db';
+import { createCoupleRecord, linkPartner2ToCoupleRecord } from '@/lib/couples';
 
 // ─── Initial State ─────────────────────────────────────────────────────────────
 
@@ -23,6 +24,7 @@ const initialState: AppState = {
   currentAssessmentStep: 0,
   currentRevealStep: 0,
   profile: null,
+  coupleId: null,
 };
 
 // ─── Actions ───────────────────────────────────────────────────────────────────
@@ -35,6 +37,7 @@ type AppAction =
   | { type: 'SET_ASSESSMENT_STEP'; payload: number }
   | { type: 'SET_REVEAL_STEP'; payload: number }
   | { type: 'SET_PROFILE'; payload: UserProfile }
+  | { type: 'SET_COUPLE_ID'; payload: string }
   | { type: 'RESTORE'; payload: Partial<AppState> }
   | { type: 'RESET' };
 
@@ -59,6 +62,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
       return { ...state, currentRevealStep: action.payload };
     case 'SET_PROFILE':
       return { ...state, profile: action.payload };
+    case 'SET_COUPLE_ID':
+      return { ...state, coupleId: action.payload };
     case 'RESTORE':
       return { ...state, ...action.payload };
     case 'RESET':
@@ -80,7 +85,8 @@ interface AppContextValue {
   advanceIntroStep: () => void;
   advanceAssessmentStep: () => void;
   advanceRevealStep: () => void;
-  computeAndSaveProfile: () => UserProfile;
+  computeAndSaveProfile: () => Promise<UserProfile>;
+  setCoupleId: (id: string) => void;
   resetApp: () => void;
 }
 
@@ -101,6 +107,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       // If assessment was completed, restore to dashboard
       if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
         dispatch({ type: 'RESTORE', payload: { ...savedState, profile: savedProfile } });
+      } else if (savedState?.coupleId) {
+        dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
       }
     } else if (savedState) {
       dispatch({ type: 'RESTORE', payload: savedState });
@@ -117,6 +125,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         currentIntroStep: state.currentIntroStep,
         currentAssessmentStep: state.currentAssessmentStep,
         currentRevealStep: state.currentRevealStep,
+        coupleId: state.coupleId,
       });
     }
   }, [state]);
@@ -153,7 +162,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'SET_REVEAL_STEP', payload: state.currentRevealStep + 1 });
   }, [state.currentRevealStep]);
 
-  const computeAndSaveProfile = useCallback((): UserProfile => {
+  const computeAndSaveProfile = useCallback(async (): Promise<UserProfile> => {
     const { dimensionScores, loveStyle, archetypeResult } = computeAllScores(
       state.assessmentAnswers
     );
@@ -171,9 +180,30 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     dispatch({ type: 'SET_PROFILE', payload: profile });
     saveProfile(profile);                       // localStorage (instant, offline-first)
-    saveProfileToSupabase(profile);             // Supabase (async, non-blocking)
+    await saveProfileToSupabase(profile);       // Supabase (await so couple linking runs after)
+
+    if (state.coupleId) {
+      // Partner 2 flow — link to existing couple
+      await linkPartner2ToCoupleRecord(state.coupleId, profile.id);
+    } else {
+      // Partner 1 flow — create new couple record
+      const newCoupleId = await createCoupleRecord(
+        profile.id,
+        profile.introContext.name ?? null
+      );
+      if (newCoupleId) {
+        dispatch({ type: 'SET_COUPLE_ID', payload: newCoupleId });
+        saveAppState({ coupleId: newCoupleId });
+      }
+    }
+
     return profile;
-  }, [state.assessmentAnswers, state.introContext]);
+  }, [state.assessmentAnswers, state.introContext, state.coupleId]);
+
+  const setCoupleId = useCallback((id: string) => {
+    dispatch({ type: 'SET_COUPLE_ID', payload: id });
+    saveAppState({ coupleId: id });
+  }, []);
 
   const resetApp = useCallback(() => {
     clearAllStorage();
@@ -192,6 +222,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       advanceAssessmentStep,
       advanceRevealStep,
       computeAndSaveProfile,
+      setCoupleId,
       resetApp,
     }),
     [
@@ -205,6 +236,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       advanceAssessmentStep,
       advanceRevealStep,
       computeAndSaveProfile,
+      setCoupleId,
       resetApp,
     ]
   );
