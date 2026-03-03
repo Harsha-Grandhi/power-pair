@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { shareOrCopy, getInviteMessage, canNativeShare } from '@/lib/share';
+import { checkCoupleComplete } from '@/lib/couples';
 import { useApp } from '@/contexts/AppContext';
 
 interface LockedReportProps {
@@ -13,11 +14,19 @@ type ShareState = 'idle' | 'loading' | 'shared' | 'copied' | 'failed';
 export default function LockedReport({ archetypeName = 'Balanced Romantic' }: LockedReportProps) {
   const [open, setOpen] = useState(false);
   const [shareState, setShareState] = useState<ShareState>('idle');
+  const [partner2Done, setPartner2Done] = useState(false);
   const { state } = useApp();
   const nativeShare = typeof window !== 'undefined' && canNativeShare();
 
   const coupleId = state.coupleId;
   const isInvited = state.isInvited;
+
+  // Partner 1 only: check if Partner 2 has completed on mount
+  useEffect(() => {
+    if (coupleId && !isInvited) {
+      checkCoupleComplete(coupleId).then(setPartner2Done);
+    }
+  }, [coupleId, isInvited]);
   const inviteUrl =
     coupleId && typeof window !== 'undefined'
       ? `${window.location.origin}/invite/${coupleId}`
@@ -81,15 +90,15 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
         {/* Lock overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-pp-bg-dark/96 via-pp-bg-dark/72 to-transparent px-6 text-center">
           <div className="w-14 h-14 rounded-2xl bg-pp-primary/80 border border-pp-secondary/40 flex items-center justify-center mb-4 shadow-card">
-            <span className="text-2xl">{isInvited ? '💑' : '🔒'}</span>
+            <span className="text-2xl">{isInvited || partner2Done ? '💑' : '🔒'}</span>
           </div>
           <h3 className="font-display text-xl text-white mb-2">Couple Chemistry Report</h3>
           <p className="text-sm text-pp-text-muted leading-relaxed max-w-xs">
-            {isInvited
+            {isInvited || partner2Done
               ? 'Your couple results are ready. See how you and your partner match across all dimensions.'
               : 'Invite your partner to complete the quiz to unlock your shared compatibility breakdown and growth roadmap.'}
           </p>
-          {isInvited && coupleId ? (
+          {(isInvited || partner2Done) && coupleId ? (
             <a
               href={`/couple/${coupleId}`}
               className="mt-5 px-6 py-3 rounded-2xl bg-pp-accent text-pp-bg-dark text-sm font-semibold
@@ -111,8 +120,8 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
         </div>
       </div>
 
-      {/* Expandable share panel — only for Partner 1 */}
-      {!isInvited && (
+      {/* Expandable share panel — only for Partner 1 while Partner 2 hasn't finished */}
+      {!isInvited && !partner2Done && (
         <div
           className={`overflow-hidden transition-all duration-400 ease-out ${
             open ? 'max-h-[30rem] opacity-100' : 'max-h-0 opacity-0'

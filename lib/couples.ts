@@ -88,6 +88,34 @@ export async function linkPartner2ToCoupleRecord(
 }
 
 /**
+ * Checks whether Partner 2 has completed their quiz for a given coupleId.
+ * Returns true if partner_2_id is set on the couple row.
+ */
+export async function checkCoupleComplete(coupleId: string): Promise<boolean> {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return false;
+  }
+
+  try {
+    const { supabase } = await import('./supabase');
+
+    const { data, error } = await supabase
+      .from('power_pair_couples')
+      .select('partner_2_id')
+      .eq('id', coupleId)
+      .single();
+
+    if (error || !data) return false;
+    return Boolean(data.partner_2_id);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Fetches both partner profiles for a given coupleId.
  * Returns { partner1, partner2, partner1Name } — either profile may be null.
  */
