@@ -39,8 +39,15 @@ export function getTodayPrompt(): { prompt: string; date: string } {
   const diff = today.getTime() - start.getTime();
   const dayOfYear = Math.floor(diff / 86400000);
   const prompt = PROMPTS[dayOfYear % PROMPTS.length];
-  const date = today.toISOString().split('T')[0]; // YYYY-MM-DD
+  const date = today.toISOString().split('T')[0];
   return { prompt, date };
+}
+
+export function getPromptForDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  const start = new Date(d.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((d.getTime() - start.getTime()) / 86400000);
+  return PROMPTS[dayOfYear % PROMPTS.length];
 }
 
 // ── Supabase types + CRUD ────────────────────────────────────────────────────
@@ -97,6 +104,25 @@ export async function submitAnswer(
     return data as PromptAnswer;
   } catch {
     return null;
+  }
+}
+
+/** Fetch all answers across all dates for history view. */
+export async function fetchAnswersHistory(coupleId: string, limit = 60): Promise<PromptAnswer[]> {
+  const sb = await getSupabase();
+  if (!sb) return [];
+  try {
+    const { data, error } = await sb
+      .from('power_pair_prompt_answers')
+      .select('*')
+      .eq('couple_id', coupleId)
+      .order('prompt_date', { ascending: false })
+      .order('answered_at', { ascending: true })
+      .limit(limit);
+    if (error) return [];
+    return (data ?? []) as PromptAnswer[];
+  } catch {
+    return [];
   }
 }
 
