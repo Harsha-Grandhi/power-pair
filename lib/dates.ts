@@ -130,10 +130,35 @@ export async function uploadDatePhoto(
       return null;
     }
 
-    const { data } = sb.storage.from('date-photos').getPublicUrl(path);
-    return data.publicUrl;
+    // Return the storage path — signed URLs are generated separately for display
+    return path;
   } catch (e) {
     console.error('[PowerPair] uploadDatePhoto failed:', e);
     return null;
   }
+}
+
+/**
+ * Converts storage paths into signed URLs valid for 1 hour.
+ * Handles legacy entries that are already full URLs (passes them through unchanged).
+ */
+export async function getSignedPhotoUrls(paths: string[]): Promise<string[]> {
+  const sb = await getSupabase();
+  if (!sb || paths.length === 0) return [];
+
+  const results = await Promise.all(
+    paths.map(async (path) => {
+      if (path.startsWith('http')) return path; // legacy public URL — pass through
+      const { data, error } = await sb.storage
+        .from('date-photos')
+        .createSignedUrl(path, 3600);
+      if (error) {
+        console.error('[PowerPair] createSignedUrl error:', error.message);
+        return null;
+      }
+      return data?.signedUrl ?? null;
+    })
+  );
+
+  return results.filter(Boolean) as string[];
 }

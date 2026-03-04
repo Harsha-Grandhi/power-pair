@@ -9,9 +9,12 @@ import CoupleHomeTab from '@/components/home/CoupleHomeTab';
 import LockedReport from '@/components/dashboard/LockedReport';
 import TimeSelector from '@/components/wheel/TimeSelector';
 import SpinWheel from '@/components/wheel/SpinWheel';
+import JourneyListView from '@/components/journeys/JourneyListView';
 import { DateDuration, getDateIdeasForCouple } from '@/lib/dateIdeas';
 import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
 import { fetchCoupleProfiles } from '@/lib/couples';
+import { getAllEnrollments, JourneyEnrollment } from '@/lib/journeyProgress';
+import { Journey } from '@/lib/journeys';
 
 type WheelStep = 'list' | 'time' | 'spin';
 
@@ -29,6 +32,10 @@ export default function DashboardPage() {
   const [savedDates, setSavedDates] = useState<DateRecord[]>([]);
   const [datesLoading, setDatesLoading] = useState(false);
   const [creatingDate, setCreatingDate] = useState(false);
+
+  // Journeys state
+  const [journeyEnrollments, setJourneyEnrollments] = useState<JourneyEnrollment[]>([]);
+  const [enrollmentsLoaded, setEnrollmentsLoaded] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -64,6 +71,16 @@ export default function DashboardPage() {
       }
     }
   }, [activeTab, state.coupleId, savedDates.length, datesLoading, partnerArchetype, state.isInvited]);
+
+  // Load journey enrollments when journeys tab opens
+  useEffect(() => {
+    if (activeTab === 'journeys' && state.coupleId && !enrollmentsLoaded) {
+      getAllEnrollments(state.coupleId).then((enrollments) => {
+        setJourneyEnrollments(enrollments);
+        setEnrollmentsLoaded(true);
+      });
+    }
+  }, [activeTab, state.coupleId, enrollmentsLoaded]);
 
   if (!mounted || !state.profile) return null;
 
@@ -247,7 +264,13 @@ export default function DashboardPage() {
     switch (activeTab) {
       case 'home':      return renderHome();
       case 'wheel':     return renderWheelTab();
-      case 'journeys':  return renderPlaceholder('🗺️', 'Journeys', 'Guided growth paths for you and your partner.');
+      case 'journeys':  return (
+        <JourneyListView
+          enrollments={journeyEnrollments}
+          coupleId={coupleId ?? null}
+          onSelect={(journey: Journey) => router.push(`/journey/${journey.id}`)}
+        />
+      );
       case 'counselor': return renderPlaceholder('💬', 'AI Coach', 'Personalised relationship guidance powered by AI.');
     }
   };
@@ -309,6 +332,7 @@ export default function DashboardPage() {
         onClose={() => setProfileOpen(false)}
         profile={profile}
         onReset={handleReset}
+        earnedBadges={journeyEnrollments}
       />
     </>
   );

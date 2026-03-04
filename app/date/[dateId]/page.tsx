@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { fetchDateById, updateDate, uploadDatePhoto, DateRecord } from '@/lib/dates';
+import { fetchDateById, updateDate, uploadDatePhoto, getSignedPhotoUrls, DateRecord } from '@/lib/dates';
 
 export default function DateDetailPage() {
   const params = useParams();
@@ -16,13 +16,18 @@ export default function DateDetailPage() {
   const [saved, setSaved] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [completing, setCompleting] = useState(false);
+  const [signedUrls, setSignedUrls] = useState<string[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!dateId) { setLoading(false); return; }
-    fetchDateById(dateId).then((d) => {
+    fetchDateById(dateId).then(async (d) => {
       setDate(d);
       setNotes(d?.notes ?? '');
+      if (d?.photo_urls?.length) {
+        const urls = await getSignedPhotoUrls(d.photo_urls);
+        setSignedUrls(urls);
+      }
       setLoading(false);
     });
   }, [dateId]);
@@ -40,11 +45,14 @@ export default function DateDetailPage() {
     const file = e.target.files?.[0];
     if (!file || !date) return;
     setUploading(true);
-    const url = await uploadDatePhoto(dateId, file);
-    if (url) {
-      const updated = [...(date.photo_urls ?? []), url];
-      await updateDate(dateId, { photo_urls: updated });
-      setDate({ ...date, photo_urls: updated });
+    const path = await uploadDatePhoto(dateId, file);
+    if (path) {
+      const updatedPaths = [...(date.photo_urls ?? []), path];
+      await updateDate(dateId, { photo_urls: updatedPaths });
+      setDate({ ...date, photo_urls: updatedPaths });
+      // Generate a signed URL so the new photo displays immediately
+      const [newSignedUrl] = await getSignedPhotoUrls([path]);
+      if (newSignedUrl) setSignedUrls((prev) => [...prev, newSignedUrl]);
     }
     setUploading(false);
     if (fileRef.current) fileRef.current.value = '';
@@ -127,9 +135,9 @@ export default function DateDetailPage() {
         <section className="rounded-2xl border border-white/8 bg-white/3 p-4 space-y-3">
           <p className="text-xs text-pp-text-muted uppercase tracking-widest">Photos</p>
 
-          {(date.photo_urls ?? []).length > 0 && (
+          {signedUrls.length > 0 && (
             <div className="grid grid-cols-3 gap-2">
-              {date.photo_urls.map((url, i) => (
+              {signedUrls.map((url, i) => (
                 <div key={i} className="aspect-square rounded-xl overflow-hidden bg-white/5">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={url} alt={`Date photo ${i + 1}`} className="w-full h-full object-cover" />

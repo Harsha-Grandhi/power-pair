@@ -5,15 +5,22 @@ import { UserProfile } from '@/types';
 import ArchetypeCard from '@/components/dashboard/ArchetypeCard';
 import DimensionCard from '@/components/dashboard/DimensionCard';
 import LoveStyleBreakdown from '@/components/dashboard/LoveStyleBreakdown';
+import { JOURNEYS } from '@/lib/journeys';
+
+interface EarnedBadge {
+  journey_id: string;
+  badge_earned: boolean;
+}
 
 interface ProfileDrawerProps {
   open: boolean;
   onClose: () => void;
   profile: UserProfile;
   onReset: () => void;
+  earnedBadges?: EarnedBadge[];
 }
 
-export default function ProfileDrawer({ open, onClose, profile, onReset }: ProfileDrawerProps) {
+export default function ProfileDrawer({ open, onClose, profile, onReset, earnedBadges }: ProfileDrawerProps) {
   const { archetypeResult, dimensionScores, loveStyle, introContext } = profile;
   const { primary } = archetypeResult;
 
@@ -131,6 +138,37 @@ export default function ProfileDrawer({ open, onClose, profile, onReset }: Profi
               ))}
             </div>
           </div>
+
+          {/* Journey Badges */}
+          {earnedBadges && earnedBadges.some((b) => b.badge_earned) && (
+            <div>
+              <p className="text-xs text-pp-text-muted uppercase tracking-widest mb-3">
+                Journey Badges
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {earnedBadges
+                  .filter((b) => b.badge_earned)
+                  .map((b) => {
+                    const journey = JOURNEYS.find((j) => j.id === b.journey_id);
+                    if (!journey) return null;
+                    return (
+                      <div
+                        key={b.journey_id}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl border text-sm"
+                        style={{
+                          background: `${journey.badge.color}10`,
+                          borderColor: `${journey.badge.color}30`,
+                        }}
+                        title={journey.title}
+                      >
+                        <span>{journey.badge.emoji}</span>
+                        <span className="text-xs text-white/70">{journey.badge.label}</span>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
 
           {/* Retake */}
           <div className="pt-2 text-center">
