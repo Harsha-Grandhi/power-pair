@@ -36,6 +36,14 @@ export default function DashboardPage() {
     if (mounted && !state.profile) router.replace('/');
   }, [mounted, state.profile, router]);
 
+  // ── Wheel handlers — must be before early return (Rules of Hooks) ─────────────
+
+  const handleSelectDuration = useCallback((duration: DateDuration) => {
+    if (!state.coupleId || !state.profile) return;
+    setSelectedDuration(duration);
+    setWheelStep('spin');
+  }, [state.coupleId, state.profile]);
+
   // Load saved dates + partner archetype when wheel tab opens
   useEffect(() => {
     if (activeTab === 'wheel' && state.coupleId) {
@@ -68,19 +76,6 @@ export default function DashboardPage() {
     resetApp();
     router.replace('/');
   };
-
-  // ── Wheel handlers ───────────────────────────────────────────────────────────
-
-  const handleSelectDuration = useCallback((duration: DateDuration) => {
-    if (!coupleId || !profile) return;
-
-    // We don't know partner's archetype from context — use primary as both if no couple data
-    // In reality fetchCoupleProfiles would give partner's archetype; for now we use what we have
-    // The CoupleHomeTab already fetches partners — here we pass profile's archetype as p1
-    // and use a placeholder for p2 until we have both. We filter just by p1 archetype pattern.
-    setSelectedDuration(duration);
-    setWheelStep('spin');
-  }, [coupleId, profile]);
 
   const handleWheelBack = () => {
     setWheelStep('time');
