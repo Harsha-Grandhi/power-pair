@@ -9,6 +9,7 @@ import LockedReport from '@/components/dashboard/LockedReport';
 import { fetchRelationshipStart } from '@/lib/coupleExtra';
 import { fetchSpecialDays, daysUntil } from '@/lib/specialDays';
 import { getTodayPrompt, fetchStreak, fetchTodayAnswers } from '@/lib/dailyPrompts';
+import { fetchChallengesForCouple, Challenge } from '@/lib/challenges';
 
 interface CoupleHomeTabProps {
   coupleId: string;
@@ -83,6 +84,7 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const [nextSpecial, setNextSpecial] = useState<{ title: string; daysAway: number } | null>(null);
   const [streak, setStreak] = useState(0);
   const [answeredToday, setAnsweredToday] = useState(false);
+  const [activeChallenges, setActiveChallenges] = useState<Challenge[]>([]);
 
   useEffect(() => {
     fetchCoupleProfiles(coupleId).then(({ partner1: p1, partner2: p2, partner1Name: name }) => {
@@ -108,7 +110,8 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       fetchSpecialDays(coupleId),
       fetchStreak(coupleId),
       fetchTodayAnswers(coupleId, date),
-    ]).then(([startDate, specialDays, s, todayAnswers]) => {
+      fetchChallengesForCouple(coupleId),
+    ]).then(([startDate, specialDays, s, todayAnswers, challenges]) => {
       if (startDate) setDaysCount(daysSince(startDate));
       const upcoming = specialDays
         .filter((d) => daysUntil(d.date) >= 0)
@@ -118,6 +121,7 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       }
       setStreak(s);
       setAnsweredToday(todayAnswers.some((a) => a.author_id === currentProfile.id));
+      setActiveChallenges(challenges.filter((c) => c.status === 'active'));
     });
   }, [fetchState, coupleId, currentProfile.id]);
 
@@ -265,7 +269,25 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
         gradientFrom="from-red-400/8"
         gradientTo="to-pp-accent/6"
       >
-        <p className="text-sm text-white/80 font-medium mt-0.5">Challenge your partner</p>
+        {activeChallenges.length > 0 ? (
+          <div className="mt-0.5 space-y-1.5">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-red-400">
+                {activeChallenges.length} active {activeChallenges.length === 1 ? 'challenge' : 'challenges'}
+              </span>
+            </div>
+            {activeChallenges.slice(0, 2).map((c) => (
+              <p key={c.id} className="text-xs text-white/70 leading-snug truncate">
+                · {c.challenge_text}
+              </p>
+            ))}
+            {activeChallenges.length > 2 && (
+              <p className="text-[10px] text-pp-text-muted">+{activeChallenges.length - 2} more</p>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-white/50 mt-0.5">No active challenges — send one!</p>
+        )}
       </NavBanner>
 
     </div>
