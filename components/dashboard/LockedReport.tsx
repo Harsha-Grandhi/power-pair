@@ -15,11 +15,20 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
   const [open, setOpen] = useState(false);
   const [shareState, setShareState] = useState<ShareState>('idle');
   const [partner2Done, setPartner2Done] = useState(false);
+  const [nativeShare, setNativeShare] = useState(false);
+  const [inviteUrl, setInviteUrl] = useState<string | undefined>(undefined);
   const { state } = useApp();
-  const nativeShare = typeof window !== 'undefined' && canNativeShare();
 
   const coupleId = state.coupleId;
   const isInvited = state.isInvited;
+
+  // Resolve browser-only values after mount to avoid hydration mismatch
+  useEffect(() => {
+    setNativeShare(canNativeShare());
+    if (coupleId) {
+      setInviteUrl(`${window.location.origin}/invite/${coupleId}`);
+    }
+  }, [coupleId]);
 
   // Partner 1 only: check if Partner 2 has completed on mount
   useEffect(() => {
@@ -27,10 +36,6 @@ export default function LockedReport({ archetypeName = 'Balanced Romantic' }: Lo
       checkCoupleComplete(coupleId).then(setPartner2Done);
     }
   }, [coupleId, isInvited]);
-  const inviteUrl =
-    coupleId && typeof window !== 'undefined'
-      ? `${window.location.origin}/invite/${coupleId}`
-      : undefined;
 
   const message = getInviteMessage(archetypeName, inviteUrl);
 
