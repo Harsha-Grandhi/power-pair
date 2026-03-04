@@ -239,13 +239,24 @@ export default function DashboardPage() {
       );
     }
     return (
-      <div className="px-5 py-6 space-y-5">
-        <div className="pt-2 space-y-1">
-          <p className="text-xs text-pp-text-muted uppercase tracking-widest">Your Match</p>
-          <h2 className="font-display text-2xl text-white">Couple Chemistry</h2>
-          <p className="text-sm text-pp-text-muted leading-relaxed">
-            Invite your partner to unlock your compatibility breakdown.
-          </p>
+      <div className="px-5 py-6 space-y-4">
+        {/* Static banner — no couple yet */}
+        <div className="rounded-2xl border border-white/10 bg-white/3 p-4 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-pp-card border border-pp-secondary/25 flex items-center justify-center flex-shrink-0">
+            <span className="text-xl">💑</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-xs font-medium tracking-[0.18em] text-pp-accent uppercase">
+              Couple Chemistry
+            </span>
+            <p className="text-sm text-white/80 font-medium mt-0.5 leading-tight">Invite your partner</p>
+            <p className="text-xs text-pp-text-muted mt-0.5">Unlock your compatibility breakdown together</p>
+          </div>
+          <div className="text-pp-text-muted/40 flex-shrink-0">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
         </div>
         <LockedReport archetypeName={primary.name} />
       </div>
