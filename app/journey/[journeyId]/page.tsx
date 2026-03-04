@@ -94,6 +94,7 @@ export default function JourneyPage() {
     if (!coupleId || isStarting) return;
     setIsStarting(true);
     const enroll = await startJourney(coupleId, journeyId);
+    console.log('[Journey] startJourney result:', enroll, 'coupleId:', coupleId, 'journeyId:', journeyId);
     if (enroll) {
       setEnrollment(enroll);
       setActiveDay(1);
@@ -101,9 +102,9 @@ export default function JourneyPage() {
     setIsStarting(false);
   }, [coupleId, journeyId, isStarting]);
 
-  const handleSoloSubmit = useCallback(async (response: string) => {
+  const handleSoloSubmit = useCallback(async (responses: string[]) => {
     if (!coupleId) return;
-    await saveSoloResponse(coupleId, journeyId, activeDay, isPartner2, response);
+    await saveSoloResponse(coupleId, journeyId, activeDay, isPartner2, responses);
     await refreshDay(activeDay);
   }, [coupleId, journeyId, activeDay, isPartner2, refreshDay]);
 

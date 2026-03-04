@@ -137,9 +137,10 @@ export async function startJourney(
       .select()
       .single();
 
-    if (error) return null;
+    if (error) { console.error('[Journey] startJourney error:', error); return null; }
     return data as JourneyEnrollment;
-  } catch {
+  } catch (e) {
+    console.error('[Journey] startJourney exception:', e);
     return null;
   }
 }
@@ -248,12 +249,13 @@ export async function saveSoloResponse(
   journeyId: string,
   dayNumber: number,
   isPartner2: boolean,
-  response: string
+  responses: string[]
 ): Promise<boolean> {
   const sb = await getSupabase();
   if (!sb) return false;
 
   const column = isPartner2 ? 'partner2_solo_response' : 'partner1_solo_response';
+  const response = JSON.stringify(responses);
 
   // Also auto-check the first checkbox (solo written) for this partner
   const journey = getJourneyById(journeyId);
