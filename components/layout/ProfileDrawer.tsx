@@ -170,15 +170,6 @@ export default function ProfileDrawer({ open, onClose, profile, onReset, earnedB
             </div>
           )}
 
-          {/* Retake */}
-          <div className="pt-2 text-center">
-            <button
-              onClick={onReset}
-              className="text-xs text-pp-text-muted hover:text-white/60 transition-colors underline underline-offset-2"
-            >
-              Retake assessment
-            </button>
-          </div>
         </div>
       </div>
     </>
