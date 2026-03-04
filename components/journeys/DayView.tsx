@@ -58,26 +58,103 @@ function parseSoloResponses(raw: string | null): string[] {
 
 function SoloPromptTask({
   task,
-  taskIndex,
   myResponses,
   partnerResponses,
   partnerName,
   soloTexts,
   onTextChange,
-  isSubmitted,
+  onSubmitPrompt,
 }: {
   task: DayTask;
-  taskIndex: number;
   myResponses: string[];
   partnerResponses: string[];
   partnerName: string;
   soloTexts: string[];
   onTextChange: (idx: number, value: string) => void;
-  isSubmitted: boolean;
+  onSubmitPrompt: (idx: number) => Promise<void>;
 }) {
   const prompts = task.prompts ?? [];
-  const partnerSubmitted = partnerResponses.length > 0 && partnerResponses.every((r) => r.trim());
-  const bothSubmitted = isSubmitted && partnerSubmitted;
+  const [submitting, setSubmitting] = useState<Record<number, boolean>>({});
+
+  const handleSubmit = async (pIdx: number) => {
+    setSubmitting((s) => ({ ...s, [pIdx]: true }));
+    await onSubmitPrompt(pIdx);
+    setSubmitting((s) => ({ ...s, [pIdx]: false }));
+  };
+
+  // All prompts submitted by both
+  const allMyDone = prompts.length > 0
+    ? prompts.every((_, i) => !!myResponses[i]?.trim())
+    : !!myResponses[0]?.trim();
+  const allPartnerDone = prompts.length > 0
+    ? prompts.every((_, i) => !!partnerResponses[i]?.trim())
+    : !!partnerResponses[0]?.trim();
+  const allBothDone = allMyDone && allPartnerDone;
+
+  const renderPrompt = (prompt: string, pIdx: number) => {
+    const myAnswer = myResponses[pIdx]?.trim();
+    const partnerAnswer = partnerResponses[pIdx]?.trim();
+    const bothThisPrompt = !!myAnswer && !!partnerAnswer;
+
+    return (
+      <div key={pIdx} className="space-y-2">
+        {/* Prompt text */}
+        <div className="rounded-xl bg-pp-secondary/10 border border-pp-secondary/15 px-3 py-2">
+          <p className="text-sm text-white/80 leading-relaxed italic">{prompt}</p>
+        </div>
+
+        {/* My answer — textarea or submitted */}
+        {myAnswer ? (
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/6 p-3">
+            <div className="flex items-center gap-1.5 mb-1">
+              <span className="text-emerald-400 text-xs">✓</span>
+              <p className="text-xs text-emerald-400 font-medium">Your answer</p>
+            </div>
+            <p className="text-sm text-white/70 leading-relaxed">{myAnswer}</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <textarea
+              value={soloTexts[pIdx] ?? ''}
+              onChange={(e) => onTextChange(pIdx, e.target.value)}
+              placeholder="Write your private reflection here…"
+              rows={3}
+              className="w-full rounded-xl bg-white/5 border border-white/12 px-3 py-2.5
+                text-sm text-white placeholder:text-white/30 resize-none
+                focus:outline-none focus:border-pp-accent/50 focus:bg-white/8
+                transition-colors leading-relaxed"
+            />
+            <button
+              onClick={() => handleSubmit(pIdx)}
+              disabled={!soloTexts[pIdx]?.trim() || submitting[pIdx]}
+              className="w-full py-2 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold
+                text-sm hover:bg-pp-accent/90 transition-all active:scale-[0.98]
+                disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {submitting[pIdx] ? 'Submitting…' : 'Submit'}
+            </button>
+          </div>
+        )}
+
+        {/* Partner answer — per prompt, shown once both submit this prompt */}
+        {myAnswer && (
+          <div className={`rounded-xl border p-3 ${bothThisPrompt ? 'border-white/8 bg-white/2' : 'border-white/6 bg-white/1'}`}>
+            <p className="text-xs text-pp-text-muted font-medium mb-1">
+              {partnerName ? `${partnerName}'s answer` : "Partner's answer"}
+            </p>
+            {bothThisPrompt ? (
+              <p className="text-sm text-white/70 leading-relaxed">{partnerAnswer}</p>
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full border-2 border-pp-secondary/40 border-t-transparent animate-spin flex-shrink-0" />
+                <p className="text-xs text-pp-text-muted">Waiting for {partnerName || 'partner'}…</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="rounded-2xl border border-white/8 bg-white/3 overflow-hidden">
@@ -95,95 +172,19 @@ function SoloPromptTask({
       <div className="px-4 py-3 space-y-4">
         <p className="text-sm text-white/70 leading-relaxed">{task.instructions}</p>
 
-        {/* Per-prompt text boxes */}
-        {prompts.map((prompt, pIdx) => (
-          <div key={pIdx} className="space-y-2">
-            {/* Prompt */}
-            <div className="rounded-xl bg-pp-secondary/10 border border-pp-secondary/15 px-3 py-2">
-              <p className="text-sm text-white/80 leading-relaxed italic">{prompt}</p>
-            </div>
+        {prompts.length > 0
+          ? prompts.map((prompt, pIdx) => renderPrompt(prompt, pIdx))
+          : renderPrompt('', 0)
+        }
 
-            {/* My answer */}
-            {isSubmitted ? (
-              <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/6 p-3">
-                <p className="text-xs text-emerald-400 font-medium mb-1">Your answer</p>
-                <p className="text-sm text-white/70 leading-relaxed">
-                  {myResponses[pIdx] ?? '—'}
-                </p>
-              </div>
-            ) : (
-              <textarea
-                value={soloTexts[pIdx] ?? ''}
-                onChange={(e) => onTextChange(pIdx, e.target.value)}
-                placeholder="Write your private reflection here…"
-                rows={3}
-                className="w-full rounded-xl bg-white/5 border border-white/12 px-3 py-2.5
-                  text-sm text-white placeholder:text-white/30 resize-none
-                  focus:outline-none focus:border-pp-accent/50 focus:bg-white/8
-                  transition-colors leading-relaxed"
-              />
-            )}
-
-            {/* Partner answer — shown after both submit */}
-            {bothSubmitted && (
-              <div className="rounded-xl border border-white/8 bg-white/2 p-3">
-                <p className="text-xs text-pp-text-muted font-medium mb-1">
-                  {partnerName ? `${partnerName}'s answer` : "Partner's answer"}
-                </p>
-                <p className="text-sm text-white/70 leading-relaxed">
-                  {partnerResponses[pIdx] ?? '—'}
-                </p>
-              </div>
-            )}
-          </div>
-        ))}
-
-        {/* Fallback: no prompts defined — single textarea */}
-        {prompts.length === 0 && (
-          isSubmitted ? (
-            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/6 p-3">
-              <p className="text-xs text-emerald-400 font-medium mb-1">Your reflection</p>
-              <p className="text-sm text-white/70 leading-relaxed">{myResponses[0] ?? '—'}</p>
-            </div>
-          ) : (
-            <textarea
-              value={soloTexts[0] ?? ''}
-              onChange={(e) => onTextChange(0, e.target.value)}
-              placeholder="Write your private reflection here…"
-              rows={4}
-              className="w-full rounded-xl bg-white/5 border border-white/12 px-3 py-2.5
-                text-sm text-white placeholder:text-white/30 resize-none
-                focus:outline-none focus:border-pp-accent/50 focus:bg-white/8
-                transition-colors leading-relaxed"
-            />
-          )
-        )}
-
-        {/* Waiting for partner */}
-        {isSubmitted && !partnerSubmitted && (
-          <div className="rounded-xl border border-white/8 bg-white/2 p-3 flex items-center gap-2">
-            <div className="w-4 h-4 rounded-full border-2 border-pp-secondary/40 border-t-transparent animate-spin flex-shrink-0" />
-            <p className="text-sm text-pp-text-muted">
-              Waiting for {partnerName || 'your partner'} to share…
-            </p>
-          </div>
-        )}
-
-        {/* Partner hasn't seen — remind to submit first */}
-        {!isSubmitted && (
-          <p className="text-xs text-pp-text-muted">
-            Your answers are private until both of you submit.
-          </p>
-        )}
-
-        {/* Combined insights — shown after both submit */}
-        {bothSubmitted && (
+        {/* Combined insights — shown after all prompts submitted by both */}
+        {allBothDone && (
           <div className="rounded-xl border border-pp-accent/20 bg-pp-accent/6 p-3 space-y-1.5">
             <p className="text-[10px] text-pp-accent uppercase tracking-widest font-medium">
               Combined Insights
             </p>
             <p className="text-sm text-white/75 leading-relaxed">
-              You've both shared your reflections across {prompts.length || 1} prompt{prompts.length !== 1 ? 's' : ''}.
+              You've both shared your reflections across all {prompts.length || 1} prompt{(prompts.length || 1) !== 1 ? 's' : ''}.
               As you read each other's answers, look for what resonates, what surprises you, and
               where your perspectives differ — these are the threads to explore in your conversation today.
             </p>
@@ -239,7 +240,6 @@ export default function DayView({
 
   // Local state
   const [soloTexts, setSoloTexts] = useState<string[]>(() => Array(totalPrompts).fill(''));
-  const [isSubmittingSolo, setIsSubmittingSolo] = useState(false);
   const [notes, setNotes] = useState(progress?.conversation_notes ?? '');
 
   // Build normalized checkboxes
@@ -254,14 +254,13 @@ export default function DayView({
     });
   }, []);
 
-  const handleSoloSubmit = useCallback(async () => {
-    if (isSubmittingSolo) return;
-    setIsSubmittingSolo(true);
-    await onSoloSubmit(soloTexts.map((t) => t.trim()));
-    setIsSubmittingSolo(false);
-  }, [soloTexts, isSubmittingSolo, onSoloSubmit]);
-
-  const allFilled = soloTexts.every((t) => t.trim().length > 0) && totalPrompts > 0;
+  // Per-prompt submit: merge this prompt's answer into the full responses array and save
+  const handleSubmitPrompt = useCallback(async (globalIdx: number) => {
+    const merged = Array(totalPrompts).fill('').map((_, i) =>
+      i === globalIdx ? soloTexts[globalIdx]?.trim() ?? '' : (myParsedResponses[i] ?? '')
+    );
+    await onSoloSubmit(merged);
+  }, [soloTexts, myParsedResponses, totalPrompts, onSoloSubmit]);
 
   const handleCheckbox = useCallback(async (idx: number) => {
     if (progress?.day_completed) return;
@@ -302,17 +301,17 @@ export default function DayView({
           const taskPartnerResponses = partnerParsedResponses.slice(promptOffset, promptOffset + taskPromptCount);
           promptOffset += taskPromptCount;
 
+          const taskOffset = promptOffset - taskPromptCount;
           return (
             <SoloPromptTask
               key={taskIdx}
               task={task}
-              taskIndex={taskIdx}
               myResponses={taskMyResponses}
               partnerResponses={taskPartnerResponses}
               partnerName={partnerName}
               soloTexts={taskSoloTexts}
-              onTextChange={(localIdx, value) => handleTextChange(promptOffset - taskPromptCount + localIdx, value)}
-              isSubmitted={mySubmitted}
+              onTextChange={(localIdx, value) => handleTextChange(taskOffset + localIdx, value)}
+              onSubmitPrompt={(localIdx) => handleSubmitPrompt(taskOffset + localIdx)}
             />
           );
         }
@@ -349,19 +348,6 @@ export default function DayView({
           </div>
         );
       })}
-
-      {/* Submit button for solo prompts — shown below all tasks if not yet submitted */}
-      {hasSoloPrompt && !mySubmitted && (
-        <button
-          onClick={handleSoloSubmit}
-          disabled={!allFilled || isSubmittingSolo}
-          className="w-full py-3 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold
-            text-sm hover:bg-pp-accent/90 transition-all active:scale-[0.98]
-            disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {isSubmittingSolo ? 'Submitting…' : 'Submit My Reflections'}
-        </button>
-      )}
 
       {/* Conversation Notes */}
       <div className="rounded-2xl border border-white/8 bg-white/3 overflow-hidden">
