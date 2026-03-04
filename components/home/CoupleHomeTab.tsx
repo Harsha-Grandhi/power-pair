@@ -8,8 +8,10 @@ import CompatibilityScore from '@/components/couple/CompatibilityScore';
 import DimensionComparison from '@/components/couple/DimensionComparison';
 import ArchetypePairing from '@/components/couple/ArchetypePairing';
 import LockedReport from '@/components/dashboard/LockedReport';
-import SharedNotesPanel from '@/components/home/SharedNotesPanel';
 import ChallengesPanel from '@/components/home/ChallengesPanel';
+import DaysTogetherPanel from '@/components/home/DaysTogetherPanel';
+import SpecialDaysPanel from '@/components/home/SpecialDaysPanel';
+import DailyPromptPanel from '@/components/home/DailyPromptPanel';
 
 interface CoupleHomeTabProps {
   coupleId: string;
@@ -26,7 +28,9 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const [partner1Name, setPartner1Name] = useState<string | null>(null);
   const [compatibility, setCompatibility] = useState<CoupleCompatibility | null>(null);
   const [expanded, setExpanded] = useState(false);
-  const [notesExpanded, setNotesExpanded] = useState(false);
+  const [daysExpanded, setDaysExpanded] = useState(false);
+  const [specialExpanded, setSpecialExpanded] = useState(false);
+  const [promptExpanded, setPromptExpanded] = useState(false);
   const [challengesExpanded, setChallengesExpanded] = useState(false);
 
   useEffect(() => {
@@ -224,35 +228,93 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
         </div>
       )}
 
-      {/* ── Shared Notes banner ────────────────────────────────────────── */}
+      {/* ── Days Together banner ───────────────────────────────────────── */}
       <button
-        onClick={() => setNotesExpanded((v) => !v)}
-        className="w-full text-left rounded-2xl border border-pp-secondary/30 bg-gradient-to-r
-          from-pp-secondary/8 to-pp-primary/8 p-4 flex items-center gap-4
-          hover:border-pp-secondary/50 transition-all duration-200 active:scale-[0.99]"
+        onClick={() => setDaysExpanded((v) => !v)}
+        className="w-full text-left rounded-2xl border border-rose-400/25 bg-gradient-to-r
+          from-rose-400/8 to-pp-accent/8 p-4 flex items-center gap-4
+          hover:border-rose-400/40 transition-all duration-200 active:scale-[0.99]"
       >
-        <div className="w-10 h-10 rounded-xl bg-pp-card border border-pp-secondary/25
+        <div className="w-10 h-10 rounded-xl bg-pp-card border border-rose-400/20
           flex items-center justify-center text-xl flex-shrink-0">
-          📝
+          ❤️
         </div>
         <div className="flex-1 min-w-0">
-          <span className="text-xs font-medium tracking-[0.18em] text-pp-secondary uppercase">
-            Shared Notes
+          <span className="text-xs font-medium tracking-[0.18em] text-rose-300 uppercase">
+            Days Together
           </span>
           <p className="text-sm text-white/80 font-medium mt-0.5 leading-tight">
-            Leave notes &amp; photos for each other
+            Your relationship counter
           </p>
         </div>
         <svg
           className="w-4 h-4 text-pp-text-muted flex-shrink-0 transition-transform duration-300"
-          style={{ transform: notesExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          style={{ transform: daysExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {notesExpanded && (
-        <SharedNotesPanel coupleId={coupleId} currentProfile={currentProfile} />
+      {daysExpanded && <DaysTogetherPanel coupleId={coupleId} />}
+
+      {/* ── Special Days banner ────────────────────────────────────────── */}
+      <button
+        onClick={() => setSpecialExpanded((v) => !v)}
+        className="w-full text-left rounded-2xl border border-purple-400/25 bg-gradient-to-r
+          from-purple-400/8 to-pp-secondary/8 p-4 flex items-center gap-4
+          hover:border-purple-400/40 transition-all duration-200 active:scale-[0.99]"
+      >
+        <div className="w-10 h-10 rounded-xl bg-pp-card border border-purple-400/20
+          flex items-center justify-center text-xl flex-shrink-0">
+          🗓
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-medium tracking-[0.18em] text-purple-300 uppercase">
+            Special Days
+          </span>
+          <p className="text-sm text-white/80 font-medium mt-0.5 leading-tight">
+            Upcoming dates &amp; countdowns
+          </p>
+        </div>
+        <svg
+          className="w-4 h-4 text-pp-text-muted flex-shrink-0 transition-transform duration-300"
+          style={{ transform: specialExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {specialExpanded && <SpecialDaysPanel coupleId={coupleId} />}
+
+      {/* ── Daily Prompt banner ────────────────────────────────────────── */}
+      <button
+        onClick={() => setPromptExpanded((v) => !v)}
+        className="w-full text-left rounded-2xl border border-pp-accent/25 bg-gradient-to-r
+          from-pp-accent/8 to-amber-400/8 p-4 flex items-center gap-4
+          hover:border-pp-accent/40 transition-all duration-200 active:scale-[0.99]"
+      >
+        <div className="w-10 h-10 rounded-xl bg-pp-card border border-pp-accent/20
+          flex items-center justify-center text-xl flex-shrink-0">
+          💬
+        </div>
+        <div className="flex-1 min-w-0">
+          <span className="text-xs font-medium tracking-[0.18em] text-pp-accent uppercase">
+            Daily Prompt
+          </span>
+          <p className="text-sm text-white/80 font-medium mt-0.5 leading-tight">
+            Answer today's question together
+          </p>
+        </div>
+        <svg
+          className="w-4 h-4 text-pp-text-muted flex-shrink-0 transition-transform duration-300"
+          style={{ transform: promptExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {promptExpanded && (
+        <DailyPromptPanel coupleId={coupleId} currentProfile={currentProfile} />
       )}
 
       {/* ── Challenges banner ──────────────────────────────────────────── */}
