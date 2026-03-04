@@ -160,9 +160,24 @@ export default function CouplePage() {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-pp-secondary/12 blur-3xl" />
       </div>
 
+      {/* Sticky back header */}
+      <header className="sticky top-0 z-30 bg-pp-bg-dark/90 backdrop-blur-sm border-b border-white/6">
+        <div className="max-w-lg mx-auto px-5 py-3.5 flex items-center gap-3">
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center
+              justify-center text-pp-text-muted hover:text-white transition-colors"
+          >
+            ←
+          </button>
+          <span className="text-lg">💑</span>
+          <span className="font-display text-base text-white font-semibold">Couple Chemistry</span>
+        </div>
+      </header>
+
       <div className="relative z-10 max-w-lg mx-auto w-full px-6 pb-16">
         {/* Header */}
-        <div className="pt-12 pb-8 text-center space-y-2">
+        <div className="pt-8 pb-8 text-center space-y-2">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="h-px w-8 bg-pp-accent/40" />
             <span className="text-xs font-medium tracking-[0.2em] text-pp-accent uppercase">

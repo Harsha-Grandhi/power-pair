@@ -27,7 +27,7 @@ export default function SpecialDaysPage() {
       <header className="sticky top-0 z-30 bg-pp-bg-dark/90 backdrop-blur-sm border-b border-white/6">
         <div className="max-w-lg mx-auto px-5 py-3.5 flex items-center gap-3">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push("/dashboard")}
             className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center
               justify-center text-pp-text-muted hover:text-white transition-colors"
           >
