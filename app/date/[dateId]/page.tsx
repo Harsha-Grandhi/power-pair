@@ -82,7 +82,7 @@ export default function DateDetailPage() {
       <main className="min-h-dvh flex flex-col items-center justify-center bg-pp-bg-dark px-6 gap-4 text-center">
         <div className="text-4xl">🔍</div>
         <p className="text-white font-display text-xl">Date not found</p>
-        <button onClick={() => router.push('/dashboard')} className="text-sm text-pp-text-muted hover:text-white transition-colors">
+        <button onClick={() => router.push('/dashboard?tab=wheel')} className="text-sm text-pp-text-muted hover:text-white transition-colors">
           ← Back to home
         </button>
       </main>
@@ -102,7 +102,7 @@ export default function DateDetailPage() {
       <header className="sticky top-0 z-30 bg-pp-bg-dark/90 backdrop-blur-sm border-b border-white/6">
         <div className="max-w-lg mx-auto px-5 py-3.5 flex items-center gap-3">
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/dashboard?tab=wheel')}
             className="text-pp-text-muted hover:text-white transition-colors text-sm"
           >
             ←
@@ -201,7 +201,7 @@ export default function DateDetailPage() {
         )}
 
         <button
-          onClick={() => router.push('/dashboard')}
+          onClick={() => router.push('/dashboard?tab=wheel')}
           className="w-full py-3 text-sm text-pp-text-muted hover:text-white transition-colors"
         >
           ← Back to Home

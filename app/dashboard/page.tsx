@@ -37,7 +37,14 @@ export default function DashboardPage() {
   const [journeyEnrollments, setJourneyEnrollments] = useState<JourneyEnrollment[]>([]);
   const [enrollmentsLoaded, setEnrollmentsLoaded] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'wheel' || tab === 'journeys' || tab === 'counselor') {
+      setActiveTab(tab as AppTab);
+    }
+  }, []);
 
   useEffect(() => {
     if (mounted && !state.profile) router.replace('/');
@@ -107,7 +114,7 @@ export default function DashboardPage() {
       setSavedDates((prev) => [newDate, ...prev]);
       setWheelStep('list');
       setSelectedDuration(null);
-      router.push(`/date/${newDate.id}`);
+      router.push(`/date/${newDate.id}?from=wheel`);
     }
     setCreatingDate(false);
   };
@@ -184,7 +191,7 @@ export default function DashboardPage() {
             {savedDates.map((d) => (
               <button
                 key={d.id}
-                onClick={() => router.push(`/date/${d.id}`)}
+                onClick={() => router.push(`/date/${d.id}?from=wheel`)}
                 className="w-full text-left p-4 rounded-2xl border border-white/8 bg-white/3
                   hover:border-white/20 transition-all active:scale-[0.98]"
               >
@@ -268,7 +275,7 @@ export default function DashboardPage() {
         <JourneyListView
           enrollments={journeyEnrollments}
           coupleId={coupleId ?? null}
-          onSelect={(journey: Journey) => router.push(`/journey/${journey.id}`)}
+          onSelect={(journey: Journey) => router.push(`/journey/${journey.id}?from=journeys`)}
         />
       );
       case 'counselor': return renderPlaceholder('💬', 'AI Coach', 'Personalised relationship guidance powered by AI.');

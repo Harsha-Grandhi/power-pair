@@ -201,7 +201,7 @@ export default function JourneyPage() {
       <header className="sticky top-0 z-30 bg-pp-bg-dark/90 backdrop-blur-sm border-b border-white/6">
         <div className="max-w-lg mx-auto px-5 py-3.5 flex items-center gap-3">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push('/dashboard?tab=journeys')}
             className="w-8 h-8 rounded-full bg-white/8 flex items-center justify-center
               text-white/60 hover:text-white hover:bg-white/12 transition-colors flex-shrink-0"
           >
