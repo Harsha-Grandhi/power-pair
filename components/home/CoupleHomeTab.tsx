@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserProfile, CoupleCompatibility } from '@/types';
+import { useApp } from '@/contexts/AppContext';
 import { fetchCoupleProfiles, fetchPairingCode, linkByPairingCode } from '@/lib/couples';
 import { computeCoupleCompatibility } from '@/lib/compatibility';
 import LockedReport from '@/components/dashboard/LockedReport';
@@ -72,6 +73,7 @@ function NavBanner({
 
 export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName }: CoupleHomeTabProps) {
   const router = useRouter();
+  const { setCoupleId } = useApp();
 
   const [fetchState, setFetchState] = useState<FetchState>('loading');
   const [partner1, setPartner1] = useState<UserProfile | null>(null);
@@ -145,6 +147,7 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
     const newCoupleId = await linkByPairingCode(linkCode.trim(), currentProfile.id, coupleId);
     setLinkLoading(false);
     if (newCoupleId) {
+      setCoupleId(newCoupleId);
       setLinkSuccess(true);
       setTimeout(() => window.location.reload(), 1200);
     } else {
