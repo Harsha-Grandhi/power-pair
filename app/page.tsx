@@ -97,7 +97,7 @@ export default function LandingPage() {
             style={{ animationDelay: '200ms' }}
           >
             {[
-              { value: '36', label: 'Questions' },
+              { value: '20', label: 'Questions' },
               { value: '4', label: 'Dimensions' },
               { value: '16', label: 'Archetypes' },
             ].map(({ value, label }) => (

@@ -79,7 +79,7 @@ export function computeAllScores(answers: AssessmentAnswers): {
 } {
   const dimensionScores: DimensionScore[] = DIMENSION_CONFIGS.map((config) => {
     const rawScore = computeDimensionRawScore(answers, config.id);
-    const percentage = Math.round((Math.abs(rawScore) / 27) * 100);
+    const percentage = Math.round((Math.abs(rawScore) / 15) * 100);
     const isStyleA = rawScore >= 0;
     const style = isStyleA ? config.styleA : config.styleB;
 
