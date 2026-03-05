@@ -292,7 +292,7 @@ export default function RevealPage() {
                 onClick={handleViewDashboard}
                 className="w-full py-3.5 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm hover:bg-pp-accent/90 transition-colors"
               >
-                {state.isInvited ? 'See Compatibility With Your Partner' : 'Go to Dashboard'}
+                {state.isInvited ? 'See Compatibility With Your Partner' : 'Go to the App'}
               </button>
             </div>
           </div>
