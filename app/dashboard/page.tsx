@@ -31,6 +31,7 @@ export default function DashboardPage() {
   const [partnerArchetype, setPartnerArchetype] = useState<string | null>(null);
   const [savedDates, setSavedDates] = useState<DateRecord[]>([]);
   const [datesLoading, setDatesLoading] = useState(false);
+  const [datesLoaded, setDatesLoaded] = useState(false);
   const [wheelDurationFilter, setWheelDurationFilter] = useState<DateDuration | null>(null);
   const [creatingDate, setCreatingDate] = useState(false);
 
@@ -62,11 +63,12 @@ export default function DashboardPage() {
   // Load saved dates + partner archetype when wheel tab opens
   useEffect(() => {
     if (activeTab === 'wheel' && state.coupleId) {
-      if (savedDates.length === 0 && !datesLoading) {
+      if (!datesLoaded && !datesLoading) {
         setDatesLoading(true);
         fetchDatesForCouple(state.coupleId).then((dates) => {
           setSavedDates(dates);
           setDatesLoading(false);
+          setDatesLoaded(true);
         });
       }
       // Fetch partner's archetype if not yet loaded
@@ -78,7 +80,7 @@ export default function DashboardPage() {
         });
       }
     }
-  }, [activeTab, state.coupleId, savedDates.length, datesLoading, partnerArchetype, state.isInvited]);
+  }, [activeTab, state.coupleId, datesLoaded, datesLoading, partnerArchetype, state.isInvited]);
 
   // Load journey enrollments when journeys tab opens
   useEffect(() => {
@@ -191,7 +193,7 @@ export default function DashboardPage() {
         </button>
 
         {/* Saved dates */}
-        {datesLoading ? (
+        {!datesLoaded ? (
           <div className="flex justify-center py-8">
             <div className="w-6 h-6 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
           </div>
