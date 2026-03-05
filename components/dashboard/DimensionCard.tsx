@@ -11,8 +11,8 @@ interface DimensionCardProps {
 
 export default function DimensionCard({ dimension, index }: DimensionCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const scoreColor = getScoreColor(dimension.score);
-  const scoreLabel = getScoreLabel(dimension.score);
+  const scoreColor = getScoreColor(dimension.percentage);
+  const scoreLabel = getScoreLabel(dimension.percentage);
 
   return (
     <div
@@ -33,7 +33,7 @@ export default function DimensionCard({ dimension, index }: DimensionCardProps) 
             <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700 ease-out"
-                style={{ width: `${dimension.score}%`, backgroundColor: scoreColor }}
+                style={{ width: `${dimension.percentage}%`, backgroundColor: scoreColor }}
               />
             </div>
           </div>
@@ -42,7 +42,7 @@ export default function DimensionCard({ dimension, index }: DimensionCardProps) 
         {/* Score + label */}
         <div className="flex-shrink-0 text-right">
           <span className="text-lg font-bold" style={{ color: scoreColor }}>
-            {dimension.score}
+            {dimension.percentage}
           </span>
           <span className="text-xs text-pp-text-muted block -mt-0.5">{scoreLabel}</span>
         </div>

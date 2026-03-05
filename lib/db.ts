@@ -36,16 +36,13 @@ export async function saveProfileToSupabase(profile: UserProfile): Promise<void>
         intro_context:       profile.introContext,
         assessment_answers:  profile.assessmentAnswers,
         dimension_scores:    profile.dimensionScores,
-        love_style:          profile.loveStyle,
         full_profile:        profile,
 
         // Archetype top-level columns (easy to query/filter in Supabase dashboard)
         archetype_id:        profile.archetypeResult.primary.id,
         archetype_name:      profile.archetypeResult.primary.name,
         archetype_emoji:     profile.archetypeResult.primary.emoji,
-        confidence_score:    profile.archetypeResult.confidence,
-        love_style_subtype:  profile.loveStyle.subtype,
-        love_style_intensity: profile.loveStyle.intensity,
+        archetype_code:      profile.archetypeResult.code,
       },
       { onConflict: 'id' }
     );

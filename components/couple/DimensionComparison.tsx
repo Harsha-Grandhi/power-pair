@@ -35,29 +35,34 @@ export default function DimensionComparison({
               <span className="text-base">{dim.icon}</span>
               <span className="text-sm text-white/80 font-medium">{dim.name}</span>
             </div>
-            <span className="text-xs text-pp-text-muted">{dim.similarity}% aligned</span>
+            <span className={`text-xs ${
+              dim.compatibility === 'aligned' ? 'text-emerald-400' :
+              dim.compatibility === 'complementary' ? 'text-pp-accent' : 'text-red-400'
+            }`}>{dim.compatibility}</span>
           </div>
 
           {/* P1 bar */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-pp-text-muted w-6 text-right">{dim.p1Score}</span>
+            <span className="text-xs text-pp-text-muted w-8 text-right">{dim.p1Percentage}%</span>
             <div className="flex-1 h-2 bg-white/8 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-[#F6B17A] transition-all duration-700 ease-out"
-                style={{ width: `${dim.p1Score}%` }}
+                style={{ width: `${dim.p1Percentage}%` }}
               />
             </div>
+            <span className="text-[10px] text-white/50 w-16 text-right">{dim.p1Style}</span>
           </div>
 
           {/* P2 bar */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-pp-text-muted w-6 text-right">{dim.p2Score}</span>
+            <span className="text-xs text-pp-text-muted w-8 text-right">{dim.p2Percentage}%</span>
             <div className="flex-1 h-2 bg-white/8 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-[#7077A1] transition-all duration-700 ease-out"
-                style={{ width: `${dim.p2Score}%` }}
+                style={{ width: `${dim.p2Percentage}%` }}
               />
             </div>
+            <span className="text-[10px] text-white/50 w-16 text-right">{dim.p2Style}</span>
           </div>
         </div>
       ))}

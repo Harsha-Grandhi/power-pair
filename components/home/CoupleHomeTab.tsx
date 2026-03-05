@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserProfile, CoupleCompatibility } from '@/types';
 import { fetchCoupleProfiles } from '@/lib/couples';
-import { computeCompatibility } from '@/lib/compatibility';
+import { computeCoupleCompatibility } from '@/lib/compatibility';
 import LockedReport from '@/components/dashboard/LockedReport';
 import { fetchRelationshipStart } from '@/lib/coupleExtra';
 import { fetchSpecialDays, daysUntil } from '@/lib/specialDays';
@@ -92,7 +92,7 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       setPartner2(p2);
       setPartner1Name(name);
       if (p1 && p2) {
-        setCompatibility(computeCompatibility(p1, p2));
+        setCompatibility(computeCoupleCompatibility(p1, p2));
         setFetchState('ready');
       } else {
         setFetchState('waiting');

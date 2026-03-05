@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { fetchCoupleProfiles } from '@/lib/couples';
-import { computeCompatibility } from '@/lib/compatibility';
+import { computeCoupleCompatibility } from '@/lib/compatibility';
 import { CoupleCompatibility, UserProfile } from '@/types';
 import CompatibilityScore from '@/components/couple/CompatibilityScore';
 import DimensionComparison from '@/components/couple/DimensionComparison';
@@ -41,7 +41,7 @@ export default function CouplePage() {
       setPartner1Name(name);
 
       if (p1 && p2) {
-        setCompatibility(computeCompatibility(p1, p2));
+        setCompatibility(computeCoupleCompatibility(p1, p2));
         setLoadState('ready');
       } else {
         setLoadState('waiting');
@@ -213,7 +213,7 @@ export default function CouplePage() {
           {/* Archetype pairing note */}
           <div className="mt-4 px-4 py-3 rounded-xl bg-pp-primary/50 border border-pp-secondary/25">
             <p className="text-sm text-white/70 leading-relaxed italic">
-              {compatibility.archetypePairingNote}
+              {compatibility.compatibilityDescription}
             </p>
           </div>
         </section>
@@ -221,27 +221,13 @@ export default function CouplePage() {
         {/* Dimension comparison */}
         <section className="mb-8 p-5 rounded-2xl bg-pp-card border border-pp-secondary/20">
           <h2 className="text-xs font-medium tracking-widest text-pp-text-muted uppercase mb-5">
-            6 Dimension Comparison
+            4 Dimension Comparison
           </h2>
           <DimensionComparison
             dimensions={compatibility.dimensions}
             p1Name={p1Name}
             p2Name={p2Name}
           />
-        </section>
-
-        {/* Love style match */}
-        <section className="mb-8 p-5 rounded-2xl bg-pp-card border border-pp-secondary/20">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">💗</span>
-            <h2 className="text-xs font-medium tracking-widest text-pp-text-muted uppercase">
-              Love Style Match
-            </h2>
-            {compatibility.loveStyleMatch && (
-              <span className="ml-auto text-xs text-emerald-400 font-medium">✓ Match</span>
-            )}
-          </div>
-          <p className="text-sm text-white/70 leading-relaxed">{compatibility.loveStyleNote}</p>
         </section>
 
         {/* Strengths together */}

@@ -8,7 +8,7 @@ interface ArchetypeCardProps {
 }
 
 export default function ArchetypeCard({ result }: ArchetypeCardProps) {
-  const { primary, secondary, confidence } = result;
+  const { primary } = result;
 
   return (
     <div
@@ -45,18 +45,10 @@ export default function ArchetypeCard({ result }: ArchetypeCardProps) {
             {primary.name}
           </h2>
 
-          {/* Confidence */}
-          <div className="flex items-center gap-2 mt-2">
-            <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${confidence}%`, backgroundColor: primary.color }}
-              />
-            </div>
-            <span className="text-xs font-semibold" style={{ color: primary.color }}>
-              {confidence}% match
-            </span>
-          </div>
+          {/* Code badge */}
+          <p className="text-xs font-mono mt-1.5" style={{ color: primary.color }}>
+            {primary.code}
+          </p>
         </div>
       </div>
 
@@ -64,17 +56,6 @@ export default function ArchetypeCard({ result }: ArchetypeCardProps) {
       <p className="relative mt-4 text-sm text-white/65 leading-relaxed">
         {primary.description}
       </p>
-
-      {/* Secondary */}
-      {secondary && (
-        <div className="relative mt-4 flex items-center gap-2 pt-4 border-t border-white/8">
-          <span className="text-base">{secondary.emoji}</span>
-          <span className="text-xs text-pp-text-muted">
-            Secondary influence:{' '}
-            <span className="text-white/80 font-medium">{secondary.name}</span>
-          </span>
-        </div>
-      )}
     </div>
   );
 }

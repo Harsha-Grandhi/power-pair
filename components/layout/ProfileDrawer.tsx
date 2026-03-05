@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { UserProfile } from '@/types';
 import ArchetypeCard from '@/components/dashboard/ArchetypeCard';
 import DimensionCard from '@/components/dashboard/DimensionCard';
-import LoveStyleBreakdown from '@/components/dashboard/LoveStyleBreakdown';
 import { JOURNEYS } from '@/lib/journeys';
 
 interface EarnedBadge {
@@ -21,7 +20,7 @@ interface ProfileDrawerProps {
 }
 
 export default function ProfileDrawer({ open, onClose, profile, onReset, earnedBadges }: ProfileDrawerProps) {
-  const { archetypeResult, dimensionScores, loveStyle, introContext } = profile;
+  const { archetypeResult, dimensionScores, introContext } = profile;
   const { primary } = archetypeResult;
 
   // Lock scroll when open
@@ -99,21 +98,13 @@ export default function ProfileDrawer({ open, onClose, profile, onReset, earnedB
           {/* Dimensions */}
           <div>
             <p className="text-xs text-pp-text-muted uppercase tracking-widest mb-3">
-              6 Dimensions
+              4 Dimensions
             </p>
             <div className="space-y-2">
               {dimensionScores.map((dim, i) => (
                 <DimensionCard key={dim.id} dimension={dim} index={i} />
               ))}
             </div>
-          </div>
-
-          {/* Love style */}
-          <div>
-            <p className="text-xs text-pp-text-muted uppercase tracking-widest mb-3">
-              Love Style
-            </p>
-            <LoveStyleBreakdown loveStyle={loveStyle} />
           </div>
 
           {/* Strengths & Growth */}
@@ -130,7 +121,7 @@ export default function ProfileDrawer({ open, onClose, profile, onReset, earnedB
               ))}
             </div>
             <div className="space-y-1.5">
-              {primary.growthEdge.map((g) => (
+              {primary.growthAreas.map((g) => (
                 <div key={g} className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-pp-accent/8 border border-pp-accent/15">
                   <span className="text-pp-accent text-xs">◆</span>
                   <span className="text-sm text-white/85">{g}</span>

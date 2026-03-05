@@ -9,7 +9,7 @@ import React, {
   useMemo,
 } from 'react';
 import { AppState, AppPhase, IntroContext, AssessmentAnswers, UserProfile } from '@/types';
-import { computeAllScores } from '@/lib/scoring';
+import { computeAllScores, isAllNeutral } from '@/lib/scoring';
 import { saveProfile, loadProfile, saveAppState, loadAppState, clearAllStorage } from '@/lib/storage';
 import { saveProfileToSupabase } from '@/lib/db';
 import { createCoupleRecord, linkPartner2ToCoupleRecord } from '@/lib/couples';
@@ -54,7 +54,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
     case 'SET_ASSESSMENT_ANSWER':
       return {
         ...state,
-        assessmentAnswers: { ...state.assessmentAnswers, ...action.payload },
+        assessmentAnswers: { ...state.assessmentAnswers, ...action.payload } as AssessmentAnswers,
       };
     case 'SET_INTRO_STEP':
       return { ...state, currentIntroStep: action.payload };
@@ -169,7 +169,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [state.currentRevealStep]);
 
   const computeAndSaveProfile = useCallback(async (): Promise<UserProfile> => {
-    const { dimensionScores, loveStyle, archetypeResult } = computeAllScores(
+    const { dimensionScores, archetypeResult } = computeAllScores(
       state.assessmentAnswers
     );
 
@@ -180,7 +180,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       introContext: state.introContext,
       assessmentAnswers: state.assessmentAnswers,
       dimensionScores,
-      loveStyle,
       archetypeResult,
     };
 

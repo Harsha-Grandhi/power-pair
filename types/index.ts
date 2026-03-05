@@ -1,9 +1,6 @@
-// ─── Core Domain Types for Power Pair ────────────────────────────────────────
+// Core Domain Types for Power Pair
 
-export type LoveSubtype = 'Physical' | 'Verbal' | 'Presence' | 'Action';
-
-export type AgeRange = '18–21' | '22–25' | '26–30' | '31–35' | '36+';
-
+export type AgeRange = '18-21' | '22-25' | '26-30' | '31-35' | '36+';
 export type Gender = 'Man' | 'Woman' | 'Non-binary' | 'Prefer not to say';
 
 export type RelationshipStage =
@@ -37,8 +34,6 @@ export type RelationshipChallenge =
   | 'Emotional misunderstandings'
   | 'Nothing major at the moment';
 
-// ─── Onboarding Context ────────────────────────────────────────────────────────
-
 export interface IntroContext {
   name?: string;
   phoneNumber?: string;
@@ -52,75 +47,43 @@ export interface IntroContext {
   biggestChallenge?: RelationshipChallenge;
 }
 
-// ─── Assessment Answers ────────────────────────────────────────────────────────
-
-export interface AssessmentAnswers {
-  // Dimension 1: Personal Emotional Awareness
-  q1?: number;
-  q2?: number;
-  q3?: number;
-  // Dimension 2: Emotional Regulation
-  q4?: number;
-  q5?: number;
-  q6?: number;
-  // Dimension 3: Empathy & Validation
-  q7?: number;
-  q8?: number;
-  q9?: number;
-  // Dimension 4: Love Style (subtype tags, not numeric scores)
-  q10?: LoveSubtype;
-  q11?: LoveSubtype;
-  q12?: LoveSubtype;
-  // Dimension 5: Future Alignment Mindset
-  q13?: number;
-  q14?: number;
-  q15?: number;
-  // Dimension 6: Consistency of Effort
-  q16?: number;
-  q17?: number;
-  q18?: number;
-}
-
-// ─── Scoring Types ─────────────────────────────────────────────────────────────
+export type DimensionId = 'emotionalStyle' | 'conflictStyle' | 'affectionStyle' | 'lifeRhythm';
+export type StyleLetter = 'E' | 'R' | 'D' | 'A' | 'P' | 'S';
+export type AssessmentAnswers = Record<string, number>;
 
 export interface DimensionScore {
-  id: string;
+  id: DimensionId;
   name: string;
-  score: number; // 0–100
-  rawScore?: number;
+  rawScore: number;
+  percentage: number;
+  dominantStyle: string;
+  styleLetter: StyleLetter;
+  styleLabel: string;
   icon: string;
   description: string;
 }
 
-export interface LoveStyleResult {
-  subtype: LoveSubtype;
-  intensity: number; // 0–100
-  subtypeDistribution: Record<LoveSubtype, number>;
-}
-
 export interface ArchetypeResult {
   primary: Archetype;
-  secondary?: Archetype;
-  confidence: number; // 0–100
-  distance: number;
+  code: string;
+  dimensionScores: DimensionScore[];
 }
-
-// ─── Archetype Definition ──────────────────────────────────────────────────────
 
 export interface Archetype {
   id: string;
+  code: string;
   name: string;
   emoji: string;
-  prototype: [number, number, number, number, number, number];
   description: string;
+  whatMakesYouUnique: string;
   strengths: string[];
-  growthEdge: string[];
+  growthAreas: string[];
+  whatYouNeedInPartner: string[];
+  compatibleWith: string[];
   color: string;
   gradientFrom: string;
   gradientTo: string;
 }
-
-// ─── User Profile ──────────────────────────────────────────────────────────────
 
 export interface UserProfile {
   id: string;
@@ -129,40 +92,35 @@ export interface UserProfile {
   introContext: IntroContext;
   assessmentAnswers: AssessmentAnswers;
   dimensionScores: DimensionScore[];
-  loveStyle: LoveStyleResult;
   archetypeResult: ArchetypeResult;
 }
 
-// ─── Couple Compatibility Types ────────────────────────────────────────────────
-
 export interface DimensionComparison {
-  dimension: string;
+  dimension: DimensionId;
   name: string;
   icon: string;
-  p1Score: number;
-  p2Score: number;
-  similarity: number;
+  p1Style: string;
+  p1Percentage: number;
+  p2Style: string;
+  p2Percentage: number;
+  compatibility: 'aligned' | 'complementary' | 'challenging';
+  note: string;
 }
 
 export interface CoupleCompatibility {
   overallScore: number;
+  p1Archetype: string;
+  p2Archetype: string;
+  compatibilityDescription: string;
   dimensions: DimensionComparison[];
-  loveStyleMatch: boolean;
-  loveStyleNote: string;
-  archetypePairingNote: string;
+  communicationAdvice: string[];
+  conflictTips: string[];
+  recommendedDateIdeas: string[];
   strengthsTogether: string[];
   growthTogether: string[];
 }
 
-// ─── App Navigation ────────────────────────────────────────────────────────────
-
-export type AppPhase =
-  | 'landing'
-  | 'onboarding'
-  | 'assessment'
-  | 'processing'
-  | 'reveal'
-  | 'dashboard';
+export type AppPhase = 'landing' | 'onboarding' | 'assessment' | 'processing' | 'reveal' | 'dashboard';
 
 export interface AppState {
   phase: AppPhase;
@@ -176,8 +134,6 @@ export interface AppState {
   isInvited: boolean;
 }
 
-// ─── Question Types ────────────────────────────────────────────────────────────
-
 export interface IntroQuestion {
   id: string;
   questionKey: keyof IntroContext;
@@ -186,17 +142,11 @@ export interface IntroQuestion {
   options: string[];
 }
 
-export interface ScoredQuestionOption {
-  label: string;
-  score: number | LoveSubtype;
-}
-
-export interface ScoredQuestion {
+export interface LikertQuestion {
   id: string;
-  questionIndex: number;
-  dimension: string;
-  dimensionId: string;
+  originalIndex: number;
+  dimension: DimensionId;
+  dimensionLabel: string;
   question: string;
-  isLoveStyle?: boolean;
-  options: ScoredQuestionOption[];
+  isReverse: boolean;
 }
