@@ -101,7 +101,9 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       setPartner2(p2);
       setPartner1Name(name);
       if (p1 && p2) {
-        setCompatibility(computeCoupleCompatibility(p1, p2));
+        const n1 = name ?? p1.introContext.name ?? 'Partner 1';
+        const n2 = p2.introContext.name ?? 'Partner 2';
+        setCompatibility(computeCoupleCompatibility(p1, p2, n1, n2));
         setFetchState('ready');
       } else {
         setFetchState('waiting');

@@ -137,8 +137,12 @@ function getDateIdeas(dimensions: DimensionComparison[]): string[] {
 
 export function computeCoupleCompatibility(
   profile1: UserProfile,
-  profile2: UserProfile
+  profile2: UserProfile,
+  p1Name?: string,
+  p2Name?: string
 ): CoupleCompatibility {
+  const name1 = p1Name || profile1.introContext.name || 'Partner 1';
+  const name2 = p2Name || profile2.introContext.name || 'Partner 2';
   const p1Code = profile1.archetypeResult.code;
   const p2Code = profile2.archetypeResult.code;
 
@@ -157,14 +161,14 @@ export function computeCoupleCompatibility(
   const p2Arch = getArchetypeByCode(p2Code);
 
   const strengthsTogether = [
-    ...(p1Arch ? p1Arch.strengths.slice(0, 2) : []),
-    ...(p2Arch ? p2Arch.strengths.slice(0, 2) : []),
+    ...(p1Arch ? p1Arch.strengths.slice(0, 2).map(s => name1 + ': ' + s) : []),
+    ...(p2Arch ? p2Arch.strengths.slice(0, 2).map(s => name2 + ': ' + s) : []),
   ];
 
   const growthTogether = [
-    ...(p1Arch ? p1Arch.growthAreas.slice(0, 1) : []),
-    ...(p2Arch ? p2Arch.growthAreas.slice(0, 1) : []),
-    'Practice patience with each other\'s different styles',
+    ...(p1Arch ? p1Arch.growthAreas.slice(0, 1).map(g => name1 + ': ' + g) : []),
+    ...(p2Arch ? p2Arch.growthAreas.slice(0, 1).map(g => name2 + ': ' + g) : []),
+    name1 + ' and ' + name2 + ': Practice patience with each other\'s different styles',
   ];
 
   return {

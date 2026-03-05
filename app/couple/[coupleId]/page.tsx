@@ -41,7 +41,9 @@ export default function CouplePage() {
       setPartner1Name(name);
 
       if (p1 && p2) {
-        setCompatibility(computeCoupleCompatibility(p1, p2));
+        const n1 = name ?? p1.introContext.name ?? 'Partner 1';
+        const n2 = p2.introContext.name ?? 'Partner 2';
+        setCompatibility(computeCoupleCompatibility(p1, p2, n1, n2));
         setLoadState('ready');
       } else {
         setLoadState('waiting');
