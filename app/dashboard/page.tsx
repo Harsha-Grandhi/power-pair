@@ -31,6 +31,7 @@ export default function DashboardPage() {
   const [partnerArchetype, setPartnerArchetype] = useState<string | null>(null);
   const [savedDates, setSavedDates] = useState<DateRecord[]>([]);
   const [datesLoading, setDatesLoading] = useState(false);
+  const [wheelDurationFilter, setWheelDurationFilter] = useState<DateDuration | null>(null);
   const [creatingDate, setCreatingDate] = useState(false);
 
   // Journeys state
@@ -189,6 +190,23 @@ export default function DashboardPage() {
           🎡 Spin for a Date Idea
         </button>
 
+        {/* Duration filter tabs */}
+        <div className="flex gap-2">
+          {(['30 min', '1 hr', '3 hrs'] as DateDuration[]).map((dur) => (
+            <button
+              key={dur}
+              onClick={() => setWheelDurationFilter(wheelDurationFilter === dur ? null : dur)}
+              className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
+                wheelDurationFilter === dur
+                  ? 'bg-pp-accent text-pp-bg-dark'
+                  : 'bg-white/5 border border-white/10 text-pp-text-muted hover:text-white'
+              }`}
+            >
+              {dur}
+            </button>
+          ))}
+        </div>
+
         {/* Saved dates */}
         {datesLoading ? (
           <div className="flex justify-center py-8">
@@ -197,7 +215,11 @@ export default function DashboardPage() {
         ) : savedDates.length > 0 ? (
           <div className="space-y-3">
             <p className="text-xs text-pp-text-muted uppercase tracking-widest">Your Dates</p>
-            {savedDates.map((d) => (
+            {(wheelDurationFilter ? savedDates.filter((d) => d.duration === wheelDurationFilter) : savedDates).map((d) => {
+              const colonIdx = d.date_idea.indexOf(': ');
+              const dateTitle = colonIdx > -1 ? d.date_idea.slice(0, colonIdx) : d.date_idea;
+              const dateDesc = colonIdx > -1 ? d.date_idea.slice(colonIdx + 2) : '';
+              return (
               <button
                 key={d.id}
                 onClick={() => router.push(`/date/${d.id}?from=wheel`)}
@@ -210,9 +232,10 @@ export default function DashboardPage() {
                     {d.status === 'completed' ? '✅' : '💑'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white/90 font-medium leading-snug line-clamp-2">
-                      {d.date_idea}
-                    </p>
+                    <p className="text-sm text-white font-semibold leading-snug">{dateTitle}</p>
+                    {dateDesc && (
+                      <p className="text-xs text-white/55 leading-snug mt-0.5 line-clamp-2">{dateDesc}</p>
+                    )}
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-xs text-pp-text-muted">{d.duration}</span>
                       <span className="text-pp-text-muted/40">·</span>
@@ -224,7 +247,8 @@ export default function DashboardPage() {
                   <span className="text-pp-text-muted text-sm flex-shrink-0">→</span>
                 </div>
               </button>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-6">
