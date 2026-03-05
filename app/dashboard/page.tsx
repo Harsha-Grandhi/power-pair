@@ -12,7 +12,7 @@ import SpinWheel from '@/components/wheel/SpinWheel';
 import JourneyListView from '@/components/journeys/JourneyListView';
 import { DateDuration, getDateIdeasForCouple, DateIdea } from '@/lib/dateIdeas';
 import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
-import { fetchCoupleProfiles } from '@/lib/couples';
+import { fetchCoupleProfiles, fetchPairingCode, linkByPairingCode } from '@/lib/couples';
 import { getAllEnrollments, JourneyEnrollment } from '@/lib/journeyProgress';
 import { Journey } from '@/lib/journeys';
 import ReflectionHistory from '@/components/coach/ReflectionHistory';
@@ -39,6 +39,13 @@ export default function DashboardPage() {
   // Journeys state
   const [journeyEnrollments, setJourneyEnrollments] = useState<JourneyEnrollment[]>([]);
   const [enrollmentsLoaded, setEnrollmentsLoaded] = useState(false);
+
+  // Pairing code state
+  const [pairingCode, setPairingCode] = useState<string | null>(null);
+  const [linkCode, setLinkCode] = useState('');
+  const [linkError, setLinkError] = useState('');
+  const [linkLoading, setLinkLoading] = useState(false);
+  const [linkSuccess, setLinkSuccess] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -92,6 +99,13 @@ export default function DashboardPage() {
       });
     }
   }, [activeTab, state.coupleId, enrollmentsLoaded]);
+
+  // Fetch pairing code for solo users
+  useEffect(() => {
+    if (mounted && state.coupleId && !partnerArchetype) {
+      fetchPairingCode(state.coupleId).then(code => setPairingCode(code));
+    }
+  }, [mounted, state.coupleId, partnerArchetype]);
 
   if (!mounted || !state.profile) return null;
 
@@ -284,26 +298,100 @@ export default function DashboardPage() {
         />
       );
     }
+    const handleLinkPartner = async () => {
+      if (!linkCode.trim() || linkLoading) return;
+      setLinkError('');
+      setLinkLoading(true);
+      const newCoupleId = await linkByPairingCode(linkCode.trim(), profile.id, coupleId ?? null);
+      setLinkLoading(false);
+      if (newCoupleId) {
+        setLinkSuccess(true);
+        // Reload the page to show couple results
+        setTimeout(() => window.location.reload(), 1200);
+      } else {
+        setLinkError('Code not found or already used. Check and try again.');
+      }
+    };
+
     return (
       <div className="px-5 py-6 space-y-4">
-        {/* Static banner — no couple yet */}
+        {/* Invite banner */}
         <div className="rounded-2xl border border-white/10 bg-white/3 p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-pp-card border border-pp-secondary/25 flex items-center justify-center flex-shrink-0">
-            <span className="text-xl">💑</span>
+            <span className="text-xl">{'💑'}</span>
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-xs font-medium tracking-[0.18em] text-pp-accent uppercase">
               Couple Chemistry
             </span>
-            <p className="text-sm text-white/80 font-medium mt-0.5 leading-tight">Invite your partner</p>
-            <p className="text-xs text-pp-text-muted mt-0.5">Unlock your compatibility breakdown together</p>
-          </div>
-          <div className="text-pp-text-muted/40 flex-shrink-0">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+            <p className="text-sm text-white/80 font-medium mt-0.5 leading-tight">Connect with your partner</p>
+            <p className="text-xs text-pp-text-muted mt-0.5">Share your code or enter theirs to unlock results</p>
           </div>
         </div>
+
+        {/* Your pairing code */}
+        {pairingCode && (
+          <div className="rounded-2xl border border-pp-accent/25 bg-pp-accent/5 p-4 space-y-3">
+            <p className="text-xs text-pp-text-muted uppercase tracking-widest">Your Pairing Code</p>
+            <div className="flex items-center gap-1.5">
+              {pairingCode.split('').map((ch, i) => (
+                <span key={i} className="w-9 h-11 rounded-lg bg-pp-card border border-white/15 flex items-center justify-center font-mono text-lg font-bold text-pp-accent">
+                  {ch}
+                </span>
+              ))}
+              <button
+                onClick={() => {
+                  if (navigator.clipboard) navigator.clipboard.writeText(pairingCode);
+                }}
+                className="ml-auto px-3 py-1.5 rounded-lg border border-pp-accent/30 text-pp-accent text-xs font-medium hover:bg-pp-accent/10 transition-colors"
+              >
+                Copy
+              </button>
+            </div>
+            <p className="text-[11px] text-pp-text-muted leading-relaxed">
+              Share this code with your partner so they can link their quiz results with yours.
+            </p>
+          </div>
+        )}
+
+        {/* Link partner's code */}
+        <div className="rounded-2xl border border-white/10 bg-pp-card/40 p-4 space-y-3">
+          <p className="text-xs text-pp-text-muted uppercase tracking-widest">Have your partner's code?</p>
+          {linkSuccess ? (
+            <div className="flex items-center gap-2 py-2">
+              <span className="text-lg">{'✅'}</span>
+              <p className="text-sm text-emerald-400 font-medium">Linked! Loading your couple results...</p>
+            </div>
+          ) : (
+            <>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={linkCode}
+                  onChange={(e) => { setLinkCode(e.target.value.toUpperCase()); setLinkError(''); }}
+                  placeholder="Enter 6-digit code"
+                  maxLength={6}
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white font-mono tracking-widest text-center placeholder:text-pp-text-muted/40 placeholder:tracking-normal focus:outline-none focus:border-pp-accent/40 transition-colors"
+                />
+                <button
+                  onClick={handleLinkPartner}
+                  disabled={linkCode.length < 6 || linkLoading}
+                  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                    linkCode.length >= 6 && !linkLoading
+                      ? 'bg-pp-accent text-pp-bg-dark hover:bg-pp-accent/90'
+                      : 'bg-white/10 text-white/30 cursor-not-allowed'
+                  }`}
+                >
+                  {linkLoading ? '...' : 'Link'}
+                </button>
+              </div>
+              {linkError && (
+                <p className="text-xs text-red-400">{linkError}</p>
+              )}
+            </>
+          )}
+        </div>
+
         <LockedReport archetypeName={primary.name} />
       </div>
     );

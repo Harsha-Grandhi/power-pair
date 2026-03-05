@@ -1,30 +1,44 @@
 import { UserProfile } from '@/types';
 
-/**
- * Creates a new couple record in Supabase for Partner 1.
- * Updates the profile row with couple_id and partner_role='partner_1'.
- * Returns the new coupleId string, or null on failure.
- */
-export async function createCoupleRecord(
-  partner1ProfileId: string,
-  partner1Name: string | null
-): Promise<string | null> {
+function generatePairingCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
+
+async function getSupabase() {
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   ) {
     return null;
   }
+  const { supabase } = await import('./supabase');
+  return supabase;
+}
+
+/**
+ * Creates a new couple record in Supabase for Partner 1.
+ * Generates a unique 6-char pairing code.
+ * Returns the new coupleId string, or null on failure.
+ */
+export async function createCoupleRecord(
+  partner1ProfileId: string,
+  partner1Name: string | null
+): Promise<string | null> {
+  const sb = await getSupabase();
+  if (!sb) return null;
 
   try {
-    const { supabase } = await import('./supabase');
-
-    // Insert couple row
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('power_pair_couples')
       .insert({
         partner_1_id: partner1ProfileId,
         partner_1_name: partner1Name ?? null,
+        pairing_code: generatePairingCode(),
       })
       .select('id')
       .single();
@@ -36,8 +50,7 @@ export async function createCoupleRecord(
 
     const coupleId = data.id as string;
 
-    // Update profile with couple_id and role
-    await supabase
+    await sb
       .from('power_pair_profiles')
       .update({ couple_id: coupleId, partner_role: 'partner_1' })
       .eq('id', partner1ProfileId);
@@ -52,30 +65,21 @@ export async function createCoupleRecord(
 
 /**
  * Links Partner 2 to an existing couple record.
- * Updates the couple row with partner_2_id + completed_at.
- * Updates the profile row with couple_id and partner_role='partner_2'.
  */
 export async function linkPartner2ToCoupleRecord(
   coupleId: string,
   partner2ProfileId: string
 ): Promise<void> {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return;
-  }
+  const sb = await getSupabase();
+  if (!sb) return;
 
   try {
-    const { supabase } = await import('./supabase');
-
     await Promise.all([
-      supabase
+      sb
         .from('power_pair_couples')
         .update({ partner_2_id: partner2ProfileId, completed_at: new Date().toISOString() })
         .eq('id', coupleId),
-
-      supabase
+      sb
         .from('power_pair_profiles')
         .update({ couple_id: coupleId, partner_role: 'partner_2' })
         .eq('id', partner2ProfileId),
@@ -88,21 +92,14 @@ export async function linkPartner2ToCoupleRecord(
 }
 
 /**
- * Checks whether Partner 2 has completed their quiz for a given coupleId.
- * Returns true if partner_2_id is set on the couple row.
+ * Checks whether Partner 2 has completed their quiz.
  */
 export async function checkCoupleComplete(coupleId: string): Promise<boolean> {
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return false;
-  }
+  const sb = await getSupabase();
+  if (!sb) return false;
 
   try {
-    const { supabase } = await import('./supabase');
-
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('power_pair_couples')
       .select('partner_2_id')
       .eq('id', coupleId)
@@ -117,7 +114,6 @@ export async function checkCoupleComplete(coupleId: string): Promise<boolean> {
 
 /**
  * Fetches both partner profiles for a given coupleId.
- * Returns { partner1, partner2, partner1Name } — either profile may be null.
  */
 export async function fetchCoupleProfiles(coupleId: string): Promise<{
   partner1: UserProfile | null;
@@ -125,18 +121,11 @@ export async function fetchCoupleProfiles(coupleId: string): Promise<{
   partner1Name: string | null;
 }> {
   const empty = { partner1: null, partner2: null, partner1Name: null };
-
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  ) {
-    return empty;
-  }
+  const sb = await getSupabase();
+  if (!sb) return empty;
 
   try {
-    const { supabase } = await import('./supabase');
-
-    const { data: couple, error: coupleError } = await supabase
+    const { data: couple, error: coupleError } = await sb
       .from('power_pair_couples')
       .select('partner_1_id, partner_2_id, partner_1_name')
       .eq('id', coupleId)
@@ -150,7 +139,7 @@ export async function fetchCoupleProfiles(coupleId: string): Promise<{
     const ids = [couple.partner_1_id, couple.partner_2_id].filter(Boolean) as string[];
     if (ids.length === 0) return { ...empty, partner1Name: couple.partner_1_name ?? null };
 
-    const { data: profiles, error: profilesError } = await supabase
+    const { data: profiles, error: profilesError } = await sb
       .from('power_pair_profiles')
       .select('id, full_profile')
       .in('id', ids);
@@ -170,5 +159,96 @@ export async function fetchCoupleProfiles(coupleId: string): Promise<{
   } catch (e) {
     console.error('[PowerPair] fetchCoupleProfiles failed:', e);
     return empty;
+  }
+}
+
+/**
+ * Fetches the pairing code for a couple.
+ */
+export async function fetchPairingCode(coupleId: string): Promise<string | null> {
+  const sb = await getSupabase();
+  if (!sb) return null;
+
+  try {
+    const { data, error } = await sb
+      .from('power_pair_couples')
+      .select('pairing_code')
+      .eq('id', coupleId)
+      .single();
+
+    if (error || !data) return null;
+    return data.pairing_code ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Links two independently-created accounts by pairing code.
+ * The joiner becomes partner_2 on the code owner's couple record.
+ * The joiner's orphan couple record is cleaned up.
+ * Returns the new coupleId or null on failure.
+ */
+export async function linkByPairingCode(
+  code: string,
+  joinerProfileId: string,
+  joinerCoupleId: string | null
+): Promise<string | null> {
+  const sb = await getSupabase();
+  if (!sb) return null;
+
+  try {
+    // Find the couple with this pairing code
+    const { data: couple, error: findError } = await sb
+      .from('power_pair_couples')
+      .select('id, partner_1_id, partner_2_id')
+      .eq('pairing_code', code.toUpperCase().trim())
+      .single();
+
+    if (findError || !couple) {
+      console.error('[PowerPair] linkByPairingCode: code not found');
+      return null;
+    }
+
+    // Don't link to yourself
+    if (couple.partner_1_id === joinerProfileId) {
+      console.error('[PowerPair] linkByPairingCode: cannot link to own code');
+      return null;
+    }
+
+    // Already has a partner
+    if (couple.partner_2_id) {
+      console.error('[PowerPair] linkByPairingCode: couple already complete');
+      return null;
+    }
+
+    const targetCoupleId = couple.id as string;
+
+    // Link joiner as partner_2
+    await Promise.all([
+      sb
+        .from('power_pair_couples')
+        .update({ partner_2_id: joinerProfileId, completed_at: new Date().toISOString() })
+        .eq('id', targetCoupleId),
+      sb
+        .from('power_pair_profiles')
+        .update({ couple_id: targetCoupleId, partner_role: 'partner_2' })
+        .eq('id', joinerProfileId),
+    ]);
+
+    // Clean up joiner's orphan couple record (if different)
+    if (joinerCoupleId && joinerCoupleId !== targetCoupleId) {
+      await sb
+        .from('power_pair_couples')
+        .delete()
+        .eq('id', joinerCoupleId)
+        .is('partner_2_id', null);
+    }
+
+    console.log('[PowerPair] Linked by pairing code to couple:', targetCoupleId);
+    return targetCoupleId;
+  } catch (e) {
+    console.error('[PowerPair] linkByPairingCode failed:', e);
+    return null;
   }
 }
