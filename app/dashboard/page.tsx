@@ -15,6 +15,7 @@ import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
 import { fetchCoupleProfiles } from '@/lib/couples';
 import { getAllEnrollments, JourneyEnrollment } from '@/lib/journeyProgress';
 import { Journey } from '@/lib/journeys';
+import ReflectionHistory from '@/components/coach/ReflectionHistory';
 
 type WheelStep = 'list' | 'time' | 'spin';
 
@@ -334,7 +335,7 @@ export default function DashboardPage() {
           onSelect={(journey: Journey) => router.push(`/journey/${journey.id}?from=journeys`)}
         />
       );
-      case 'counselor': return renderPlaceholder('💬', 'AI Coach', 'Personalised relationship guidance powered by AI.');
+      case 'counselor': return <ReflectionHistory userId={state.profile?.id ?? ''} coupleId={coupleId ?? null} />;
     }
   };
 
