@@ -557,6 +557,33 @@ export function generateDateIdea(activity: Activity, layer: EmotionalLayer): Dat
   return { title, description: sentence };
 }
 
+
+// ── Relaxed Profile Generation (Tiered Fallback) ────────────────────────────
+
+function generateRelaxedProfiles(profile: CoupleProfile): CoupleProfile[] {
+  const dims: (keyof CoupleProfile)[] = ['energy', 'conflict', 'affection', 'rhythm'];
+  const tier2: CoupleProfile[] = [];
+  const tier3: CoupleProfile[] = [];
+
+  // Tier 2: relax 1 dimension to 'mixed'
+  for (const dim of dims) {
+    if (profile[dim] !== 'mixed') {
+      tier2.push({ ...profile, [dim]: 'mixed' });
+    }
+  }
+
+  // Tier 3: relax 2 dimensions to 'mixed'
+  for (let i = 0; i < dims.length; i++) {
+    for (let j = i + 1; j < dims.length; j++) {
+      if (profile[dims[i]] !== 'mixed' || profile[dims[j]] !== 'mixed') {
+        tier3.push({ ...profile, [dims[i]]: 'mixed', [dims[j]]: 'mixed' });
+      }
+    }
+  }
+
+  return [...tier2, ...tier3];
+}
+
 // ── Main Entry Points ────────────────────────────────────────────────────────
 
 export function generateMultipleDates(
@@ -568,28 +595,46 @@ export function generateMultipleDates(
   const p1 = parseArchetype(code1);
   const p2 = parseArchetype(code2);
   const profile = combineCoupleProfile(p1, p2);
-  const activities = filterActivities(profile, timeSlot);
-  const layers = filterEmotionalLayers(profile);
 
-  if (activities.length === 0 || layers.length === 0) {
-    return [];
-  }
+  const results: DateIdea[] = [];
+  const usedKeys = new Set<string>();
 
-  const ideasMap = new Map<string, DateIdea>();
-  let attempts = 0;
-  const maxAttempts = count * 5; // prevent infinite loop
+  // Helper to generate from a profile
+  function fillFromProfile(prof: CoupleProfile) {
+    const activities = filterActivities(prof, timeSlot);
+    const layers = filterEmotionalLayers(prof);
+    if (activities.length === 0 || layers.length === 0) return;
 
-  while (ideasMap.size < count && attempts < maxAttempts) {
-    const activity = pickRandom(activities);
-    const layer = pickRandom(layers);
-    const idea = generateDateIdea(activity, layer);
-    if (!ideasMap.has(idea.description)) {
-      ideasMap.set(idea.description, idea);
+    // Shuffle both
+    const shuffledActivities = [...activities].sort(() => Math.random() - 0.5);
+    const shuffledLayers = [...layers].sort(() => Math.random() - 0.5);
+
+    for (const activity of shuffledActivities) {
+      if (results.length >= count) return;
+      for (const layer of shuffledLayers) {
+        if (results.length >= count) return;
+        const key = activity.name + '|' + layer.text;
+        if (usedKeys.has(key)) continue;
+        usedKeys.add(key);
+        results.push(generateDateIdea(activity, layer));
+        break; // one layer per activity per pass
+      }
     }
-    attempts++;
   }
 
-  return Array.from(ideasMap.values());
+  // Tier 1: exact profile
+  fillFromProfile(profile);
+
+  // Tier 2 & 3: relaxed profiles
+  if (results.length < count) {
+    const relaxed = generateRelaxedProfiles(profile);
+    for (const rp of relaxed) {
+      if (results.length >= count) break;
+      fillFromProfile(rp);
+    }
+  }
+
+  return results;
 }
 
 export function spinDateWheel(
