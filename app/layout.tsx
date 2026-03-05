@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { AppProvider } from '@/contexts/AppContext';
+import PauseButton from '@/components/pause/PauseButton';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -42,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="font-sans bg-pp-bg-dark min-h-dvh antialiased overflow-x-hidden">
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>{children}<PauseButton /></AppProvider>
       </body>
     </html>
   );
