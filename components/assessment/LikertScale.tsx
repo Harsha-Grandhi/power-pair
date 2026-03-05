@@ -33,6 +33,7 @@ export default function LikertScale({ questionId, value, onChange, isActive }: L
             <button
               key={opt.value}
               onClick={() => onChange(questionId, opt.value)}
+              disabled={!isActive}
               className={`rounded-full border-2 transition-all duration-200 flex items-center justify-center shrink-0 ${
                 isSelected
                   ? 'scale-110 shadow-lg'
