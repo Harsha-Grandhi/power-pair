@@ -11,33 +11,33 @@ export const INTRO_QUESTIONS: IntroQuestion[] = [
 ];
 
 const ALL_QUESTIONS: LikertQuestion[] = [
-  // Emotional Style (5 questions: 3 forward, 2 reverse)
-  { id: 'es1', originalIndex: 1, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: 'I easily share my feelings with my partner.', isReverse: false },
-  { id: 'es2', originalIndex: 2, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: 'When something bothers me, I prefer talking about it openly.', isReverse: false },
-  { id: 'es3', originalIndex: 3, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: 'I enjoy deep emotional conversations.', isReverse: false },
-  { id: 'es4', originalIndex: 4, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: 'My partner usually knows how I feel without guessing.', isReverse: false },
-  { id: 'es6', originalIndex: 5, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: 'I sometimes hold back my feelings even when something bothers me.', isReverse: true },
+  // ── Emotional Style (Expressive vs Reserved) ──────────────────────────────
+  { id: 'es1', originalIndex: 1, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: "After a tough day, I'd rather talk it out with my partner than process it alone.", isReverse: false },
+  { id: 'es2', originalIndex: 2, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: "When I'm excited about something, my partner is the first person I tell.", isReverse: false },
+  { id: 'es3', originalIndex: 3, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: 'I need some time alone before I can talk about something that upset me.', isReverse: true },
+  { id: 'es4', originalIndex: 4, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: "I tend to share how I'm feeling throughout the day, not just at night.", isReverse: false },
+  { id: 'es5', originalIndex: 5, dimension: 'emotionalStyle', dimensionLabel: 'Emotional Style', question: "I'd rather figure out my emotions on my own before bringing them up.", isReverse: true },
 
-  // Conflict Style (5 questions: 3 forward, 2 reverse)
-  { id: 'cs1', originalIndex: 6, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: 'When an issue arises, I prefer addressing it immediately.', isReverse: false },
-  { id: 'cs2', originalIndex: 7, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: 'Honest confrontation is healthier than avoiding problems.', isReverse: false },
-  { id: 'cs3', originalIndex: 8, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: 'I feel comfortable discussing difficult topics with my partner.', isReverse: false },
-  { id: 'cs4', originalIndex: 9, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: 'I avoid arguments to maintain peace.', isReverse: true },
-  { id: 'cs8', originalIndex: 10, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: 'I value clarity over temporary harmony.', isReverse: false },
+  // ── Conflict Style (Direct vs Avoidant) ───────────────────────────────────
+  { id: 'cs1', originalIndex: 6, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: "If something my partner did bothered me, I'd bring it up that same day.", isReverse: false },
+  { id: 'cs2', originalIndex: 7, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: "I'd rather have an uncomfortable conversation now than let resentment build.", isReverse: false },
+  { id: 'cs3', originalIndex: 8, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: "I pick my battles \u2014 not every disagreement needs a full conversation.", isReverse: true },
+  { id: 'cs4', originalIndex: 9, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: "When we disagree, I'd rather hash it out right then even if it gets heated.", isReverse: false },
+  { id: 'cs5', originalIndex: 10, dimension: 'conflictStyle', dimensionLabel: 'Conflict Style', question: 'I believe some things resolve themselves if you give them space and time.', isReverse: true },
 
-  // Affection Style (5 questions: 3 forward, 2 reverse)
-  { id: 'as1', originalIndex: 11, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'I enjoy planning romantic gestures for my partner.', isReverse: false },
-  { id: 'as2', originalIndex: 12, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'I like surprising my partner with thoughtful acts.', isReverse: false },
-  { id: 'as3', originalIndex: 13, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'Romantic moments are important in a relationship.', isReverse: false },
-  { id: 'as4', originalIndex: 14, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'I show love more through actions than romantic gestures.', isReverse: true },
-  { id: 'as5', originalIndex: 15, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'Celebrating relationship milestones matters to me.', isReverse: false },
+  // ── Affection Style (Romantic vs Practical) ───────────────────────────────
+  { id: 'as1', originalIndex: 11, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: "I'd rather plan a surprise date night than help my partner with their to-do list.", isReverse: false },
+  { id: 'as2', originalIndex: 12, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'Handwritten notes and thoughtful gifts mean more to me than practical help.', isReverse: false },
+  { id: 'as3', originalIndex: 13, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: "I show love by making my partner's life easier, not through grand gestures.", isReverse: true },
+  { id: 'as4', originalIndex: 14, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: "I love setting the mood \u2014 candles, music, the whole vibe.", isReverse: false },
+  { id: 'as5', originalIndex: 15, dimension: 'affectionStyle', dimensionLabel: 'Affection Style', question: 'Fixing something broken at home feels more loving to me than buying flowers.', isReverse: true },
 
-  // Life Rhythm (5 questions: 3 forward, 2 reverse)
-  { id: 'lr1', originalIndex: 16, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'I prefer planning activities in advance.', isReverse: false },
-  { id: 'lr2', originalIndex: 17, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'I feel comfortable when life is organized.', isReverse: false },
-  { id: 'lr4', originalIndex: 18, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'I enjoy spontaneous plans more than scheduled ones.', isReverse: true },
-  { id: 'lr5', originalIndex: 19, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'Stability is important in my lifestyle.', isReverse: false },
-  { id: 'lr7', originalIndex: 20, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'Sudden plan changes stress me.', isReverse: false },
+  // ── Life Rhythm (Structured vs Spontaneous) ───────────────────────────────
+  { id: 'lr1', originalIndex: 16, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: "I like knowing what we're doing this weekend by Wednesday.", isReverse: false },
+  { id: 'lr2', originalIndex: 17, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'A spontaneous road trip sounds more fun than a planned vacation.', isReverse: true },
+  { id: 'lr3', originalIndex: 18, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'I feel most relaxed when my week is mapped out.', isReverse: false },
+  { id: 'lr4', originalIndex: 19, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: "I'd rather see where the night takes us than follow a dinner reservation.", isReverse: true },
+  { id: 'lr5', originalIndex: 20, dimension: 'lifeRhythm', dimensionLabel: 'Life Rhythm', question: 'Routines make me feel grounded, not bored.', isReverse: false },
 ];
 
 // Jumble: interleave dimensions so same dimension doesn't appear back-to-back
@@ -45,8 +45,8 @@ const JUMBLED_ORDER: number[] = [
   0, 5, 10, 15,   // es1, cs1, as1, lr1
   3, 8, 13, 18,   // es4, cs4, as3, lr4
   1, 6, 11, 16,   // es2, cs2, as2, lr2
-  4, 9, 14, 19,   // es6, cs8, as4, lr5
-  2, 7, 12, 17,   // es3, cs3, as5, lr7
+  4, 9, 14, 19,   // es5, cs5, as4, lr5
+  2, 7, 12, 17,   // es3, cs3, as5, lr3
 ];
 
 export const ASSESSMENT_QUESTIONS: LikertQuestion[] = JUMBLED_ORDER.map(
