@@ -86,8 +86,8 @@ export default function LandingPage() {
               <span className="text-gradient-primary">how you love.</span>
             </h1>
             <p className="text-base md:text-lg text-pp-text-muted leading-relaxed max-w-sm">
-              A psychologically structured assessment that reveals your emotional patterns,
-              love style, and relationship archetype — in under 10 minutes.
+              A psychologically structured assessment that reveals your personality type
+              across 4 relationship dimensions — in under 10 minutes.
             </p>
           </div>
 
@@ -97,9 +97,9 @@ export default function LandingPage() {
             style={{ animationDelay: '200ms' }}
           >
             {[
-              { value: '18', label: 'Questions' },
-              { value: '6', label: 'Dimensions' },
-              { value: '8', label: 'Archetypes' },
+              { value: '36', label: 'Questions' },
+              { value: '4', label: 'Dimensions' },
+              { value: '16', label: 'Archetypes' },
             ].map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p className="text-2xl font-bold text-white font-display">{value}</p>
@@ -136,18 +136,26 @@ export default function LandingPage() {
           style={{ animationDelay: '450ms' }}
         >
           <p className="text-xs text-pp-text-muted mb-3 text-center uppercase tracking-widest">
-            8 relationship archetypes
+            16 personality types
           </p>
           <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
             {[
+              { emoji: '❤️', name: 'Passionate Heart', color: '#E05C5C' },
+              { emoji: '🌹', name: 'Romantic Adventurer', color: '#E8845A' },
+              { emoji: '📋', name: 'Devoted Planner', color: '#5B8FD4' },
+              { emoji: '🎉', name: 'Playful Partner', color: '#E88FCF' },
+              { emoji: '✨', name: 'Emotional Idealist', color: '#9B72CF' },
+              { emoji: '🌙', name: 'Dreamy Romantic', color: '#8B6FC0' },
+              { emoji: '🤲', name: 'Gentle Supporter', color: '#4CAF9A' },
+              { emoji: '☀️', name: 'Cheerful Companion', color: '#F6B17A' },
               { emoji: '🌿', name: 'Emotional Sage', color: '#4CAF9A' },
-              { emoji: '🔥', name: 'Passionate Heart', color: '#E05C5C' },
-              { emoji: '⚓', name: 'Steady Anchor', color: '#7B8FA6' },
-              { emoji: '🫶', name: 'Safe Haven', color: '#F6B17A' },
-              { emoji: '🚀', name: 'Future Builder', color: '#5B8FD4' },
-              { emoji: '🌊', name: 'Free Spirit', color: '#9B72CF' },
-              { emoji: '🤍', name: 'Devoted Partner', color: '#8DB5C8' },
-              { emoji: '⚖️', name: 'Balanced Romantic', color: '#7077A1' },
+              { emoji: '🎯', name: 'Quiet Strategist', color: '#5B8FD4' },
+              { emoji: '⚓', name: 'Loyal Anchor', color: '#7B8FA6' },
+              { emoji: '🧭', name: 'Independent Explorer', color: '#E8845A' },
+              { emoji: '🕯️', name: 'Quiet Romantic', color: '#C47A5A' },
+              { emoji: '💭', name: 'Thoughtful Dreamer', color: '#8B6FC0' },
+              { emoji: '🛡️', name: 'Steady Supporter', color: '#4A8B7F' },
+              { emoji: '🍃', name: 'Easygoing Observer', color: '#7077A1' },
             ].map(({ emoji, name, color }) => (
               <div
                 key={name}

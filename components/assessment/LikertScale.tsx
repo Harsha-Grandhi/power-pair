@@ -46,7 +46,6 @@ export default function LikertScale({ questionId, value, onChange, isActive }: L
                 borderColor: isSelected ? opt.color : isActive ? opt.color + '60' : opt.color + '30',
                 backgroundColor: isSelected ? opt.color : 'transparent',
               }}
-              disabled={!isActive}
             >
               {isSelected && (
                 <div className="w-2 h-2 rounded-full bg-white" />

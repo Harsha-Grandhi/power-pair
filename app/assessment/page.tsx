@@ -46,21 +46,40 @@ export default function AssessmentPage() {
     (questionId: string, value: number) => {
       setAssessmentAnswer({ [questionId]: value } as Partial<AssessmentAnswers>);
 
-      // Auto-advance to next question on this page
+      // Auto-advance to next unanswered question on this page
       const currentLocalIndex = questions.findIndex(q => q.id === questionId);
-      if (currentLocalIndex < questions.length - 1) {
-        const nextIndex = currentLocalIndex + 1;
+      // Look for the next unanswered question after the current one
+      let nextIndex = -1;
+      for (let i = currentLocalIndex + 1; i < questions.length; i++) {
+        if (state.assessmentAnswers[questions[i].id] === undefined) {
+          nextIndex = i;
+          break;
+        }
+      }
+      // If no unanswered after current, check before (wrap around)
+      if (nextIndex === -1) {
+        for (let i = 0; i < currentLocalIndex; i++) {
+          if (state.assessmentAnswers[questions[i].id] === undefined) {
+            nextIndex = i;
+            break;
+          }
+        }
+      }
+
+      if (nextIndex !== -1) {
         setActiveQuestionIndex(nextIndex);
-        // Scroll to next question
         setTimeout(() => {
           questionRefs.current[nextIndex]?.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
           });
-        }, 150);
+        }, 200);
+      } else {
+        // All questions on page answered — keep current active
+        setActiveQuestionIndex(currentLocalIndex);
       }
     },
-    [questions, setAssessmentAnswer]
+    [questions, setAssessmentAnswer, state.assessmentAnswers]
   );
 
   const isPageComplete = questions.every(q => state.assessmentAnswers[q.id] !== undefined);
