@@ -86,6 +86,13 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const [answeredToday, setAnsweredToday] = useState(false);
   const [activeChallenges, setActiveChallenges] = useState<Challenge[]>([]);
 
+  // Pairing code state
+  const [pairingCode, setPairingCode] = useState<string | null>(null);
+  const [linkCode, setLinkCode] = useState('');
+  const [linkError, setLinkError] = useState('');
+  const [linkLoading, setLinkLoading] = useState(false);
+  const [linkSuccess, setLinkSuccess] = useState(false);
+
   useEffect(() => {
     fetchCoupleProfiles(coupleId).then(({ partner1: p1, partner2: p2, partner1Name: name }) => {
       setPartner1(p1);
@@ -125,21 +132,6 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
     });
   }, [fetchState, coupleId, currentProfile.id]);
 
-  if (fetchState === 'loading') {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
-      </div>
-    );
-  }
-
-  // Pairing code state for waiting view
-  const [pairingCode, setPairingCode] = useState<string | null>(null);
-  const [linkCode, setLinkCode] = useState('');
-  const [linkError, setLinkError] = useState('');
-  const [linkLoading, setLinkLoading] = useState(false);
-  const [linkSuccess, setLinkSuccess] = useState(false);
-
   useEffect(() => {
     if (fetchState === 'waiting') {
       fetchPairingCode(coupleId).then(code => setPairingCode(code));
@@ -159,6 +151,14 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       setLinkError('Code not found or already used. Check and try again.');
     }
   };
+
+  if (fetchState === 'loading') {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="w-8 h-8 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
+      </div>
+    );
+  }
 
   if (fetchState === 'waiting') {
     return (
