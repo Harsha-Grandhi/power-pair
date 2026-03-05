@@ -73,7 +73,7 @@ export default function DashboardPage() {
         fetchCoupleProfiles(state.coupleId!).then(({ partner1, partner2 }) => {
           const isP2 = state.isInvited;
           const partner = isP2 ? partner1 : partner2;
-          if (partner) setPartnerArchetype(partner.archetypeResult.primary.name);
+          if (partner) setPartnerArchetype(partner.archetypeResult.primary.code);
         });
       }
     }
@@ -145,8 +145,8 @@ export default function DashboardPage() {
     }
 
     if (wheelStep === 'spin' && selectedDuration) {
-      const p2Name = partnerArchetype ?? primary.name;
-      const ideas = getDateIdeasForCouple(primary.name, p2Name, selectedDuration);
+      const p2Code = partnerArchetype ?? primary.code;
+      const ideas = getDateIdeasForCouple(primary.code, p2Code, selectedDuration);
       const fallback = ['Cook together', 'Go for a walk', 'Watch a movie', 'Play a board game', 'Have a picnic', 'Visit a café', 'Write letters to each other', 'Star gaze'];
 
       return (
