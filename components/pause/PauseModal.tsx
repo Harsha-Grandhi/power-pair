@@ -44,6 +44,7 @@ export default function PauseModal({ open, onClose, userId, coupleId }: PauseMod
   const [rawText, setRawText] = useState('');
   const [aiSummary, setAiSummary] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [postResetFeeling, setPostResetFeeling] = useState('');
 
   // Lock body scroll
   useEffect(() => {
@@ -66,6 +67,7 @@ export default function PauseModal({ open, onClose, userId, coupleId }: PauseMod
       setRawText('');
       setAiSummary('');
       setIsProcessing(false);
+      setPostResetFeeling('');
     }
   }, [open]);
 
@@ -104,6 +106,7 @@ export default function PauseModal({ open, onClose, userId, coupleId }: PauseMod
   };
 
   const handlePostResetSubmit = (feeling: string, reflection: string) => {
+    setPostResetFeeling(feeling);
     const text = reflection || `After a breathing exercise, I felt ${feeling.toLowerCase()}.`;
     setRawText(text);
     summarize(selectedEmotion, text);
@@ -115,16 +118,19 @@ export default function PauseModal({ open, onClose, userId, coupleId }: PauseMod
   };
 
   const handleShare = async () => {
-    const reflection = await saveReflection({
-      userId,
-      coupleId,
+    const mode = selectedMode ?? 'vent';
+    const reflectionId = await saveReflection({
+      user_id: userId,
+      couple_id: coupleId ?? '',
       emotion: selectedEmotion,
-      rawText,
-      aiSummary,
-      shared: true,
+      mode,
+      raw_text: rawText,
+      ai_summary: aiSummary,
+      shared_with_partner: true,
+      ...(mode === 'reset' && postResetFeeling ? { post_reset_feeling: postResetFeeling } : {}),
     });
-    if (coupleId) {
-      await shareWithPartner(reflection.id, coupleId);
+    if (reflectionId && coupleId) {
+      await shareWithPartner(reflectionId, coupleId, userId, aiSummary, selectedEmotion);
     }
     onClose();
   };
@@ -134,13 +140,16 @@ export default function PauseModal({ open, onClose, userId, coupleId }: PauseMod
   };
 
   const handleKeepPrivate = async () => {
+    const mode = selectedMode ?? 'vent';
     await saveReflection({
-      userId,
-      coupleId,
+      user_id: userId,
+      couple_id: coupleId ?? '',
       emotion: selectedEmotion,
-      rawText,
-      aiSummary,
-      shared: false,
+      mode,
+      raw_text: rawText,
+      ai_summary: aiSummary,
+      shared_with_partner: false,
+      ...(mode === 'reset' && postResetFeeling ? { post_reset_feeling: postResetFeeling } : {}),
     });
     onClose();
   };
