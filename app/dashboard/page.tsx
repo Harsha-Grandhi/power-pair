@@ -10,7 +10,7 @@ import LockedReport from '@/components/dashboard/LockedReport';
 import TimeSelector from '@/components/wheel/TimeSelector';
 import SpinWheel from '@/components/wheel/SpinWheel';
 import JourneyListView from '@/components/journeys/JourneyListView';
-import { DateDuration, getDateIdeasForCouple } from '@/lib/dateIdeas';
+import { DateDuration, getDateIdeasForCouple, DateIdea } from '@/lib/dateIdeas';
 import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
 import { fetchCoupleProfiles } from '@/lib/couples';
 import { getAllEnrollments, JourneyEnrollment } from '@/lib/journeyProgress';
@@ -147,7 +147,16 @@ export default function DashboardPage() {
     if (wheelStep === 'spin' && selectedDuration) {
       const p2Code = partnerArchetype ?? primary.code;
       const ideas = getDateIdeasForCouple(primary.code, p2Code, selectedDuration);
-      const fallback = ['Cook together', 'Go for a walk', 'Watch a movie', 'Play a board game', 'Have a picnic', 'Visit a café', 'Write letters to each other', 'Star gaze'];
+      const fallback: DateIdea[] = [
+        { title: 'Cook Together', description: 'Make a simple meal together and enjoy the process.' },
+        { title: 'Go for a Walk', description: 'Take a stroll and enjoy each other\'s company.' },
+        { title: 'Movie Night', description: 'Pick a movie and watch it together with some snacks.' },
+        { title: 'Game Night', description: 'Play a board game and get a little competitive.' },
+        { title: 'Picnic Date', description: 'Pack some treats and head to the park.' },
+        { title: 'Caf\u00E9 Hop', description: 'Visit a new caf\u00E9 and try something different.' },
+        { title: 'Love Letters', description: 'Write heartfelt letters to each other.' },
+        { title: 'Star Gaze', description: 'Find a cozy spot and look up at the night sky together.' },
+      ];
 
       return (
         <SpinWheel

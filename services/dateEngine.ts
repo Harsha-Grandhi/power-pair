@@ -19,6 +19,11 @@ export interface CoupleProfile {
 
 export type TimeSlot = '30min' | '1hr' | '3hrs';
 
+export interface DateIdea {
+  title: string;
+  description: string;
+}
+
 // ── Parsing ──────────────────────────────────────────────────────────────────
 
 const POS1: Record<string, 'Expressive' | 'Reflective'> = { E: 'Expressive', R: 'Reflective' };
@@ -131,6 +136,50 @@ export function filterEmotionalLayers(profile: CoupleProfile): EmotionalLayer[] 
 }
 
 // ── Activity Verb Phrase Map ─────────────────────────────────────────────────
+
+
+const ACTIVITY_TITLES: Record<string, string[]> = {
+  'Cooking challenge': ['Kitchen Cook-Off', 'Chef Battle', 'Cook-Off Night'],
+  'Cafe hopping': ['Caf\u00E9 Crawl', 'Coffee Run', 'Caf\u00E9 Hop'],
+  'Street food exploration': ['Street Eats', 'Food Trail', 'Street Food Run'],
+  'Board game night': ['Game Night', 'Board Game Bash'],
+  'Photo walk': ['Snap & Stroll', 'Photo Walk'],
+  'Park picnic': ['Picnic Date', 'Park Picnic'],
+  'Couple workout': ['Sweat Date', 'Workout Together'],
+  'Art challenge': ['Art Jam', 'Creative Clash'],
+  'Puzzle solving': ['Puzzle Time', 'Brain Teasers'],
+  'Movie analysis': ['Movie Deep Dive', 'Film Night'],
+  'Relationship trivia': ['Love Trivia', 'Couple Quiz'],
+  'Future planning': ['Dream Planning', 'Future Talk'],
+  'Bucket list writing': ['Bucket List Date', 'Dream List'],
+  'Dance session': ['Dance It Out', 'Dance Date'],
+  'Love letter writing': ['Love Letters', 'Letter Date'],
+  'Memory walk': ['Memory Lane', 'Walk & Remember'],
+  'Blind taste test': ['Taste Test Showdown', 'Blind Tasting'],
+  'Travel planning': ['Trip Planning', 'Wanderlust Date'],
+  'DIY craft': ['Craft Date', 'DIY Together'],
+  'Mini road trip': ['Mini Road Trip', 'Spontaneous Drive'],
+  'Bookstore date': ['Bookstore Browse', 'Book Date'],
+  'Sunset watching': ['Sunset Date', 'Golden Hour'],
+  'Museum visit': ['Museum Date', 'Culture Trip'],
+  'Karaoke': ['Karaoke Night', 'Sing-Off'],
+  'Cooking competition': ['Cook-Off Battle', 'Kitchen Showdown'],
+  'Vision board creation': ['Vision Board', 'Dream Board Date'],
+  'Couple journaling': ['Journal Together', 'Couple Journal'],
+  'Yoga together': ['Yoga Date', 'Stretch & Connect'],
+  'Meditation session': ['Zen Date', 'Meditation Moment'],
+  'Podcast listening discussion': ['Podcast & Chat', 'Listen & Discuss'],
+  'Board game cafe': ['Game Caf\u00E9', 'Board Game Caf\u00E9'],
+  'Farmers market visit': ['Market Date', 'Farmers Market Run'],
+  'Dessert tasting': ['Sweet Tasting', 'Dessert Date'],
+  'Creative storytelling': ['Story Time', 'Make Up Stories'],
+  'Relationship quiz': ['Couple Quiz', 'How Well Do You Know Me?'],
+  'Cooking international cuisine': ['World Kitchen', 'Global Flavors'],
+  'Learn a new skill together': ['Skill Date', 'Learn Together'],
+  'Language challenge': ['Language Date', 'Lingo Challenge'],
+  'Couple photography': ['Photo Shoot', 'Couple Snaps'],
+  'Random adventure challenge': ['Mystery Adventure', 'Random Challenge'],
+};
 
 const ACTIVITY_PHRASES: Record<string, string[]> = {
   'Cooking challenge': [
@@ -478,7 +527,7 @@ function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export function generateDateIdea(activity: Activity, layer: EmotionalLayer): string {
+export function generateDateIdea(activity: Activity, layer: EmotionalLayer): DateIdea {
   // Pick an activity verb phrase (fallback to raw name)
   const actPhrases = ACTIVITY_PHRASES[activity.name];
   const actPart = actPhrases ? pickRandom(actPhrases) : activity.name;
@@ -501,7 +550,11 @@ export function generateDateIdea(activity: Activity, layer: EmotionalLayer): str
     sentence += '.';
   }
 
-  return sentence;
+  // Pick a short catchy title from ACTIVITY_TITLES
+  const titles = ACTIVITY_TITLES[activity.name];
+  const title = titles ? pickRandom(titles) : activity.name;
+
+  return { title, description: sentence };
 }
 
 // ── Main Entry Points ────────────────────────────────────────────────────────
@@ -511,7 +564,7 @@ export function generateMultipleDates(
   code2: string,
   timeSlot: TimeSlot,
   count = 20
-): string[] {
+): DateIdea[] {
   const p1 = parseArchetype(code1);
   const p2 = parseArchetype(code2);
   const profile = combineCoupleProfile(p1, p2);
@@ -522,25 +575,28 @@ export function generateMultipleDates(
     return [];
   }
 
-  const ideas = new Set<string>();
+  const ideasMap = new Map<string, DateIdea>();
   let attempts = 0;
   const maxAttempts = count * 5; // prevent infinite loop
 
-  while (ideas.size < count && attempts < maxAttempts) {
+  while (ideasMap.size < count && attempts < maxAttempts) {
     const activity = pickRandom(activities);
     const layer = pickRandom(layers);
-    ideas.add(generateDateIdea(activity, layer));
+    const idea = generateDateIdea(activity, layer);
+    if (!ideasMap.has(idea.description)) {
+      ideasMap.set(idea.description, idea);
+    }
     attempts++;
   }
 
-  return Array.from(ideas);
+  return Array.from(ideasMap.values());
 }
 
 export function spinDateWheel(
   code1: string,
   code2: string,
   timeSlot: TimeSlot
-): string {
+): DateIdea {
   const ideas = generateMultipleDates(code1, code2, timeSlot, 1);
-  return ideas[0] ?? "Go for a walk and enjoy each other's company.";
+  return ideas[0] ?? { title: 'Go for a Walk', description: "Go for a walk and enjoy each other's company." };
 }

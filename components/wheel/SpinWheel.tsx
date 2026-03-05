@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
-import { DateDuration, DURATION_LABELS, DURATION_ICONS } from '@/lib/dateIdeas';
+import { DateDuration, DURATION_LABELS, DURATION_ICONS, DateIdea } from '@/lib/dateIdeas';
 
 // Segment colours cycling through design palette
 const SEGMENT_COLORS = [
@@ -16,7 +16,7 @@ const SEGMENT_COLORS = [
 ];
 
 interface SpinWheelProps {
-  ideas: string[];
+  ideas: DateIdea[];
   duration: DateDuration;
   onBack: () => void;
   onConfirm: (idea: string) => void;
@@ -39,7 +39,7 @@ function segmentPath(cx: number, cy: number, r: number, startAngle: number, endA
 export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWheelProps) {
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
-  const [winner, setWinner] = useState<string | null>(null);
+  const [winner, setWinner] = useState<DateIdea | null>(null);
   const totalRotRef = useRef(0);
 
   // Pick 8 ideas (or fewer if not enough)
@@ -139,8 +139,8 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
             const textPos = polarToCartesian(CX, CY, R * 0.65, midAngle);
             const rad = ((midAngle - 90) * Math.PI) / 180;
 
-            // Shorten idea text for the wheel
-            const short = idea.length > 22 ? idea.slice(0, 20) + '…' : idea;
+            // Show short title on wheel segment
+            const short = idea.title.length > 22 ? idea.title.slice(0, 20) + '\u2026' : idea.title;
 
             return (
               <g key={i}>
@@ -193,7 +193,8 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
           {/* Winner card */}
           <div className="p-5 rounded-2xl border border-pp-accent/30 bg-pp-accent/8 text-center space-y-2">
             <p className="text-xs text-pp-accent uppercase tracking-widest font-medium">Your Date Idea</p>
-            <p className="text-white font-semibold text-base leading-snug">{winner}</p>
+            <p className="text-white font-semibold text-lg leading-snug">{winner.title}</p>
+            <p className="text-sm text-pp-text-muted leading-relaxed">{winner.description}</p>
             <div className="flex items-center justify-center gap-1.5">
               <span className="text-xs">{DURATION_ICONS[duration]}</span>
               <span className="text-xs text-pp-text-muted">{DURATION_LABELS[duration]}</span>
@@ -202,7 +203,7 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
 
           {/* Actions */}
           <button
-            onClick={() => onConfirm(winner)}
+            onClick={() => onConfirm(winner.title + ': ' + winner.description)}
             className="w-full py-4 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold text-base
               hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]"
           >

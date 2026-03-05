@@ -1,7 +1,9 @@
-import { generateMultipleDates, TimeSlot } from '@/services/dateEngine';
+import { generateMultipleDates, TimeSlot, DateIdea } from '@/services/dateEngine';
 import { ARCHETYPES } from '@/lib/archetypes';
 
 export type DateDuration = '30 min' | '1 hr' | '3 hrs';
+
+export type { DateIdea };
 
 const DURATION_TO_SLOT: Record<DateDuration, TimeSlot> = {
   '30 min': '30min',
@@ -29,7 +31,7 @@ export function getDateIdeasForCouple(
   p1: string,
   p2: string,
   duration: DateDuration
-): string[] {
+): DateIdea[] {
   // Detect whether we received a code (4 uppercase letters) or a name
   const code1 = p1.length === 4 && /^[A-Z]{4}$/.test(p1) ? p1 : codeFromName(p1);
   const code2 = p2.length === 4 && /^[A-Z]{4}$/.test(p2) ? p2 : codeFromName(p2);
