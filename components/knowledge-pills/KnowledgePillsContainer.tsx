@@ -46,11 +46,12 @@ export default function KnowledgePillsContainer({ partnerArchetypeCode }: Knowle
 
   // ---------- All situations ----------
   return (
-    <div className="px-5 pt-4 space-y-6">
-      <div>
-        <h2 className="font-display text-xl text-white">Knowledge Pills</h2>
-        <p className="text-sm text-pp-text-muted mt-1">
-          Quick support for what your partner is going through
+    <div className="px-5 py-5 space-y-5">
+      <div className="space-y-1">
+        <p className="text-xs text-pp-text-muted uppercase tracking-widest">Quick Support</p>
+        <h2 className="font-display text-2xl text-white">Knowledge Pills</h2>
+        <p className="text-sm text-pp-text-muted leading-relaxed">
+          Quick support for what your partner is going through.
         </p>
       </div>
 

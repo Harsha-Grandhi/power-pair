@@ -34,19 +34,21 @@ export default function PillCard({ situation, onSelect }: PillCardProps) {
   return (
     <button
       onClick={() => onSelect(situation)}
-      className="w-full text-left bg-pp-card/60 rounded-xl p-4 border border-white/5 hover:border-pp-accent/30 transition-all space-y-2"
+      className="w-full text-left rounded-2xl border border-white/8 bg-white/3 p-4
+        hover:border-white/20 hover:bg-white/5 transition-all duration-200 active:scale-[0.99]"
     >
-      <div className="flex items-start gap-3">
-        <span className="text-xl shrink-0">{SITUATION_EMOJI[situation.situation_id] || CATEGORY_EMOJI[situation.category] || '💡'}</span>
-        <div className="min-w-0 flex-1">
-          <p className="text-sm text-white font-medium leading-snug">{situation.situation}</p>
-          <span className="inline-block mt-1.5 text-[11px] px-2 py-0.5 rounded-full bg-white/8 text-pp-text-muted">
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-xl bg-pp-accent/8 border border-pp-accent/20
+          flex items-center justify-center flex-shrink-0 text-xl">
+          {SITUATION_EMOJI[situation.situation_id] || CATEGORY_EMOJI[situation.category] || '💡'}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-white leading-snug">{situation.situation}</p>
+          <span className="inline-block mt-1.5 text-[10px] px-2 py-0.5 rounded-full border border-white/10 bg-white/5 text-pp-text-muted">
             {situation.category}
           </span>
         </div>
-        <svg className="w-4 h-4 text-pp-text-muted shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+        <span className="text-pp-text-muted text-sm flex-shrink-0">→</span>
       </div>
     </button>
   );

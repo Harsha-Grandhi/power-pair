@@ -50,25 +50,25 @@ export default function PillDetailView({ situationText, bucket, onBack }: PillDe
       </div>
 
       {/* Why this moment matters */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-white/5">
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
         <p className="text-xs text-pp-text-muted uppercase tracking-wider mb-2">Why this moment matters</p>
         <p className="text-sm text-white/80 leading-relaxed">{bucket.why_this_moment_matters}</p>
       </div>
 
       {/* Understanding their feelings */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-white/5">
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
         <p className="text-xs text-pp-text-muted uppercase tracking-wider mb-2">Understanding their feelings</p>
         <p className="text-sm text-white/80 leading-relaxed">{bucket.understanding_feelings}</p>
       </div>
 
       {/* What they need */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-white/5">
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
         <p className="text-xs text-pp-text-muted uppercase tracking-wider mb-2">What they need</p>
         <p className="text-sm text-white/80 leading-relaxed">{bucket.what_they_need}</p>
       </div>
 
       {/* What to say */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-white/5">
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
         <p className="text-xs text-pp-text-muted uppercase tracking-wider mb-3">💬 What to say</p>
         <div className="space-y-3">
           {sayEntries.map(([key, value]) => (
@@ -83,7 +83,7 @@ export default function PillDetailView({ situationText, bucket, onBack }: PillDe
       </div>
 
       {/* What to do */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-white/5">
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
         <p className="text-xs text-pp-text-muted uppercase tracking-wider mb-2">✅ What to do</p>
         <ul className="space-y-2">
           {bucket.what_to_do.map((d, i) => (
@@ -96,13 +96,13 @@ export default function PillDetailView({ situationText, bucket, onBack }: PillDe
       </div>
 
       {/* Small gesture */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-white/5">
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
         <p className="text-xs text-pp-text-muted uppercase tracking-wider mb-2">🎁 Small gesture</p>
         <p className="text-sm text-white/80 leading-relaxed">{bucket.small_gesture}</p>
       </div>
 
       {/* What NOT to do */}
-      <div className="bg-pp-card/60 rounded-xl p-4 border border-red-500/10">
+      <div className="rounded-2xl border border-red-400/15 bg-red-400/3 p-4">
         <p className="text-xs text-red-400/80 uppercase tracking-wider mb-2">🚫 What not to do</p>
         <ul className="space-y-2">
           {bucket.what_not_to_do.map((d, i) => (
@@ -115,7 +115,7 @@ export default function PillDetailView({ situationText, bucket, onBack }: PillDe
       </div>
 
       {/* Closing affirmation */}
-      <div className="bg-pp-accent/5 rounded-xl p-4 border border-pp-accent/15 text-center">
+      <div className="rounded-2xl border border-pp-accent/15 bg-pp-accent/5 p-4 text-center">
         <p className="text-sm text-white/80 italic leading-relaxed">💛 {bucket.closing_affirmation}</p>
       </div>
     </div>
