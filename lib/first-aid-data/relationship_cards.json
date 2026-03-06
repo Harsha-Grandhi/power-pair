@@ -1,0 +1,1232 @@
+[
+  {
+    "situation_id": 1,
+    "situation": "Your partner had a bad day at work",
+    "category": "Work Stress",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "A bad day at work doesn't stay at work for your partner. They carry it home in their body, their tone, their silence or their words. As someone who is both expressive and direct, they won't hide that something is wrong — but they need you to meet that energy with presence, not solutions. Tonight is about being their person first.",
+        "understanding_feelings": "Your partner processes emotions outwardly — they need to say it to make sense of it. After a bad day they're likely frustrated, tense and looking for an outlet. Because they're direct, they may come home with strong opinions about what went wrong and who was responsible. This isn't venting for the sake of it — they're working through it in real time. What they need most right now is someone who can hold that energy without flinching, without redirecting and without making them feel like they're too much.",
+        "what_they_need": "Engagement — real, full, unhurried engagement. They don't want you to fix it, but they do want you to care enough to understand it. Ask follow up questions. React genuinely. Let them feel that what happened to them today actually matters to you too. An Expressive + Direct partner can tell immediately when you're half present — and that will frustrate them more than the bad day itself.",
+        "what_to_say": {
+          "open_with": "You seem off — what happened today? Tell me everything.",
+          "while_talking": "That's really frustrating. You didn't deserve that.",
+          "show_presence": "Wait, so what did they actually say when you responded? I want to understand the full picture.",
+          "wind_down": "I'm glad you told me. That sounds like a genuinely hard day and you handled it better than most people would."
+        },
+        "what_to_do": [
+          "Put your phone away and give them a dedicated window to talk — even 20 minutes of real attention changes everything",
+          "Ask follow up questions — show genuine curiosity about the details",
+          "React honestly — they can tell when you're performing sympathy vs actually feeling it",
+          "If they want to problem solve, engage with it seriously and honestly",
+          "Make the evening feel like a recovery — good food, comfort, their kind of unwinding"
+        ],
+        "small_gesture": "Have their favorite drink or snack ready when they get home — no big announcement, just quiet care that says you were thinking of them before they even walked in.",
+        "what_not_to_do": [
+          "Don't say 'just forget about it' or 'don't let it ruin your evening'",
+          "Don't offer solutions before they feel completely heard",
+          "Don't make them feel guilty for bringing the bad mood home",
+          "Don't be emotionally flat — they need your energy to match their moment"
+        ],
+        "closing_affirmation": "They came home to you first. Make sure that always feels like the right choice."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Your partner feels things deeply but tends to pull back when things get hard. A bad day at work creates an internal tension for them — they want to express how they feel but something holds them back. Your job tonight is to create enough warmth and safety that they feel they can let it out without being judged or overwhelmed.",
+        "understanding_feelings": "On the surface they may seem quiet or withdrawn — but underneath there's a lot going on. An Expressive + Avoidant partner absorbs the emotions of a bad day fully but hesitates to unload them, often because they don't want to be a burden or they're not sure how you'll respond. They may drop hints — a sigh, a one word answer, a deflection — without coming out and saying 'I had a terrible day.' Don't wait for them to announce it. They're already hoping you'll notice.",
+        "what_they_need": "A gentle, low pressure opening. They need you to notice and invite — not push or pry. Once they feel safe enough to talk, they will open up and they'll need warmth and emotional validation more than logic or advice. Avoid making them feel analyzed or managed — they need the conversation to feel natural and soft, not like a check-in.",
+        "what_to_say": {
+          "open_with": "Hey — come here. You seem like today was a lot. No pressure, but I'm here if you want to talk.",
+          "if_they_deflect": "Okay, we don't have to talk about it. I just want you to know I noticed and I'm not going anywhere.",
+          "when_opening_up": "I'm really glad you're telling me this. That sounds like it was genuinely hard.",
+          "wind_down": "You don't have to have it all figured out tonight. You just had a hard day — that's allowed."
+        },
+        "what_to_do": [
+          "Create a warm, comfortable environment the moment they walk in — soft lighting, calm energy, no chaos",
+          "Give them the opening without forcing the door",
+          "When they do open up, respond with warmth and empathy first — save any practical thoughts for much later",
+          "Stay physically close — a hand on their shoulder, sitting next to them — it grounds them",
+          "Don't let the evening feel heavy — once they've shared, help them transition to something comforting"
+        ],
+        "small_gesture": "Light a candle, put on music they love, or suggest curling up together — create a little sanctuary that makes home feel like the safest place to land.",
+        "what_not_to_do": [
+          "Don't push them to talk before they're ready",
+          "Don't respond to their feelings with logic or problem solving too quickly",
+          "Don't make them feel like they're being too sensitive",
+          "Don't fill the silence with your own energy — sometimes quiet togetherness is exactly what they need"
+        ],
+        "closing_affirmation": "They don't always know how to ask for comfort — but they always know when they've found it."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner won't come home and announce they had a bad day. They'll go quiet, they'll seem focused or slightly withdrawn and they'll manage it internally. But just because they're not showing it loudly doesn't mean they don't need you. Recognizing it without being asked — and responding in the right way — is one of the most meaningful things you can do.",
+        "understanding_feelings": "A Reserved + Direct partner processes stress privately and practically. They're probably already analyzing what went wrong and thinking about how to fix it. They don't want to be fussed over or emotionally handled — but they do appreciate calm, solid support from someone they trust. If they do bring it up, they'll be matter of fact about it. Don't confuse that with not caring — this is just how they're wired.",
+        "what_they_need": "Calm, unobtrusive support. The best thing you can do is take things off their plate, keep the environment peaceful and let them know you're available without hovering. If they want to talk they will — and when they do, engage with substance. They'll appreciate a real conversation far more than emotional reassurance they didn't ask for.",
+        "what_to_say": {
+          "open_with": "Rough day? I've got dinner sorted — no need to think about anything tonight.",
+          "if_they_want_to_talk": "Tell me what happened — what's the actual problem?",
+          "show_support": "That makes sense that it frustrated you. What are you thinking of doing about it?",
+          "wind_down": "You'll work it out — you always do. Tonight just decompress."
+        },
+        "what_to_do": [
+          "Handle practical things without being asked — dinner, chores, logistics",
+          "Keep the home environment calm and low stimulation",
+          "Engage with the problem if they bring it up — be a real sounding board, not just a cheerleader",
+          "Respect their silence — don't interpret it as something being wrong between you two",
+          "Give them space to decompress in their own way before expecting connection"
+        ],
+        "small_gesture": "Handle one thing they'd normally do themselves — quietly and without making it a moment. For a Reserved + Direct partner, actions speak louder than any words.",
+        "what_not_to_do": [
+          "Don't pepper them with emotional check-in questions",
+          "Don't try to get them to open up if they're clearly in processing mode",
+          "Don't offer unsolicited emotional analysis of their situation",
+          "Don't take their quietness personally"
+        ],
+        "closing_affirmation": "Their version of leaning on you looks like quiet trust — honour it."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner will say very little about their bad day — possibly nothing at all. They process internally, they dislike burdening others and they retreat when stressed. But they still feel it. The way you show up tonight — without pressure, without drama — is what makes them feel safe at home.",
+        "understanding_feelings": "A Reserved + Avoidant partner carries stress very quietly. They won't vent, they won't bring it up and they may even deflect if you ask directly. But you'll notice it — in their energy, their quietness, the way they seem slightly elsewhere. They're not shutting you out on purpose. They're just wired to handle things alone and need time to decompress before they can be present again. The worst thing you can do is push. The best thing is to simply be a calm, non-demanding presence.",
+        "what_they_need": "Space — but not distance. There's a difference. They don't want to be left alone entirely, but they don't want to be crowded either. A calm evening with no pressure, no big conversations and no emotional demands is genuinely restorative for them. Show care through actions, not words. They notice everything — they just don't always say so.",
+        "what_to_say": {
+          "open_with": "Hey — no need to talk about anything. Just glad you're home.",
+          "if_they_seem_low": "I've got everything sorted tonight. You just relax.",
+          "if_they_open_up": "That sounds frustrating. You handled it though.",
+          "wind_down": "Tonight's about switching off. What do you feel like doing?"
+        },
+        "what_to_do": [
+          "Take over the evening completely — food, decisions, logistics",
+          "Don't initiate any heavy conversations",
+          "Be physically present but emotionally undemanding — sit near them, watch something together",
+          "Let them set the pace for any interaction",
+          "Do small things that show care without requiring acknowledgment"
+        ],
+        "small_gesture": "Order their favorite food, put on a show they love and just be there — no agenda, no check-ins, just comfortable shared space.",
+        "what_not_to_do": [
+          "Don't ask repeatedly if they're okay",
+          "Don't push them to talk or share what happened",
+          "Don't make their quietness about you or the relationship",
+          "Don't create any new decisions or demands for them tonight"
+        ],
+        "closing_affirmation": "The fact that they came home to you is already them saying everything they need to say."
+      }
+    ]
+  },
+  {
+    "situation_id": 2,
+    "situation": "Your partner seems unusually quiet today",
+    "category": "Emotional Overwhelm",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "When your partner goes quiet, something is off. As someone who is naturally expressive, unusual silence is a signal — not a mood. They may not know how to start the conversation, or they might be waiting to see if you'll notice. Tonight, noticing matters more than anything else.",
+        "understanding_feelings": "An Expressive + Direct partner going quiet is rare and significant. They're likely sitting with something heavy — something that feels too big or too complicated to just blurt out. They may seem fine on the surface but there's a tension underneath. They're processing, but they process better out loud — and they need someone to open the door.",
+        "what_they_need": "A direct, warm invitation to talk. Don't dance around it or pretend you haven't noticed — they'll see through that immediately. Name what you're observing and make it safe to open up. Once they start talking, give them everything — full attention, real reactions, genuine engagement.",
+        "what_to_say": {
+          "open_with": "Hey — you've been quiet today and I notice. What's going on?",
+          "if_they_say_nothing": "I know you well enough to know it's not nothing. I'm not going anywhere — take your time.",
+          "when_opening_up": "I'm really glad you told me. Keep going — I want to understand all of it.",
+          "wind_down": "Thank you for telling me. That makes sense that it's been weighing on you."
+        },
+        "what_to_do": [
+          "Name the silence directly but gently — don't pretend everything is normal",
+          "Create a private, comfortable moment for them to open up",
+          "Give full, undivided attention once they start talking",
+          "React genuinely — they need to feel the conversation is real, not managed",
+          "Stay with them for the rest of the evening, even if nothing more is said"
+        ],
+        "small_gesture": "Make them their favorite drink and sit with them — no phone, no TV, just you being present and unhurried.",
+        "what_not_to_do": [
+          "Don't pretend you haven't noticed — it will feel like indifference",
+          "Don't push so hard that they shut down",
+          "Don't try to immediately fix or reframe whatever they share",
+          "Don't let the evening pass without acknowledging something is off"
+        ],
+        "closing_affirmation": "Sometimes the most loving thing is simply refusing to pretend you didn't notice."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Your partner being quiet could mean they're overwhelmed, hurt or processing something they don't yet have words for. As someone expressive but avoidant, they feel deeply but retreat when vulnerable. The quietness is an invitation — but a fragile one.",
+        "understanding_feelings": "An Expressive + Avoidant partner goes quiet when they're feeling something they're not sure is safe to express. They may fear being judged, misunderstood or making things awkward. There's often a lot happening beneath the surface — emotions they're trying to sort through alone before they can share them. They need to feel genuinely safe before the words will come.",
+        "what_they_need": "Softness. A gentle, no-pressure opening that tells them you've noticed and you care — without making them feel put on the spot. The more relaxed and warm the environment, the more likely they are to slowly open up. Don't make it feel like an intervention.",
+        "what_to_say": {
+          "open_with": "You seem a little in your head today — I'm here whenever you're ready, no rush at all.",
+          "if_they_deflect": "Okay — I just want you to know I noticed and I'm not going anywhere.",
+          "when_opening_up": "Take your time. I'm listening and there's nowhere else I'd rather be right now.",
+          "wind_down": "I'm glad you shared that with me. You don't have to carry things alone."
+        },
+        "what_to_do": [
+          "Create a calm, warm environment — reduce noise, chaos and demands",
+          "Offer the opening gently and then step back — let them come to you",
+          "When they do talk, respond with pure warmth and zero judgment",
+          "Stay physically close without being intrusive",
+          "Let the evening be slow and gentle — no agenda"
+        ],
+        "small_gesture": "Suggest something cozy and low-key together — a walk, cooking together, or just sitting outside for a bit. Movement and softness often unlock what stillness can't.",
+        "what_not_to_do": [
+          "Don't force the conversation or ask repeatedly",
+          "Don't make them feel like their quietness is a problem",
+          "Don't respond to what they share with advice or analysis too quickly",
+          "Don't be visibly worried — it adds to their pressure"
+        ],
+        "closing_affirmation": "Your calm, patient presence is the safest place they have — let them find their way to it."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "For your partner, quiet is normal — but unusual quiet is different. They're self-sufficient and rarely ask for help, so if something is visibly off, it's worth acknowledging. The key is doing it without making a big deal of it.",
+        "understanding_feelings": "A Reserved + Direct partner goes quiet when they're processing something significant. They're likely working through it methodically in their head — replaying events, considering options, thinking about next steps. They don't need you to draw it out of them emotionally, but a simple, direct acknowledgment that you've noticed shows you're paying attention — which matters to them more than they let on.",
+        "what_they_need": "A brief, direct check-in — then space. Don't linger on it or make it emotionally heavy. Ask once, mean it, and then respect whatever response you get. If they want to talk, they will — and when they do, be a practical, engaged sounding board rather than an emotional support coach.",
+        "what_to_say": {
+          "open_with": "You seem quiet — everything okay? I'm here if you want to think something through.",
+          "if_they_say_fine": "Okay — I'm around if that changes.",
+          "if_they_open_up": "What's the actual situation? Walk me through it.",
+          "wind_down": "Makes sense. You'll work through it — you always do."
+        },
+        "what_to_do": [
+          "Check in once, directly and sincerely — then respect their answer",
+          "Keep the home environment calm and low pressure",
+          "Be available as a sounding board if they want to think something through",
+          "Don't interpret their quietness as emotional distance from you",
+          "Keep the evening simple and undemanding"
+        ],
+        "small_gesture": "Take care of dinner or the evening logistics quietly — no fuss, just practical care that clears their space to think.",
+        "what_not_to_do": [
+          "Don't keep asking if they're okay after the first check-in",
+          "Don't try to emotionally unpack what they're feeling",
+          "Don't take their quietness personally",
+          "Don't create a big emotional moment out of a quiet evening"
+        ],
+        "closing_affirmation": "Respect for their process is one of the deepest forms of love you can show them."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Quiet is your partner's default — but there are shades of quiet. Today's feels different and you've noticed. They won't bring it up and they won't ask for anything — but a gentle, pressure-free presence from you tonight is exactly what they need even if they'd never say so.",
+        "understanding_feelings": "A Reserved + Avoidant partner processes everything internally and shares very little even on a normal day. When something is genuinely weighing on them, the difference is subtle — slightly more withdrawn, less engaged, a certain flatness. They're unlikely to open up unprompted and pushing will cause them to retreat further. They need space, but the warm kind — where they know you're there without feeling crowded.",
+        "what_they_need": "Almost nothing — in the best possible way. A calm evening, no pressure, no demands, no probing questions. Just you being a quiet, comfortable presence. If they want to share something they will — but most likely they just need to decompress in a space that feels safe and judgment-free.",
+        "what_to_say": {
+          "open_with": "Quiet evening tonight — I've got everything sorted.",
+          "if_they_seem_low": "No need to talk about anything. Just wanted you to know I'm here.",
+          "if_they_share": "That sounds tough. I hear you.",
+          "wind_down": "Good to just be home, right?"
+        },
+        "what_to_do": [
+          "Handle the entire evening without asking them to make decisions",
+          "Sit nearby comfortably without initiating conversation",
+          "Let them lead any interaction completely",
+          "Keep noise, stimulation and demands at zero",
+          "Show care entirely through actions — not words or questions"
+        ],
+        "small_gesture": "Set up the most comfortable, low-effort evening possible — their spot, their show, their food. No ceremony, just pure comfort.",
+        "what_not_to_do": [
+          "Don't ask what's wrong more than once",
+          "Don't try to get them to open up",
+          "Don't make their quietness feel like a problem to solve",
+          "Don't make the evening about you or your connection needs tonight"
+        ],
+        "closing_affirmation": "Being someone they never have to explain themselves to — that's everything to them."
+      }
+    ]
+  },
+  {
+    "situation_id": 3,
+    "situation": "Your partner says they feel emotionally drained",
+    "category": "Emotional Overwhelm",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "When your partner names it — says out loud 'I'm emotionally drained' — that's significant. They're telling you directly because they trust you to respond well. This is your moment to show up exactly the way they need.",
+        "understanding_feelings": "An Expressive + Direct partner telling you they're drained means they've hit a real wall. They've been giving — to work, to people, to responsibilities — and there's nothing left. They may feel irritable, flat or unusually tearful. Because they're expressive, they may oscillate between wanting to talk about everything and just wanting to collapse. Because they're direct, they've already told you the truth — now they need you to take it seriously.",
+        "what_they_need": "To be completely relieved of any responsibility for the evening. They need you to take over — the decisions, the logistics, the energy. They also need to feel emotionally replenished, which for them means real connection — not just physical comfort but genuine presence and conversation when they're ready for it.",
+        "what_to_say": {
+          "open_with": "Thank you for telling me. Tonight is completely taken care of — you don't have to do or decide anything.",
+          "when_they_want_to_talk": "Tell me what's been draining you — let's get it out.",
+          "to_validate": "You've been carrying a lot. It makes complete sense that you're exhausted.",
+          "wind_down": "You've done enough. Tonight you just receive."
+        },
+        "what_to_do": [
+          "Take full ownership of the evening — food, decisions, atmosphere",
+          "Let them choose between talking it out or switching off completely",
+          "If they talk, listen with full presence and genuine empathy",
+          "Be physically warm and affectionate — it replenishes them",
+          "Protect their energy fiercely — no difficult topics tonight"
+        ],
+        "small_gesture": "Draw them a bath, set up their favorite comfort show, or prepare a meal they love — something that says 'I thought about what you needed before you had to ask.'",
+        "what_not_to_do": [
+          "Don't ask them to make any decisions tonight",
+          "Don't bring up anything stressful or unresolved",
+          "Don't minimize it with 'everyone gets tired'",
+          "Don't make them take care of you emotionally tonight"
+        ],
+        "closing_affirmation": "They named what they needed — now show them they were right to trust you with it."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "For your partner to admit they're emotionally drained is actually a big deal. They feel things deeply but tend to push through and avoid burdening others. Saying it out loud means they've hit a point where they can't manage it alone anymore — and they're reaching toward you.",
+        "understanding_feelings": "An Expressive + Avoidant partner who is emotionally drained is running on empty but still trying to hold it together on the outside. They may seem okay but their eyes give it away — or maybe they finally let it slip in a quiet moment. There's likely a buildup of unexpressed emotion underneath — things they've been feeling but not saying. They need a release valve but they need it to feel safe and gentle.",
+        "what_they_need": "Warmth, softness and zero pressure. Create the conditions for them to let down their guard without feeling exposed. Don't push them to explain or unpack everything — just make the environment so safe and warm that whatever needs to come out, can.",
+        "what_to_say": {
+          "open_with": "I hear you. You don't have to hold it together tonight — not with me.",
+          "to_create_safety": "There's nothing you could say or feel right now that would be too much for me.",
+          "when_opening_up": "Let it out. I've got you.",
+          "wind_down": "You're safe here. That's what tonight is for."
+        },
+        "what_to_do": [
+          "Make the environment feel like a sanctuary — calm, warm, beautiful in small ways",
+          "Be physically close and affectionate without being demanding",
+          "Let them guide how much they share — don't pull it out of them",
+          "Respond to everything with warmth, never logic",
+          "Stay with them — don't disappear to your phone or another room"
+        ],
+        "small_gesture": "Create a cozy reset moment — candles, their comfort food, a blanket, soft music. Make home feel like the most restorative place on earth tonight.",
+        "what_not_to_do": [
+          "Don't push them to identify why they're drained",
+          "Don't offer solutions or reframes",
+          "Don't let the environment be chaotic or stimulating",
+          "Don't ask anything of them tonight"
+        ],
+        "closing_affirmation": "Sometimes being drained just means you've been strong for too long — remind them they can stop now."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner saying they're emotionally drained is them communicating a need — clearly and directly. They don't say things like this lightly. The fact that they named it means they need you to respond practically and without fuss.",
+        "understanding_feelings": "A Reserved + Direct partner who admits to being drained has been running at full capacity for too long and has hit a limit. They won't be dramatic about it — they've just assessed that they're depleted and they're telling you because they trust you. They don't need emotional processing or deep conversations about feelings. They need their load lightened, their environment quieted and their evening handled.",
+        "what_they_need": "Practical relief. Take things off their plate, keep things calm and don't add any new weight to the evening. They'll recover fastest when the environment is peaceful and they're not required to give anything — emotionally or practically.",
+        "what_to_say": {
+          "open_with": "Got it — I'll handle everything tonight. You just decompress.",
+          "to_acknowledge": "You've been running hard lately. Makes sense.",
+          "if_they_want_to_talk": "What would help most right now — talking it through or just switching off?",
+          "wind_down": "Tonight's yours. No output required."
+        },
+        "what_to_do": [
+          "Take over all evening responsibilities immediately",
+          "Keep the environment quiet, calm and low stimulation",
+          "Ask once what would help most — then do it without further discussion",
+          "Respect their need to be quiet and still",
+          "Don't require any emotional output from them"
+        ],
+        "small_gesture": "Handle everything — dinner, tidying, decisions — so their evening requires zero effort. Practical care is their love language.",
+        "what_not_to_do": [
+          "Don't make it an emotional conversation about how they're feeling",
+          "Don't keep checking in on them throughout the evening",
+          "Don't bring up anything that requires their mental energy",
+          "Don't treat it as an opportunity for deep connection — that's not what they need right now"
+        ],
+        "closing_affirmation": "The most direct way to love them tonight is to simply make everything easier."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner rarely admits to struggling. If they've said they're emotionally drained, they mean it — and it likely took something to say it out loud. The bar for tonight is simple: make home feel like the easiest place in the world to be.",
+        "understanding_feelings": "A Reserved + Avoidant partner who is emotionally drained has been silently managing too much for too long. They've probably given a lot to the outside world and have nothing left. They won't want to talk about it at length and they won't want to be fussed over — but they do want to feel like they can completely switch off in your presence without any demands or expectations placed on them.",
+        "what_they_need": "Total, pressure-free ease. Handle everything. Ask nothing. Be a calm, quiet presence that requires zero energy from them. Show love entirely through action — the absence of demands is itself a profound gift tonight.",
+        "what_to_say": {
+          "open_with": "I've got tonight. You don't need to do anything.",
+          "keep_it_simple": "No need to explain — just rest.",
+          "if_they_share": "That's enough. You've done enough.",
+          "wind_down": "Just be here. That's all."
+        },
+        "what_to_do": [
+          "Take complete ownership of the evening with no discussion needed",
+          "Create a perfectly comfortable, low-effort environment",
+          "Don't initiate conversation or connection",
+          "Be present but invisible in your demands",
+          "Let them fully decompress in whatever way feels natural to them"
+        ],
+        "small_gesture": "Set everything up for maximum comfort before they even ask — their spot, their show, their food, zero decisions required. Pure, quiet care.",
+        "what_not_to_do": [
+          "Don't ask them to explain or unpack their feelings",
+          "Don't hover or check in repeatedly",
+          "Don't make the evening about connection or relationship needs",
+          "Don't add a single item to their mental load tonight"
+        ],
+        "closing_affirmation": "Needing nothing from them tonight is one of the most loving things you can offer."
+      }
+    ]
+  },
+  {
+    "situation_id": 4,
+    "situation": "Your partner is feeling anxious about something",
+    "category": "Emotional Overwhelm",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "Anxiety has a way of making everything feel bigger and more urgent than it is. Your partner is expressive enough to show it and direct enough to tell you — which means they're already reaching out. How you respond in the next few minutes sets the tone for their entire evening.",
+        "understanding_feelings": "An Expressive + Direct partner experiencing anxiety will likely want to talk through it — possibly at length and with intensity. They process by externalizing, so expect them to circle back to the same worry multiple times. This isn't them being irrational — it's how they work through things. They may also want your honest input once they've vented. Don't hold back your perspective entirely — they're direct and they'll want a real conversation eventually, not just reassurance.",
+        "what_they_need": "First, to be heard fully without interruption. Then, honest and grounded engagement with whatever is worrying them. They don't just want to be soothed — they want to feel like you've actually thought about it with them and that together you've looked the thing in the face.",
+        "what_to_say": {
+          "open_with": "Tell me what's going on — what are you anxious about?",
+          "while_sharing": "I hear you. Keep going — what's the worst part of it?",
+          "to_ground_them": "Okay — let's actually look at this together. What do we know for certain?",
+          "wind_down": "You're not facing this alone. We've looked at it and you're more prepared than you think."
+        },
+        "what_to_do": [
+          "Let them talk it through fully before offering any perspective",
+          "Engage with the actual worry — don't just try to make it go away",
+          "Help them separate what's real from what's feared",
+          "Be honest but anchoring — give them something solid to hold onto",
+          "Stay close for the rest of the evening"
+        ],
+        "small_gesture": "Go for a walk together — movement and fresh air alongside honest conversation is one of the best antidotes to anxiety for someone like them.",
+        "what_not_to_do": [
+          "Don't dismiss the anxiety with 'you'll be fine'",
+          "Don't refuse to engage with the actual worry",
+          "Don't let them spiral without gently anchoring the conversation",
+          "Don't be emotionally flat — match their need for real engagement"
+        ],
+        "closing_affirmation": "Anxiety shrinks when it's looked at together — be the person who doesn't look away."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Your partner is feeling anxious but may struggle to fully articulate it or feel safe enough to share the depth of it. They feel intensely but avoid vulnerability — which means their anxiety may show up as restlessness, deflection or unusual clinginess rather than a direct conversation.",
+        "understanding_feelings": "An Expressive + Avoidant partner with anxiety is carrying a lot of internal noise. They're probably replaying scenarios, imagining worst cases and struggling to settle. They want comfort but may not ask for it directly. They may minimize what they're feeling — 'I'm fine, just a bit stressed' — while actually feeling quite overwhelmed underneath. They need the conversation to feel safe and warm before they'll let you all the way in.",
+        "what_they_need": "Gentle presence, warmth and a soft invitation to share without any pressure to have it all figured out. They need to feel that their anxiety won't alarm you or change how you see them — then they'll open up.",
+        "what_to_say": {
+          "open_with": "Hey — you seem a little unsettled. Whatever it is, you can tell me. No judgment at all.",
+          "to_create_safety": "You don't have to have it make sense yet. Just tell me what you're feeling.",
+          "while_sharing": "That makes complete sense that it's worrying you. I'd feel the same way.",
+          "wind_down": "You're not alone in this. Whatever it is, we'll face it — and I genuinely believe you're going to be okay."
+        },
+        "what_to_do": [
+          "Create a calm, warm, intimate space for the conversation",
+          "Validate their feelings before anything else — no reframing yet",
+          "Be physically comforting — closeness helps regulate their anxiety",
+          "Gently offer perspective only after they feel fully heard",
+          "Stay near them for the rest of the evening"
+        ],
+        "small_gesture": "Hold their hand, sit close, make their favorite comfort food — small acts of physical care and warmth are deeply regulating for them.",
+        "what_not_to_do": [
+          "Don't react to their anxiety with your own worry — stay calm and steady",
+          "Don't push them to 'think rationally' before they feel heard",
+          "Don't leave them alone if they seem unsettled",
+          "Don't minimize what they're feeling"
+        ],
+        "closing_affirmation": "Your calm certainty that everything will be okay is the most soothing thing they can borrow right now."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner doesn't scare easily and doesn't admit to anxiety lightly. If they're telling you they're anxious — or if you can see it — something real is weighing on them. The most helpful thing you can do is engage with it practically and directly without making it emotionally heavy.",
+        "understanding_feelings": "A Reserved + Direct partner experiencing anxiety is most likely anxious about something specific and concrete — a situation, a decision, an outcome. They're probably already trying to think their way through it but have hit a wall. They don't need emotional validation as much as they need a clear-headed, practical sounding board who can help them think it through without adding drama.",
+        "what_they_need": "Direct, practical engagement. Ask what's worrying them, help them think through it clearly and offer honest perspective. Keep the emotional temperature low — they'll find calm in logic and clarity, not in reassurance or comfort rituals.",
+        "what_to_say": {
+          "open_with": "What's on your mind? Talk me through it.",
+          "to_engage_practically": "Okay — what's the actual worst case here? And how likely is that really?",
+          "to_offer_perspective": "You've handled harder things than this. What's the first step you can actually take?",
+          "wind_down": "You've got this. You're already thinking about it the right way."
+        },
+        "what_to_do": [
+          "Engage with the actual concern — don't avoid the topic",
+          "Help them think it through logically and methodically",
+          "Offer honest, grounded perspective without sugarcoating",
+          "Help them identify one concrete action they can take",
+          "Keep the tone calm and matter of fact"
+        ],
+        "small_gesture": "Help them make a simple plan or list — turning anxiety into action items is genuinely calming for someone wired this way.",
+        "what_not_to_do": [
+          "Don't try to soothe them with emotional reassurance they didn't ask for",
+          "Don't avoid the topic to 'protect' them from thinking about it",
+          "Don't be alarmist or match their anxiety with your own worry",
+          "Don't make it a bigger emotional event than it needs to be"
+        ],
+        "closing_affirmation": "The most grounding thing for them is feeling like the problem has been looked at clearly — help them do that."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner likely won't tell you directly that they're anxious. You'll feel it in the room — a certain tension, distraction or withdrawal. They're carrying it alone because that's what they do. A gentle, zero-pressure presence from you tonight is the most you can offer — and it's more than enough.",
+        "understanding_feelings": "A Reserved + Avoidant partner experiencing anxiety goes very inward. They ruminate quietly, avoid talking about what's worrying them and may seem distant or distracted. They're not trying to shut you out — they're just deeply wired to handle things alone. Pushing will make them retreat further. The best environment for them to slowly decompress is one that is calm, predictable and completely free of additional stress.",
+        "what_they_need": "Quiet, steady presence. No probing, no fixing, no big conversations. Just the comfort of being around someone who isn't adding to the noise. If they want to share something, they will — but don't wait for it or engineer it.",
+        "what_to_say": {
+          "open_with": "No pressure to talk — I'm just here.",
+          "if_they_seem_tense": "Whatever's on your mind — it'll still be there tomorrow. Tonight you can just breathe.",
+          "if_they_share": "That sounds stressful. I get it.",
+          "simply": "You don't have to figure it out tonight."
+        },
+        "what_to_do": [
+          "Keep the evening completely calm and undemanding",
+          "Be a steady, quiet presence nearby",
+          "Don't probe or try to get them to open up",
+          "If they do share, respond simply and without alarm",
+          "Let them set the pace and depth of any interaction"
+        ],
+        "small_gesture": "A calm evening walk side by side — no conversation required — can quietly ease anxiety for someone who doesn't want to talk but needs to move through it.",
+        "what_not_to_do": [
+          "Don't ask repeatedly what's wrong",
+          "Don't try to fix or minimize what they're feeling",
+          "Don't create any additional stress or decisions tonight",
+          "Don't make your concern about them feel like another thing they have to manage"
+        ],
+        "closing_affirmation": "Just being a calm, quiet constant in their world tonight is an act of profound love."
+      }
+    ]
+  },
+  {
+    "situation_id": 5,
+    "situation": "Your partner feels unappreciated in the relationship",
+    "category": "Relationship Tension",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "This one hits differently — because it's not about work or the outside world. It's about you. Your partner is telling you directly that something between you two needs attention. This takes courage and trust — meet it with the same.",
+        "understanding_feelings": "An Expressive + Direct partner who feels unappreciated in the relationship will likely tell you — clearly and with feeling. They've probably been holding this for a while and it's finally come out. Underneath the frustration is someone who cares deeply about this relationship and wants it to be better, not someone who is giving up on it. The intensity of how they express it is proportional to how much they care.",
+        "what_they_need": "To be taken seriously. Not defended against, not placated, not met with counter-arguments. They need to see that what they've said has genuinely landed — that you've heard it and that you're willing to look honestly at your part in it. A real, accountable response from you will mean more than any gesture.",
+        "what_to_say": {
+          "open_with": "Thank you for telling me. I don't want to be defensive — I want to understand what you've been feeling.",
+          "to_show_accountability": "Can you tell me specifically what's made you feel that way? I want to actually get it.",
+          "to_validate": "That makes sense. I can see how those things added up — I haven't been showing up the way I should.",
+          "wind_down": "I hear you. This matters to me and I'm going to do better — starting now."
+        },
+        "what_to_do": [
+          "Listen without defending yourself — resist the urge to explain your side first",
+          "Ask specific questions to genuinely understand what they've been missing",
+          "Acknowledge your part honestly and without excuses",
+          "Show through action that night that something has shifted — be more present, more attentive",
+          "Follow through in the days after — words tonight mean nothing without change"
+        ],
+        "small_gesture": "Do something specific that shows you listened — if they mentioned feeling like an afterthought, make them the entire focus of the evening. Make it personal to what they said.",
+        "what_not_to_do": [
+          "Don't get defensive or turn it into a debate",
+          "Don't minimize with 'I do appreciate you though'",
+          "Don't promise change and then carry on the same way",
+          "Don't make them feel bad for bringing it up"
+        ],
+        "closing_affirmation": "The bravest thing they did today was tell you. The bravest thing you can do is really hear it."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "For your partner to say they feel unappreciated in the relationship — when their instinct is to avoid conflict — means they've been sitting on this for a long time. This didn't come out easily. Treat it with the care it deserves.",
+        "understanding_feelings": "An Expressive + Avoidant partner feeling unappreciated is in a painful internal conflict — they feel deeply hurt but hate confrontation. They may have brought it up gently, indirectly or in a moment of vulnerability. They're not looking for a fight — they're looking for reassurance that they matter to you and that you see them. They're also bracing slightly for the conversation to go badly, which means your tone and reaction in the first moments is everything.",
+        "what_they_need": "Immediate warmth and genuine acknowledgment — before anything else. They don't need you to fix the relationship tonight. They need to feel that you care that they're hurting and that you see what they've been missing. Gentleness is everything here.",
+        "what_to_say": {
+          "open_with": "I'm so glad you told me — I hate that you've been feeling this way. Tell me more.",
+          "to_show_listening": "I hear you. You deserve to feel appreciated and I haven't been making that clear enough.",
+          "to_reassure": "You matter to me more than I've been showing. That's on me and I want to change it.",
+          "wind_down": "Thank you for trusting me with this. I don't take that lightly."
+        },
+        "what_to_do": [
+          "Lead with warmth and care — not explanation or defense",
+          "Ask gently what they've been missing — let them guide you",
+          "Be genuinely affectionate and present for the rest of the evening",
+          "Do something that shows you listened — specific, personal, thoughtful",
+          "Be consistent in the days that follow"
+        ],
+        "small_gesture": "Write them a heartfelt message or note telling them specifically what you love and appreciate about them — something they can keep and return to.",
+        "what_not_to_do": [
+          "Don't get defensive or make them feel bad for bringing it up",
+          "Don't respond with a list of things you do for them",
+          "Don't let the conversation become clinical or turn into a negotiation",
+          "Don't let the evening end without them feeling genuinely closer to you"
+        ],
+        "closing_affirmation": "They risked the discomfort of saying it because they care about you — honor that completely."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner doesn't raise relationship issues lightly. If they've said they feel unappreciated — directly and clearly — they've been thinking about it for a while. This is them trusting you with something real. Respond with the same directness and honesty they've shown you.",
+        "understanding_feelings": "A Reserved + Direct partner who feels unappreciated has reached a point where the internal processing is done and they've decided to address it. They're not being emotional about it — they're being honest. They'll likely be clear about what's been missing and what they need. They're not looking for grand romantic gestures — they're looking for acknowledgment, honesty and concrete change.",
+        "what_they_need": "A direct, honest and accountable response. Don't over-emotionalize it — that will feel hollow to them. Acknowledge what they've said clearly, own your part without excuses and talk practically about what changes. Then follow through. For this partner, actions in the days ahead matter far more than words tonight.",
+        "what_to_say": {
+          "open_with": "I hear you — and I appreciate you saying it directly. Tell me what's been missing.",
+          "to_show_accountability": "You're right. I haven't been consistent enough and I can see how that's added up.",
+          "to_be_practical": "What would make the biggest difference to you? I want to be specific about what I change.",
+          "wind_down": "I'm glad you told me. I mean it when I say I'll do better."
+        },
+        "what_to_do": [
+          "Respond directly and without defensiveness",
+          "Ask specific questions about what they need — don't assume",
+          "Acknowledge your part clearly and honestly",
+          "Identify one or two concrete things you'll change and say them out loud",
+          "Follow through consistently — this partner notices patterns, not moments"
+        ],
+        "small_gesture": "Do something practical that directly addresses what they said they've been missing — not a grand gesture, but a precise one that shows you actually listened.",
+        "what_not_to_do": [
+          "Don't over-apologize or get emotional in a way that makes it about you",
+          "Don't deflect or bring up what they could do differently right now",
+          "Don't promise sweeping change — promise specific, believable change",
+          "Don't let the conversation end without a clear sense of what comes next"
+        ],
+        "closing_affirmation": "They said it clearly because they believe in you enough to think it's worth saying — prove them right."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "This may be one of the hardest things your partner has said to you — because saying it at all goes against every instinct they have. They avoid conflict, they keep things inside, they rarely ask for what they need. The fact that this came out means they've been carrying it for a long time and they need you to handle it very carefully.",
+        "understanding_feelings": "A Reserved + Avoidant partner who feels unappreciated is deeply hurt but will understate it. They may have brought it up quietly, almost as a throwaway comment — but it's anything but. They're likely already regretting saying it and bracing for the conversation to feel uncomfortable. They don't want a big emotional discussion — they just wanted you to know. Your reaction in the next few moments will either make them feel safe or make them close back up for a long time.",
+        "what_they_need": "Calm, genuine acknowledgment — without drama, without defensiveness and without turning it into a long conversation they didn't sign up for. A simple, sincere response and a visible change in how you treat them tonight is worth more than any amount of talking.",
+        "what_to_say": {
+          "open_with": "Thank you for telling me that — I know that wasn't easy. I hear you.",
+          "to_acknowledge": "You're right that I haven't shown it enough. That matters to me to fix.",
+          "keep_it_calm": "I don't want you to feel that way. I'm going to be more intentional.",
+          "wind_down": "No need to make it a big thing — I just want you to feel it from here on."
+        },
+        "what_to_do": [
+          "Respond calmly and sincerely — don't overreact in either direction",
+          "Don't push for a long conversation about it",
+          "Show the shift immediately through how you treat them that evening",
+          "Be more attentive, more present, more considerate — visibly",
+          "Keep showing up differently in the days ahead — quietly and consistently"
+        ],
+        "small_gesture": "Do something quietly thoughtful that shows you were listening — something small, personal and unprompted in the days that follow. They'll notice. They always notice.",
+        "what_not_to_do": [
+          "Don't make it a big dramatic moment — they'll shut down",
+          "Don't be defensive or explain yourself",
+          "Don't push them to talk more about it than they want to",
+          "Don't let it pass without any visible change in how you show up"
+        ],
+        "closing_affirmation": "They said it quietly — but they meant it deeply. Let your actions be the loudest response."
+      }
+    ]
+  },
+  {
+    "situation_id": 6,
+    "situation": "Your partner feels like you are not listening",
+    "category": "Relationship Tension",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "This one is personal — because it's not about the outside world, it's about you and them. Your partner is telling you directly that they don't feel heard by you. That takes honesty and courage. The way you respond right now will either deepen their trust or confirm their fear.",
+        "understanding_feelings": "An Expressive + Direct partner who feels unheard is frustrated and likely has been for a while. They communicate openly and expect the same level of engagement back. When they feel like they're talking to a wall — or competing with your phone, your distraction, your half-answers — it doesn't just annoy them, it makes them feel unimportant. They've probably shown this frustration in small ways before saying it out loud. Now that they have, they need to see an immediate and genuine shift.",
+        "what_they_need": "Real accountability — not defensiveness, not 'but I do listen.' They need you to hear this particular thing, in this particular moment, with your full self. Then they need to see it change. Not tomorrow, not eventually — tonight. Put the phone down, turn toward them and actually listen. Show them what it looks like when you're fully present.",
+        "what_to_say": {
+          "open_with": "You're right — I haven't been fully present and I'm sorry. I'm listening now. Tell me what's been on your mind.",
+          "to_show_accountability": "I don't want to make excuses. What I want is to actually hear you — so keep going.",
+          "while_talking": "I hear you. Say more about that.",
+          "wind_down": "Thank you for saying something. I needed to hear it and I'm going to do better."
+        },
+        "what_to_do": [
+          "Put every distraction away completely — phone face down, TV off, laptop closed",
+          "Make full eye contact and turn your body toward them",
+          "Ask follow up questions that show you're genuinely tracking what they're saying",
+          "Reflect back what they've said — show them their words actually landed",
+          "Stay consistent beyond tonight — one evening of listening means nothing without the pattern changing"
+        ],
+        "small_gesture": "Create a dedicated moment — suggest a walk or sit together somewhere without screens — and just let them talk while you listen completely.",
+        "what_not_to_do": [
+          "Don't get defensive or list all the times you have listened",
+          "Don't apologize and then immediately pick your phone back up",
+          "Don't make the conversation about your intentions — it's about their experience",
+          "Don't rush through this moment to get back to whatever you were doing"
+        ],
+        "closing_affirmation": "Being truly listened to by the person you love is one of the most profound feelings in the world — give them that tonight."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "For your partner to say they feel unlistened to — when their instinct is to avoid conflict — means this has been building for a long time and it finally came out. They're not attacking you. They're telling you something vulnerable about how they've been feeling. Treat it with the care it deserves.",
+        "understanding_feelings": "An Expressive + Avoidant partner who feels unheard is carrying a quiet sadness alongside the frustration. They want to share themselves with you — they have a lot going on inside — but when they feel like you're not really there, they start to retreat and stop trying. Over time, that feeling of not being heard becomes a feeling of not being seen. They're telling you now because they still believe it can be different — don't waste that.",
+        "what_they_need": "Warmth and genuine remorse — not a debate, not a defense. They need to feel that you actually care that they've been feeling this way and that something in you wants to change it. Then they need to experience the difference immediately — to feel what it's like when you're actually present with them.",
+        "what_to_say": {
+          "open_with": "I'm really glad you told me — and I'm sorry you've been feeling that way. I want to do better.",
+          "to_show_care": "Tell me what it's looked like from your side — I want to understand.",
+          "while_sharing": "I hear you. I can see how that would feel lonely.",
+          "wind_down": "You deserve to feel heard — especially by me. I'm going to be more present."
+        },
+        "what_to_do": [
+          "Respond with warmth and care before anything else",
+          "Put everything away and give them your complete attention right now",
+          "Ask gentle questions to understand how long they've been feeling this way",
+          "Be physically present and attentive for the rest of the evening",
+          "Show the shift — make this conversation feel different from the ones that made them feel unheard"
+        ],
+        "small_gesture": "Suggest talking over a walk or somewhere quiet and comfortable — somewhere that naturally removes distractions and makes real conversation feel easy.",
+        "what_not_to_do": [
+          "Don't defend yourself or explain why you were distracted",
+          "Don't make them feel bad for bringing it up",
+          "Don't respond with your own grievances",
+          "Don't let the evening end without them having experienced what it feels like when you're truly present"
+        ],
+        "closing_affirmation": "They're not asking for perfection — they're asking to feel like they matter to you. Show them they do."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner raised this directly — which means they've thought about it, decided it was worth saying and trusted you to handle it maturely. Don't make them regret that. A direct, honest response and a visible change in behavior is exactly what they need.",
+        "understanding_feelings": "A Reserved + Direct partner doesn't raise issues they don't mean. If they've said they feel unlistened to, they have specific evidence — moments where they felt dismissed, interrupted or deprioritized. They're not being emotional about it — they're making an observation. They expect the same directness back. What they don't want is an emotional apology or a big conversation about feelings. They want acknowledgment, honesty and change.",
+        "what_they_need": "A direct, accountable response — and then proof. Skip the lengthy apology. Say clearly that you hear them, ask what specifically has been missing and then demonstrate it by actually listening — properly, fully — for the rest of the evening.",
+        "what_to_say": {
+          "open_with": "Fair point — I haven't been as present as I should be. What have I been missing?",
+          "to_show_accountability": "Give me specific examples — I want to understand where I've dropped the ball.",
+          "to_be_direct": "Okay. I hear you. What does actually listening look like to you — what do you need from me?",
+          "wind_down": "I'll do better. And if I slip, call me out on it."
+        },
+        "what_to_do": [
+          "Respond directly and without defensiveness",
+          "Ask for specific examples — show you want to understand, not just apologize",
+          "Put distractions away and demonstrate active listening immediately",
+          "Ask them what good listening looks like for them — be practical about it",
+          "Follow through consistently, not just tonight"
+        ],
+        "small_gesture": "Ask them something about their life — work, a project, something they care about — and then actually listen with your full attention. Let them feel the difference right now.",
+        "what_not_to_do": [
+          "Don't over-apologize in a way that makes it about your feelings",
+          "Don't explain or justify the distractions",
+          "Don't make promises without asking what change actually looks like to them",
+          "Don't be defensive — it proves their point"
+        ],
+        "closing_affirmation": "The fastest way to respond to this is not with words — it's with your full, undivided attention starting right now."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner saying this at all is significant. They avoid conflict instinctively, they keep things inside and they rarely voice relationship needs. If this came out — even quietly, even sideways — it's been sitting with them for a long time. Handle it carefully and you'll earn a depth of trust that words alone never could.",
+        "understanding_feelings": "A Reserved + Avoidant partner who feels unheard doesn't show it through frustration — they show it through withdrawal. They gradually stop sharing, stop bringing things up, stop trying. By the time they say something, they've already been quietly retreating for a while. They're not looking for a big conversation about it — they're just letting you know. A calm, sincere acknowledgment and a visible shift in your behavior is more than enough.",
+        "what_they_need": "Very little — in the best way. A simple, genuine acknowledgment. No drama, no big apology, no long conversation. Then show the change quietly — put the phone down, make eye contact, be present. They'll notice immediately and it will mean everything even if they never say so.",
+        "what_to_say": {
+          "open_with": "You're right — I haven't been as present as I should be. I hear you.",
+          "keep_it_simple": "I don't need to make a big thing of it — I just want you to feel the difference.",
+          "if_they_share": "I appreciate you telling me. I'll do better.",
+          "show_it": "What's on your mind? I'm all here."
+        },
+        "what_to_do": [
+          "Acknowledge it simply and sincerely — no over-explaining",
+          "Put everything away and be visibly, quietly present",
+          "Don't turn it into a long relationship conversation they didn't ask for",
+          "Let the change speak for itself — they'll notice without you announcing it",
+          "Stay consistent in the days ahead — quietly and without fanfare"
+        ],
+        "small_gesture": "Simply put your phone in another room for the evening and give them your full presence — no announcement, just the act itself. They'll feel it.",
+        "what_not_to_do": [
+          "Don't make it a big dramatic moment",
+          "Don't over-apologize or make them comfort you about it",
+          "Don't turn it into a conversation about the relationship's patterns",
+          "Don't announce the change — just make it"
+        ],
+        "closing_affirmation": "Sometimes the most powerful thing you can say is nothing — and just finally, fully show up."
+      }
+    ]
+  },
+  {
+    "situation_id": 7,
+    "situation": "Your partner had an argument with a family member",
+    "category": "Family Stress",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "Family conflict hits differently — it carries history, complexity and a kind of pain that work stress doesn't. Your partner is likely coming home with a full emotional load. As someone expressive and direct, they need to unpack it — and they need you firmly in their corner while they do.",
+        "understanding_feelings": "An Expressive + Direct partner after a family argument will have strong feelings and strong opinions — and they'll want to share both. They may be angry, hurt, self-righteous or all three at once. They'll want to walk you through what happened in detail and they'll need your full engagement. They may also have complicated feelings underneath the anger — because family conflict rarely feels simple. Give them space to get to those layers without rushing.",
+        "what_they_need": "Your unwavering presence and loyalty — at least initially. Don't play devil's advocate too early. Don't complicate the story before they've had a chance to feel heard. Ask questions, stay engaged, validate how they feel. Once they've vented fully, you can gently help them find perspective — but only then.",
+        "what_to_say": {
+          "open_with": "Tell me what happened — all of it.",
+          "while_venting": "That sounds really painful. Especially because it's family.",
+          "to_stay_engaged": "What did you say back? How did it end?",
+          "wind_down": "However this plays out, I'm on your side. And when you're ready to think about the next step, I'm here for that too."
+        },
+        "what_to_do": [
+          "Give them full space to tell the story without steering it",
+          "Validate the emotion before engaging with the facts",
+          "Stay curious — ask follow up questions that show you're fully engaged",
+          "Be physically present and warm — family pain needs human closeness",
+          "Help them think through next steps only when they ask"
+        ],
+        "small_gesture": "Make the evening feel like a refuge — their comfort food, a quiet space, the sense that home is the one place where nothing from out there can touch them.",
+        "what_not_to_do": [
+          "Don't immediately take the family member's side or 'both sides' the situation",
+          "Don't minimize it — family arguments carry weight",
+          "Don't push them to reconcile or resolve tonight",
+          "Don't let the conversation become a general critique of their family dynamics unless they go there first"
+        ],
+        "closing_affirmation": "Family wounds are old and complicated — just being their safe place tonight is enough."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Family conflict is deeply unsettling for your partner. They feel it intensely but tend to avoid confrontation — so an argument may have left them shaken, guilty or emotionally rattled. They need to process this, but gently and in their own time.",
+        "understanding_feelings": "An Expressive + Avoidant partner after a family argument is dealing with a tangle of emotions — hurt, guilt, anger and possibly self-doubt. They may replay what was said, wonder if they handled it right or worry about the relationship with the family member going forward. They want to talk about it but may also feel embarrassed, vulnerable or unsure how much to share. Create the safety and they'll find their way to the words.",
+        "what_they_need": "Gentle, non-judgmental space to process. Let them lead. Don't push them to explain or justify — just be warm and present and let the conversation unfold naturally. They especially need to feel like you won't judge either them or their family member harshly — that it's safe to share the messy, complicated version.",
+        "what_to_say": {
+          "open_with": "Hey — I heard something happened. No pressure, but I'm here whenever you feel like talking.",
+          "when_sharing": "That sounds really hard. Family stuff is always more complicated.",
+          "to_hold_complexity": "It makes sense you feel conflicted about it — that's not easy.",
+          "wind_down": "Whatever you're feeling about it is okay. You don't have to have it figured out."
+        },
+        "what_to_do": [
+          "Create a warm, low-pressure space for them to open up",
+          "Let them share as much or as little as they want",
+          "Respond with empathy — not advice, not verdicts on who was right",
+          "Acknowledge the complexity — don't try to simplify what happened",
+          "Be physically close and comforting throughout the evening"
+        ],
+        "small_gesture": "Do something cozy and connecting together — cook a meal, watch something light afterward, create a sense of warmth and normalcy that helps them come back to themselves.",
+        "what_not_to_do": [
+          "Don't push them to talk about it before they're ready",
+          "Don't judge the family member harshly — it complicates their feelings",
+          "Don't offer strong opinions on who was right",
+          "Don't let the evening stay heavy — help them find their way back to calm"
+        ],
+        "closing_affirmation": "Family pain is complicated — the kindest thing is to simply sit in it with them without making it worse."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner doesn't dramatize family conflict — but that doesn't mean it doesn't affect them. If it's showing, it matters. A calm, practical presence and a willingness to engage seriously if they want to think it through is exactly the right support.",
+        "understanding_feelings": "A Reserved + Direct partner after a family argument is most likely already running a post-mortem in their head — what happened, why, what should come next. They'll be measured about it outwardly but there's likely frustration underneath. They don't need to be drawn out emotionally, but they may want to think through the situation with someone they trust. If they bring it up, engage with substance.",
+        "what_they_need": "A calm, steady environment and a clear-headed sounding board if they want one. Don't pry — but if they bring it up, engage practically and honestly. Help them think through it if that's what they need. If they'd rather let it sit, respect that too.",
+        "what_to_say": {
+          "open_with": "How did things go with your family? Everything okay?",
+          "if_they_want_to_talk": "Walk me through what happened — what started it?",
+          "to_engage_practically": "What do you want to do about it? Do you need to address it or let it sit for now?",
+          "wind_down": "You handled it. These things are never simple — take your time with what comes next."
+        },
+        "what_to_do": [
+          "Check in simply and directly — then let them lead",
+          "Engage practically if they want to think it through",
+          "Help them identify a clear next step if that would help",
+          "Keep the evening calm and low-key",
+          "Don't add any emotional weight to what's already a heavy situation"
+        ],
+        "small_gesture": "A calm, comfortable evening with no extra demands — sometimes the best thing is just a quiet night that restores their equilibrium.",
+        "what_not_to_do": [
+          "Don't push them to talk if they'd rather process alone",
+          "Don't over-emotionalize the situation",
+          "Don't offer strong takes on their family dynamics unless asked",
+          "Don't let the conflict bleed into the rest of the evening unnecessarily"
+        ],
+        "closing_affirmation": "Their steady way of handling hard things is a strength — stand beside it, don't try to soften it."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner almost certainly won't tell you much about what happened — and they won't ask for help processing it. But family conflict leaves a mark even on people who seem unfazed. Being a calm, low-pressure presence tonight is the most loving thing you can do.",
+        "understanding_feelings": "A Reserved + Avoidant partner after a family argument retreats inward. They process alone, they dislike conflict and the lingering discomfort of an unresolved argument with family will sit with them quietly for a while. They won't want to rehash it and they won't want to be pushed to talk. What they need is a home environment that feels completely safe, calm and free of any additional friction.",
+        "what_they_need": "Stillness. No pressure, no probing, no opinions on their family. Just a peaceful evening that gives them the space to settle back into themselves. If they want to share something, they will — but most likely they just need tonight to be easy.",
+        "what_to_say": {
+          "open_with": "Tough day — I've got tonight sorted.",
+          "if_they_seem_down": "No need to get into it. I'm just here.",
+          "if_they_share": "That sounds frustrating. Family stuff is never easy.",
+          "simply": "Tonight's just for you to decompress."
+        },
+        "what_to_do": [
+          "Handle the entire evening without asking them to engage",
+          "Keep everything calm, quiet and low-friction",
+          "Don't bring up the family situation unless they do",
+          "Be a peaceful, undemanding presence",
+          "Let them process in their own way and their own time"
+        ],
+        "small_gesture": "A completely easy evening — their comfort food, their show, no decisions required. The gift of a night that asks nothing of them.",
+        "what_not_to_do": [
+          "Don't ask about the argument or push for details",
+          "Don't share your opinions on their family",
+          "Don't try to help them resolve or process it tonight",
+          "Don't add any new stress or demands to their evening"
+        ],
+        "closing_affirmation": "Coming home to pure calm after family conflict is more restorative than any conversation could be."
+      }
+    ]
+  },
+  {
+    "situation_id": 8,
+    "situation": "Your partner had a long exhausting day",
+    "category": "Daily Stress",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "A long exhausting day accumulates — every small frustration, every demand, every hour of output adds up. Your partner has been giving all day and they're walking through the door running on empty. The quality of this evening can either restore them or drain them further.",
+        "understanding_feelings": "An Expressive + Direct partner after an exhausting day is tired but still wired — their mind is still going even if their body is done. They may need to vent before they can truly switch off. They'll want to download the day — the frustrations, the highlights, the things that annoyed them — and they need someone to receive all of that before they can relax. Don't rush them through it. Let the venting be the decompression.",
+        "what_they_need": "A warm, engaged landing. Let them talk through the day first — even briefly — and then transition into real rest. Take care of the practical things so their energy isn't split. Make the evening feel intentional and restorative, not just passive.",
+        "what_to_say": {
+          "open_with": "You look exhausted — come here. Tell me about the day.",
+          "while_downloading": "That's a lot. You've been going nonstop.",
+          "to_transition": "Okay — you've earned a proper switch-off. What do you need tonight?",
+          "wind_down": "You showed up fully today. Let me take it from here."
+        },
+        "what_to_do": [
+          "Let them talk through the day before trying to shift to rest mode",
+          "Take over dinner, decisions and any logistics",
+          "Create an evening that transitions from venting to genuine unwinding",
+          "Be warm, engaged and physically present",
+          "Match the energy — be calm and restorative, not high energy"
+        ],
+        "small_gesture": "Have dinner sorted, their space comfortable and their favorite way to unwind ready to go — so the moment they've downloaded the day, they can just fall into rest.",
+        "what_not_to_do": [
+          "Don't greet them with your own list of things that need attention",
+          "Don't rush them through the venting phase",
+          "Don't make them make decisions about the evening",
+          "Don't keep the energy high when they clearly need calm"
+        ],
+        "closing_affirmation": "The best evenings after the hardest days are the ones where home does all the work."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Your partner has been on all day — performing, managing, giving — and now they're home and they need to be able to stop. They may not say how tired they are but you'll see it. Creating the right environment tonight matters more than any conversation.",
+        "understanding_feelings": "An Expressive + Avoidant partner after an exhausting day is emotionally and physically depleted. They've been navigating people and demands all day and now they need stillness and warmth. They may want to share bits of the day but won't want to go deep — they're too tired for heavy conversation. What they're looking for is softness, ease and the feeling of being taken care of without having to ask.",
+        "what_they_need": "Warmth without demands. Create comfort, be affectionate and let them guide how much or how little they want to talk. Take the practical things off their plate and make the evening feel like a gentle landing rather than a continuation of the day.",
+        "what_to_say": {
+          "open_with": "You're home — that's all that matters now. Come and just breathe for a minute.",
+          "if_they_want_to_talk": "Tell me — what was the hardest part?",
+          "to_transition": "You've done enough for today. The rest of the evening is just for you.",
+          "wind_down": "I've got everything — you just be here."
+        },
+        "what_to_do": [
+          "Create immediate warmth and comfort the moment they're home",
+          "Be affectionate and physically close — it helps them decompress",
+          "Let them set the pace for how much they share about the day",
+          "Handle all the practical elements of the evening",
+          "Make the transition from day to evening feel soft and easy"
+        ],
+        "small_gesture": "Their comfort food, a cozy setup and your calm presence — make home feel like the most restorative place they could possibly be tonight.",
+        "what_not_to_do": [
+          "Don't greet them with demands or a list of things to discuss",
+          "Don't push them to talk if they seem too tired",
+          "Don't keep the energy or noise level high",
+          "Don't let the evening drift into logistics and responsibilities"
+        ],
+        "closing_affirmation": "After a day of giving everything to everyone else, let home be where they finally receive."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner has been operating at full capacity and they're done. They don't need a big emotional welcome — they need the practical weight of the evening lifted and a calm space to decompress. Simple, efficient care is everything tonight.",
+        "understanding_feelings": "A Reserved + Direct partner after an exhausting day wants to switch off as quickly and completely as possible. They've been solving, deciding and managing all day — the last thing they want is more of the same at home. They'll appreciate it most if you simply take over without discussion, keep things quiet and let them shift into low gear on their own terms.",
+        "what_they_need": "Efficiency and calm. Handle the evening practically, keep it quiet and give them space to decompress without input required. They'll come back to themselves faster if they're not required to engage — and once they have, they'll be genuinely present with you.",
+        "what_to_say": {
+          "open_with": "Long one? I've sorted dinner — nothing to think about tonight.",
+          "if_they_want_to_debrief": "What was the worst part of it?",
+          "to_give_permission": "You don't need to debrief — just decompress.",
+          "wind_down": "Tonight's easy. I've got it."
+        },
+        "what_to_do": [
+          "Take over dinner and all evening logistics without being asked",
+          "Keep the environment quiet and low stimulation",
+          "Don't require conversation or emotional engagement",
+          "Give them space to shift down at their own pace",
+          "Be available but undemanding"
+        ],
+        "small_gesture": "A simple, no-fuss meal ready when they need it — and an evening that requires absolutely nothing from them. Practical care at its finest.",
+        "what_not_to_do": [
+          "Don't greet them with questions or conversation that requires energy",
+          "Don't ask them to make decisions",
+          "Don't push for connection before they've had time to decompress",
+          "Don't add anything to their mental load tonight"
+        ],
+        "closing_affirmation": "The most efficient form of love tonight is making the entire evening frictionless."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner has been depleted by the day and all they want is to come home, switch off and exist without demands. They won't ask for anything — but they'll feel everything. Making tonight completely easy is the most profound thing you can offer.",
+        "understanding_feelings": "A Reserved + Avoidant partner after an exhausting day retreats into themselves. They need silence, stillness and complete freedom from expectations. They won't want conversation, they won't want to be checked on and they definitely won't want to make any decisions. The ideal evening for them is one where everything is handled and they can simply exist in comfortable, quiet peace.",
+        "what_they_need": "Nothing — in the most loving sense of the word. Handle everything, ask nothing, be peacefully present. Let the evening be so easy that they almost forget how tired they were.",
+        "what_to_say": {
+          "open_with": "Everything's sorted — you don't need to do a thing.",
+          "keep_it_minimal": "Just rest.",
+          "if_they_acknowledge": "That's what I'm here for.",
+          "nothing_more": "No need to say anything else."
+        },
+        "what_to_do": [
+          "Handle absolutely everything without asking them to weigh in",
+          "Create the most comfortable, low-effort environment possible",
+          "Don't initiate conversation or connection",
+          "Be a quiet, calm presence in the background",
+          "Let them fully decompress however they naturally do"
+        ],
+        "small_gesture": "Their spot set up, their food ready, their show queued — everything done before they even think to ask. Invisible, total care.",
+        "what_not_to_do": [
+          "Don't ask how their day was if they haven't brought it up",
+          "Don't require any output from them — emotional or practical",
+          "Don't hover or check in",
+          "Don't let any friction enter the evening"
+        ],
+        "closing_affirmation": "The quietest, most complete form of love is making someone's hardest days feel effortless at home."
+      }
+    ]
+  },
+  {
+    "situation_id": 9,
+    "situation": "Your partner feels overwhelmed by life lately",
+    "category": "Emotional Overwhelm",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "When your partner says they feel overwhelmed by life, they're not talking about one bad day — they're talking about a sustained weight that's been building. As someone expressive and direct, they're telling you because they need you to really hear it and respond with both your heart and your presence.",
+        "understanding_feelings": "An Expressive + Direct partner who is overwhelmed by life is carrying too many things at once and the load has become visible. They may feel like they're failing in multiple areas simultaneously — work, relationships, personal goals. They'll want to talk it through, probably extensively, and they need you to stay in the conversation even when it gets heavy or circular. This is how they process and eventually find their footing.",
+        "what_they_need": "Sustained presence and genuine engagement. Not a quick pep talk — a real conversation that gives them space to name everything that's weighing on them. And then, once it's out, something that reminds them they're not carrying it all alone.",
+        "what_to_say": {
+          "open_with": "Tell me everything — what's been feeling like too much lately?",
+          "while_they_talk": "I hear you. That is a lot to be holding at once.",
+          "to_engage_deeply": "Which part of it feels the heaviest right now?",
+          "wind_down": "You don't have to figure all of this out tonight. But you don't have to carry it alone either — I'm here for all of it."
+        },
+        "what_to_do": [
+          "Give them a proper, unhurried conversation — not a quick check-in",
+          "Let them name every single thing that's weighing on them without redirecting",
+          "Engage seriously with what they share — ask questions, reflect back",
+          "After they've vented, help them identify just one thing that could feel lighter",
+          "Be physically close and make the rest of the evening warm and restorative"
+        ],
+        "small_gesture": "Plan something small but meaningful for the coming days — a day trip, a dinner, something just for the two of you — so they have something good to look forward to.",
+        "what_not_to_do": [
+          "Don't minimize with 'everyone goes through this'",
+          "Don't try to solve everything in one conversation",
+          "Don't rush them toward positivity before they've been heard",
+          "Don't let the conversation stay surface level — they need depth tonight"
+        ],
+        "closing_affirmation": "Overwhelm shrinks when it's shared — be the person they can pour it all out to."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Your partner feeling overwhelmed by life is significant — and the fact that they're showing it or saying it means the weight has become too much to contain. They need gentleness, warmth and the feeling that they can finally set some of it down.",
+        "understanding_feelings": "An Expressive + Avoidant partner who is overwhelmed tends to internalize until they can't anymore. They feel everything — the pressure, the expectations, the sense of falling behind — but they resist burdening others with it. When it finally surfaces, it may come out sideways — in tears, in irritability, in a quiet admission. They need to feel safe enough to let it all be real without fear of judgment or being told to just push through.",
+        "what_they_need": "A warm, safe container for everything they've been holding. Not solutions — presence. Not pep talks — genuine compassion. Create the space and let them fill it at their own pace.",
+        "what_to_say": {
+          "open_with": "Hey — I can see you've been carrying a lot. You don't have to hold it all in here, with me.",
+          "to_open_the_door": "Whatever's been building up — I want to hear it. All of it.",
+          "while_they_share": "That makes sense. You've been dealing with so much and it's okay that it's finally getting to you.",
+          "wind_down": "You're allowed to be overwhelmed. And you don't have to get through it alone."
+        },
+        "what_to_do": [
+          "Create a soft, warm environment that invites openness",
+          "Let them share without rushing them toward resolution",
+          "Be physically close and comforting throughout",
+          "Validate everything they share — don't try to reframe or fix",
+          "Help them find one small moment of lightness by the end of the evening"
+        ],
+        "small_gesture": "Do something unexpectedly tender — a handwritten note, their favorite meal, a small gesture that says 'I see how hard you've been working and I'm proud of you.'",
+        "what_not_to_do": [
+          "Don't push them to have solutions or a plan",
+          "Don't respond to their vulnerability with practicality too soon",
+          "Don't let the evening stay heavy without offering some warmth and lightness",
+          "Don't make them feel like their overwhelm is too much for you to hold"
+        ],
+        "closing_affirmation": "Sometimes people just need someone to say — I see how much you're carrying, and I'm not going anywhere."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner doesn't use words like 'overwhelmed' lightly. If they've said it or if you can see it, they're at a genuine limit. They need practical relief and a calm, grounded presence — not emotional processing, just real support.",
+        "understanding_feelings": "A Reserved + Direct partner who is overwhelmed by life is hitting a capacity wall. They've been managing everything competently for too long and the load has simply become too heavy. They won't be dramatic about it — they'll be quieter, more clipped, possibly more irritable. What they need is for some of the weight to be taken off them practically, and for someone to help them think through what can be reduced, delegated or dropped.",
+        "what_they_need": "Practical support and calm perspective. Help them take stock of what's actually on their plate, identify what can be lightened and feel like there's a path through. Don't make it emotional — make it useful.",
+        "what_to_say": {
+          "open_with": "You seem like you're at capacity. Talk me through what's on your plate right now.",
+          "to_engage_practically": "Okay — of all of this, what actually needs your attention and what can wait or be handled differently?",
+          "to_offer_support": "Tell me what I can take off your plate. Specifically.",
+          "wind_down": "You don't have to carry all of this alone. Let's figure out what we can lighten."
+        },
+        "what_to_do": [
+          "Help them do a practical audit of what's overwhelming them",
+          "Identify two or three things you can actively take off their plate",
+          "Keep the conversation grounded and solution-oriented",
+          "Reduce any friction in the home environment this week",
+          "Follow through on what you offer to take on — reliability matters most right now"
+        ],
+        "small_gesture": "Take something significant off their list this week — proactively, without being asked. Show them through action that the load is shared.",
+        "what_not_to_do": [
+          "Don't respond with emotional reassurance they didn't ask for",
+          "Don't tell them to slow down or take it easy without offering concrete help",
+          "Don't add anything to their plate this week",
+          "Don't make their overwhelm into a bigger emotional conversation than they need"
+        ],
+        "closing_affirmation": "The most grounding thing you can do is show them the load is lighter because you're in it with them."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner being overwhelmed by life will show up as deeper withdrawal, more quietness, less engagement. They won't ask for help and they won't tell you the full extent of what they're carrying. But something in their energy is telling you. Responding with calm, undemanding support is the most you can offer — and it's exactly right.",
+        "understanding_feelings": "A Reserved + Avoidant partner who is overwhelmed retreats further inward. They manage everything privately, resist asking for help and often don't even fully acknowledge to themselves how heavy the load has become. They need space, simplicity and a home environment that doesn't add to the weight. They may never directly say they're overwhelmed — but they'll feel the relief of a partner who quietly lightens things without being asked.",
+        "what_they_need": "Invisible support. Take things off their plate silently, reduce demands and create a home environment that feels like the one place where nothing is required of them. Let them decompress in their own time without pressure.",
+        "what_to_say": {
+          "open_with": "I've noticed things have been a lot lately. I've got the home stuff — don't worry about any of it.",
+          "keep_it_simple": "You don't need to explain anything. Just let me handle things for a bit.",
+          "if_they_share": "That sounds like a really heavy load. I'm glad you told me.",
+          "wind_down": "Things will ease up. Until they do, I've got you."
+        },
+        "what_to_do": [
+          "Quietly take over more than your share of responsibilities without drawing attention to it",
+          "Reduce all sources of friction and demand in the home",
+          "Don't push for conversation or connection while they're in this state",
+          "Be a steady, reliable presence that asks nothing",
+          "Let time and space do the work — don't try to accelerate their recovery"
+        ],
+        "small_gesture": "Handle something specific they've been putting off or stressing about — quietly, without making it a moment. Just remove one thing from their world.",
+        "what_not_to_do": [
+          "Don't push them to talk about what's overwhelming them",
+          "Don't add any new decisions, tasks or emotional demands",
+          "Don't make your support conditional on them opening up",
+          "Don't hover — give them genuine space alongside genuine care"
+        ],
+        "closing_affirmation": "The steadiest love is the kind that shows up quietly and asks for nothing in return."
+      }
+    ]
+  },
+  {
+    "situation_id": 10,
+    "situation": "Your partner fell sick",
+    "category": "Personal Care",
+    "buckets": [
+      {
+        "bucket": "ED",
+        "bucket_name": "Expressive + Direct",
+        "covers": ["EDRS", "EDRP", "EDPS", "EDPP"],
+        "why_this_moment_matters": "Being sick is vulnerable — even for someone who is usually confident and direct. Your partner is physically depleted and, whether they admit it or not, they want to be taken care of. This is a moment to lead with warmth and make them feel looked after completely.",
+        "understanding_feelings": "An Expressive + Direct partner who is sick will likely tell you exactly how they feel and what they need — but underneath the directness there's a vulnerability they may not fully name. They're frustrated at being unwell, possibly anxious about things they're missing or falling behind on, and genuinely in need of care. They may be a little harder to please than usual — that's the illness talking. Don't take it personally. Just keep showing up.",
+        "what_they_need": "To be fully taken care of — practically and emotionally. Anticipate their needs before they ask. Keep them comfortable, make sure they have everything they need and check in with genuine warmth. They'll appreciate both the practical care and the emotional presence equally.",
+        "what_to_say": {
+          "open_with": "You're not doing anything today except rest — I've got all of it.",
+          "to_show_on_top_of_it": "What do you need right now? I'll get it.",
+          "to_offer_comfort": "I hate seeing you like this. Tell me what would make you feel even a little better.",
+          "wind_down": "You focus on getting better — everything else can wait."
+        },
+        "what_to_do": [
+          "Take complete ownership of all responsibilities — work, home, logistics",
+          "Anticipate their needs — water, medicine, food, comfort",
+          "Check in regularly but without hovering",
+          "Make their space as comfortable as possible",
+          "Be emotionally warm and present — not just practically efficient"
+        ],
+        "small_gesture": "Make or order their favorite comfort food, set up their space with everything they need within reach and sit with them for a while — not doing anything, just being there.",
+        "what_not_to_do": [
+          "Don't make them feel guilty for being unwell",
+          "Don't be visibly stressed about the disruption to plans",
+          "Don't disappear and leave them to manage alone",
+          "Don't minimize how they're feeling"
+        ],
+        "closing_affirmation": "Being truly cared for when you're vulnerable creates a kind of trust that nothing else can build."
+      },
+      {
+        "bucket": "EA",
+        "bucket_name": "Expressive + Avoidant",
+        "covers": ["EARS", "EARP", "EAPS", "EAPP"],
+        "why_this_moment_matters": "Your partner being sick brings out a vulnerability they usually keep tucked away. They may downplay how unwell they are — they don't want to be a burden — but inside they really want to be looked after. Your job is to make it so easy and warm that they can just surrender to being cared for.",
+        "understanding_feelings": "An Expressive + Avoidant partner who is sick is caught between wanting care and not wanting to ask for it. They'll likely say 'I'm fine' while clearly not being fine. They feel vulnerable and uncomfortable with that vulnerability — so the more naturally and gently you step in to take care of things, the more they can relax into it. They need warmth, physical comfort and the quiet reassurance that they don't have to manage anything today.",
+        "what_they_need": "To be looked after without having to ask. Anticipate what they need, create a warm and comfortable space and be a gentle, caring presence. Don't make a big deal of it — just quietly and lovingly take over.",
+        "what_to_say": {
+          "open_with": "Hey — I've got you. You don't have to do anything except rest.",
+          "to_make_it_easy": "You don't need to tell me what you need — I'll figure it out. Just focus on feeling better.",
+          "to_offer_warmth": "I'm right here. You're not dealing with this alone.",
+          "wind_down": "How are you feeling now? What would feel good?"
+        },
+        "what_to_do": [
+          "Step in and take care of everything without waiting to be asked",
+          "Make their space warm, soft and comfortable",
+          "Bring them what they need before they think to ask",
+          "Be physically close and gently affectionate — it's comforting",
+          "Let them rest without guilt — reassure them everything is handled"
+        ],
+        "small_gesture": "Their comfort food, a warm blanket, their favorite show queued and you nearby — create the coziest, most cared-for environment you possibly can.",
+        "what_not_to_do": [
+          "Don't wait for them to ask for help — they won't",
+          "Don't make them feel like a burden",
+          "Don't leave them alone for long stretches",
+          "Don't let them try to push through and do things themselves"
+        ],
+        "closing_affirmation": "When someone who never asks for help lets you take care of them — that's a form of love too."
+      },
+      {
+        "bucket": "RD",
+        "bucket_name": "Reserved + Direct",
+        "covers": ["RDRS", "RDRP", "RDPS", "RDPP"],
+        "why_this_moment_matters": "Your partner will probably try to push through the illness and keep functioning. They don't like being unwell and they like needing help even less. Your job is to take over efficiently and make it easy for them to rest without feeling like a burden or losing control of things.",
+        "understanding_feelings": "A Reserved + Direct partner who is sick is frustrated — at their body, at the timing, at anything they can't do today. They're unlikely to be very expressive about feeling unwell but they'll be quietly grateful for practical care delivered without fuss. They don't need emotional comfort so much as efficient, competent caretaking that lets them rest without worrying about everything falling apart.",
+        "what_they_need": "To know everything is handled — clearly and efficiently. Tell them what you're taking care of, make sure they have what they need medically and practically, and then give them space to rest. Don't hover, don't fuss and don't make it a bigger deal than they want it to be.",
+        "what_to_say": {
+          "open_with": "I've got everything covered — you just need to rest and get better.",
+          "to_reassure_practically": "Everything that needs handling today is handled. Nothing for you to think about.",
+          "to_check_in": "What do you need right now — medicine, food, anything?",
+          "wind_down": "Your only job is to rest. I've got the rest."
+        },
+        "what_to_do": [
+          "Take over all responsibilities clearly and efficiently",
+          "Make sure they have everything they need medically — medicine, fluids, food",
+          "Give them space to rest without hovering",
+          "Check in periodically but briefly",
+          "Handle anything work or home related that might stress them"
+        ],
+        "small_gesture": "A simple, practical sick-day setup — medicine, water, easy food, their phone charged — everything organized and within reach so they don't have to think about a thing.",
+        "what_not_to_do": [
+          "Don't make a big emotional production of them being sick",
+          "Don't hover or over-check on them",
+          "Don't let things visibly fall apart — they'll feel guilty",
+          "Don't suggest they just push through it"
+        ],
+        "closing_affirmation": "Competent, quiet care when they're vulnerable is one of the deepest forms of love for someone like them."
+      },
+      {
+        "bucket": "RA",
+        "bucket_name": "Reserved + Avoidant",
+        "covers": ["RARS", "RARP", "RAPS", "RAPP"],
+        "why_this_moment_matters": "Your partner will almost certainly downplay how they're feeling and resist being fussed over. But being sick is hard and lonely when you're wired to handle everything alone. Quiet, unobtrusive care — delivered without making a scene — is exactly right.",
+        "understanding_feelings": "A Reserved + Avoidant partner who is sick wants to be left alone to recover — but they also don't want to feel completely alone in it. It's a fine line. They won't ask for anything, they'll say they're fine and they'll probably try to keep functioning. What they actually need is someone who quietly handles things around them, makes sure they have what they need and doesn't make being sick more uncomfortable than it already is.",
+        "what_they_need": "Invisible care. Handle things around them, make sure the essentials are covered and check in briefly and practically. Don't hover, don't fuss and don't make it emotional. Just be a calm, capable presence that makes today as easy as possible.",
+        "what_to_say": {
+          "open_with": "I've sorted everything — you just rest.",
+          "to_check_in": "Do you need anything right now?",
+          "if_they_resist": "I know you're fine — I'm just making sure you have what you need.",
+          "nothing_more": "That's all — just rest."
+        },
+        "what_to_do": [
+          "Handle everything quietly and without ceremony",
+          "Make sure essentials are covered — medicine, fluids, food nearby",
+          "Check in briefly and practically, not emotionally",
+          "Give them plenty of space to rest undisturbed",
+          "Be nearby without being intrusive"
+        ],
+        "small_gesture": "Leave everything they need within easy reach — water, medicine, easy food — and check in once without making it a moment. Simple, quiet, complete care.",
+        "what_not_to_do": [
+          "Don't hover or over-attend to them",
+          "Don't make emotional comments about how unwell they look",
+          "Don't push them to talk about how they're feeling",
+          "Don't make recovering feel like a performance they have to manage"
+        ],
+        "closing_affirmation": "The gentlest care is the kind that asks nothing in return — not even acknowledgment."
+      }
+    ]
+  }
+]
