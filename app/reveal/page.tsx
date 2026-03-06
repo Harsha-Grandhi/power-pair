@@ -7,15 +7,11 @@ import { TOTAL_REVEAL_STEPS } from '@/lib/questions';
 import { getArchetypeByCode } from '@/lib/archetypes';
 import { getScoreLabel, getScoreColor } from '@/lib/scoring';
 import FadeTransition from '@/components/ui/FadeTransition';
-import { fetchPairingCode } from '@/lib/couples';
 
 export default function RevealPage() {
   const router = useRouter();
   const { state, advanceRevealStep, setPhase } = useApp();
   const [mounted, setMounted] = useState(false);
-  const [pairingCode, setPairingCode] = useState<string | null>(null);
-  const [inviteUrl, setInviteUrl] = useState('');
-  const [codeCopied, setCodeCopied] = useState(false);
 
   const step = state.currentRevealStep;
   const profile = state.profile;
@@ -26,13 +22,6 @@ export default function RevealPage() {
     if (mounted && !profile) router.replace('/');
   }, [mounted, profile, router]);
 
-  useEffect(() => {
-    if (mounted && state.coupleId) {
-      setInviteUrl(window.location.origin + '/invite/' + state.coupleId);
-      fetchPairingCode(state.coupleId).then(code => setPairingCode(code));
-    }
-  }, [mounted, state.coupleId]);
-
   const handleContinue = () => {
     if (step + 1 >= TOTAL_REVEAL_STEPS) {
       setPhase('dashboard');
@@ -40,11 +29,6 @@ export default function RevealPage() {
     } else {
       advanceRevealStep();
     }
-  };
-
-  const handleViewDashboard = () => {
-    setPhase('dashboard');
-    router.push('/dashboard');
   };
 
   if (!mounted || !profile) return null;
@@ -197,106 +181,11 @@ export default function RevealPage() {
               ))}
             </div>
             <button onClick={handleContinue} className="w-full py-3.5 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm hover:bg-pp-accent/90 transition-colors">
-              Share & Continue &#x2192;
+              Continue &#x2192;
             </button>
           </div>
         );
       }
-
-      // Screen 8: Share Result / Partner CTA
-      case 7:
-        return (
-          <div className="space-y-6 pt-4">
-            <h2 className="font-display text-2xl text-white text-center">Share Your Result</h2>
-            {/* Share card */}
-            <div
-              className="rounded-2xl p-6 text-center space-y-4 border border-white/10"
-              style={{
-                background: 'linear-gradient(135deg, ' + archetype.gradientFrom + '22, ' + archetype.gradientTo + '22)',
-              }}
-            >
-              <p className="text-xs text-pp-text-muted uppercase tracking-wider">My Relationship Archetype</p>
-              <div className="text-4xl">{archetype.emoji}</div>
-              <h3 className="font-display text-xl text-white">{archetype.name}</h3>
-              <div className="space-y-1">
-                {dimensionScores.map(d => (
-                  <p key={d.id} className="text-xs text-white/70">
-                    {d.dominantStyle} &ndash; {d.percentage}%
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            {/* Pairing code + invite link */}
-            {!state.isInvited && pairingCode && (
-              <div className="rounded-2xl border border-pp-accent/30 bg-pp-accent/5 p-5 space-y-4">
-                <p className="text-xs text-pp-text-muted uppercase tracking-widest text-center">Your Pairing Code</p>
-                <div className="flex items-center justify-center gap-1">
-                  {pairingCode.split('').map((ch, i) => (
-                    <span key={i} className="w-10 h-12 rounded-lg bg-pp-card border border-white/15 flex items-center justify-center font-mono text-xl font-bold text-pp-accent">
-                      {ch}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-xs text-pp-text-muted text-center leading-relaxed">
-                  Share this code with your partner. If they already took the quiz, they can enter it to link your results.
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      const text = pairingCode;
-                      if (navigator.clipboard) {
-                        navigator.clipboard.writeText(text);
-                        setCodeCopied(true);
-                        setTimeout(() => setCodeCopied(false), 2000);
-                      }
-                    }}
-                    className="flex-1 py-2.5 rounded-xl border border-pp-accent/40 text-pp-accent text-sm font-medium hover:bg-pp-accent/10 transition-colors"
-                  >
-                    {codeCopied ? 'Copied!' : 'Copy Code'}
-                  </button>
-                  <button
-                    onClick={() => {
-                      const text = 'Take the Power Pair relationship quiz and enter my code: ' + pairingCode + '\n' + (inviteUrl || window.location.origin);
-                      if (navigator.share) {
-                        navigator.share({ title: 'Power Pair', text });
-                      } else if (navigator.clipboard) {
-                        navigator.clipboard.writeText(text);
-                      }
-                    }}
-                    className="flex-1 py-2.5 rounded-xl border border-pp-accent/40 text-pp-accent text-sm font-medium hover:bg-pp-accent/10 transition-colors"
-                  >
-                    Share Link
-                  </button>
-                </div>
-              </div>
-            )}
-
-            <div className="space-y-3">
-              <button
-                onClick={() => {
-                  const text = 'My Relationship Archetype: ' + archetype.emoji + ' ' + archetype.name + ' (' + archetypeResult.code + ')\n\n' +
-                    dimensionScores.map(d => d.dominantStyle + ' - ' + d.percentage + '%').join('\n') +
-                    '\n\nTake the relationship quiz!';
-                  if (navigator.share) {
-                    navigator.share({ title: 'My Relationship Archetype', text });
-                  } else if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text);
-                  }
-                }}
-                className="w-full py-3.5 rounded-xl border border-pp-accent/40 text-pp-accent font-semibold text-sm hover:bg-pp-accent/10 transition-colors"
-              >
-                Share Result
-              </button>
-              <button
-                onClick={handleViewDashboard}
-                className="w-full py-3.5 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm hover:bg-pp-accent/90 transition-colors"
-              >
-                {state.isInvited ? 'See Compatibility With Your Partner' : 'Go to the App'}
-              </button>
-            </div>
-          </div>
-        );
 
       default:
         return null;

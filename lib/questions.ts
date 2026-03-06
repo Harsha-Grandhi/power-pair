@@ -63,7 +63,7 @@ export function getQuestionsForPage(page: number): LikertQuestion[] {
 
 export const TOTAL_INTRO_STEPS = INTRO_QUESTIONS.length;
 export const TOTAL_ASSESSMENT_STEPS = TOTAL_ASSESSMENT_PAGES;
-export const TOTAL_REVEAL_STEPS = 8;
+export const TOTAL_REVEAL_STEPS = 7;
 export const TOTAL_QUESTIONS = ASSESSMENT_QUESTIONS.length;
 
 export const LIKERT_OPTIONS = [
