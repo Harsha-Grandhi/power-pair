@@ -35,8 +35,10 @@ export default function SpecialDaysPanel({ coupleId }: Props) {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
+  const [month, setMonth] = useState('');
+  const [day, setDay] = useState('');
   const [saving, setSaving] = useState(false);
+  const currentYear = new Date().getFullYear();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -46,16 +48,25 @@ export default function SpecialDaysPanel({ coupleId }: Props) {
     });
   }, [coupleId]);
 
+  const selectedDate = month && day
+    ? `${currentYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    : '';
+
+  const daysInMonth = month
+    ? new Date(currentYear, parseInt(month), 0).getDate()
+    : 31;
+
   const handleAdd = async () => {
-    if (!title.trim() || !date || saving) return;
+    if (!title.trim() || !selectedDate || saving) return;
     setSaving(true);
-    const created = await createSpecialDay(coupleId, title.trim(), date);
+    const created = await createSpecialDay(coupleId, title.trim(), selectedDate);
     if (created) {
       setDays((prev) =>
         [...prev, created].sort((a, b) => a.date.localeCompare(b.date))
       );
       setTitle('');
-      setDate('');
+      setMonth('');
+      setDay('');
       setShowForm(false);
     }
     setSaving(false);
@@ -95,16 +106,35 @@ export default function SpecialDaysPanel({ coupleId }: Props) {
             className="w-full bg-transparent text-sm text-white/85 placeholder:text-pp-text-muted
               focus:outline-none border-b border-white/8 pb-2"
           />
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full bg-pp-card border border-white/10 rounded-xl px-4 py-2 text-sm
-              text-white focus:outline-none focus:border-pp-accent/50"
-          />
+          <div className="flex gap-2">
+            <select
+              value={month}
+              onChange={(e) => { setMonth(e.target.value); setDay(''); }}
+              className="flex-1 bg-pp-card border border-white/10 rounded-xl px-3 py-2 text-sm
+                text-white focus:outline-none focus:border-pp-accent/50 appearance-none"
+            >
+              <option value="" disabled>Month</option>
+              {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => (
+                <option key={i + 1} value={String(i + 1)}>{m}</option>
+              ))}
+            </select>
+            <select
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              disabled={!month}
+              className="flex-1 bg-pp-card border border-white/10 rounded-xl px-3 py-2 text-sm
+                text-white focus:outline-none focus:border-pp-accent/50 appearance-none
+                disabled:opacity-40"
+            >
+              <option value="" disabled>Day</option>
+              {Array.from({ length: daysInMonth }, (_, i) => (
+                <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
+              ))}
+            </select>
+          </div>
           <div className="flex gap-2">
             <button
-              onClick={() => { setShowForm(false); setTitle(''); setDate(''); }}
+              onClick={() => { setShowForm(false); setTitle(''); setMonth(''); setDay(''); }}
               className="flex-1 py-2 rounded-xl border border-white/10 text-xs text-pp-text-muted
                 hover:text-white transition-colors"
             >
@@ -112,7 +142,7 @@ export default function SpecialDaysPanel({ coupleId }: Props) {
             </button>
             <button
               onClick={handleAdd}
-              disabled={!title.trim() || !date || saving}
+              disabled={!title.trim() || !selectedDate || saving}
               className="flex-1 py-2 rounded-xl bg-pp-accent text-pp-bg-dark text-xs font-semibold
                 disabled:opacity-40 active:scale-[0.97] transition-all"
             >
