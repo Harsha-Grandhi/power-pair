@@ -9,7 +9,7 @@ import CoupleHomeTab from '@/components/home/CoupleHomeTab';
 import LockedReport from '@/components/dashboard/LockedReport';
 import TimeSelector from '@/components/wheel/TimeSelector';
 import SpinWheel from '@/components/wheel/SpinWheel';
-import JourneyListView from '@/components/journeys/JourneyListView';
+import JourneysTabContainer from '@/components/journeys/JourneysTabContainer';
 import { DateDuration, getDateIdeasForCouple, DateIdea } from '@/lib/dateIdeas';
 import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
 import { fetchCoupleProfiles, fetchPairingCode, linkByPairingCode } from '@/lib/couples';
@@ -417,10 +417,12 @@ export default function DashboardPage() {
       case 'home':      return renderHome();
       case 'wheel':     return renderWheelTab();
       case 'journeys':  return (
-        <JourneyListView
+        <JourneysTabContainer
           enrollments={journeyEnrollments}
           coupleId={coupleId ?? null}
-          onSelect={(journey: Journey) => router.push(`/journey/${journey.id}?from=journeys`)}
+          userId={profile.id}
+          partnerArchetypeCode={partnerArchetype}
+          onSelectJourney={(journey: Journey) => router.push(`/journey/${journey.id}?from=journeys`)}
         />
       );
       case 'counselor': return <ReflectionHistory userId={state.profile?.id ?? ''} coupleId={coupleId ?? null} />;
