@@ -226,6 +226,7 @@ export default function OnboardingPage() {
             {/* ── Steps 1–7: Intro questions (auto-advance) ── */}
             {isQuestionStep && currentQ && (
               <ContextQuestion
+                key={currentQ.questionKey}
                 question={currentQ}
                 selectedValue={selectedValue}
                 onSelect={handleOptionSelect}
