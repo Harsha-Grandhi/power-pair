@@ -1,0 +1,82 @@
+{
+  "EDRS": {
+    "tone": "warm",
+    "what_to_say_style": "be practical and reassuring",
+    "what_to_do_style": "give space and presence"
+  },
+  "EDRP": {
+    "tone": "calm",
+    "what_to_say_style": "keep language calm and minimal",
+    "what_to_do_style": "take practical actions"
+  },
+  "EDPS": {
+    "tone": "calm",
+    "what_to_say_style": "use encouraging language",
+    "what_to_do_style": "give space and presence"
+  },
+  "EDPP": {
+    "tone": "direct",
+    "what_to_say_style": "express feelings openly",
+    "what_to_do_style": "take practical actions"
+  },
+  "EARS": {
+    "tone": "warm",
+    "what_to_say_style": "use encouraging language",
+    "what_to_do_style": "give space and presence"
+  },
+  "EARP": {
+    "tone": "playful",
+    "what_to_say_style": "be practical and reassuring",
+    "what_to_do_style": "celebrate or uplift mood"
+  },
+  "EAPS": {
+    "tone": "playful",
+    "what_to_say_style": "express feelings openly",
+    "what_to_do_style": "take practical actions"
+  },
+  "EAPP": {
+    "tone": "direct",
+    "what_to_say_style": "use encouraging language",
+    "what_to_do_style": "give space and presence"
+  },
+  "RDRS": {
+    "tone": "calm",
+    "what_to_say_style": "express feelings openly",
+    "what_to_do_style": "take practical actions"
+  },
+  "RDRP": {
+    "tone": "playful",
+    "what_to_say_style": "be practical and reassuring",
+    "what_to_do_style": "give space and presence"
+  },
+  "RDPS": {
+    "tone": "playful",
+    "what_to_say_style": "be practical and reassuring",
+    "what_to_do_style": "give space and presence"
+  },
+  "RDPP": {
+    "tone": "calm",
+    "what_to_say_style": "keep language calm and minimal",
+    "what_to_do_style": "offer emotional reassurance"
+  },
+  "RARS": {
+    "tone": "calm",
+    "what_to_say_style": "use encouraging language",
+    "what_to_do_style": "give space and presence"
+  },
+  "RARP": {
+    "tone": "playful",
+    "what_to_say_style": "express feelings openly",
+    "what_to_do_style": "offer emotional reassurance"
+  },
+  "RAPS": {
+    "tone": "direct",
+    "what_to_say_style": "keep language calm and minimal",
+    "what_to_do_style": "take practical actions"
+  },
+  "RAPP": {
+    "tone": "warm",
+    "what_to_say_style": "express feelings openly",
+    "what_to_do_style": "offer emotional reassurance"
+  }
+}
