@@ -42,7 +42,20 @@ export async function saveProfileToSupabase(profile: UserProfile, authUserId?: s
     );
 
     if (error) {
-      console.error('[PowerPair] Supabase save error:', error.message, error.details, error.hint);
+      console.warn('[PowerPair] Supabase save error (retrying without optional columns):', error.message);
+
+      // Retry without columns that may not exist yet (auth_user_id, couple_id)
+      const { auth_user_id, couple_id, ...safePayload } = payload as Record<string, unknown>;
+      const { error: retryError } = await supabase.from('power_pair_profiles').upsert(
+        safePayload,
+        { onConflict: 'id' }
+      );
+
+      if (retryError) {
+        console.error('[PowerPair] Supabase save retry failed:', retryError.message, retryError.details);
+      } else {
+        console.log('[PowerPair] Profile saved to Supabase OK (without auth_user_id)');
+      }
     } else {
       console.log('[PowerPair] Profile saved to Supabase OK');
     }
