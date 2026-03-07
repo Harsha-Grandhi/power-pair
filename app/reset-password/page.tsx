@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { updatePassword } from '@/lib/auth';
+import { signOut } from '@/lib/auth';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -15,24 +15,21 @@ export default function ResetPasswordPage() {
   const [success, setSuccess] = useState(false);
   const [ready, setReady] = useState(false);
   const [expired, setExpired] = useState(false);
+  const recoveryDetected = useRef(false);
 
-  // Wait for Supabase to exchange the URL token for a session
+  // Wait for Supabase to detect the PASSWORD_RECOVERY event from the URL token
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
+        recoveryDetected.current = true;
         setReady(true);
       }
     });
 
-    // Also check if there's already a session (token may have been exchanged before listener attached)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) setReady(true);
-    });
-
-    // If still not ready after 5 seconds, the link is likely expired/invalid
+    // If not detected after 6 seconds, link is expired/invalid
     const timeout = setTimeout(() => {
-      setExpired(true);
-    }, 5000);
+      if (!recoveryDetected.current) setExpired(true);
+    }, 6000);
 
     return () => {
       subscription.unsubscribe();
@@ -54,16 +51,23 @@ export default function ResetPasswordPage() {
     }
 
     setLoading(true);
-    const { error: updateError } = await updatePassword(password);
-    setLoading(false);
+    try {
+      const { error: updateError } = await supabase.auth.updateUser({ password });
+      if (updateError) {
+        setError(updateError.message);
+        setLoading(false);
+        return;
+      }
 
-    if (updateError) {
-      setError(updateError);
-      return;
+      // Sign out the recovery session so user logs in fresh
+      await signOut();
+      setLoading(false);
+      setSuccess(true);
+      setTimeout(() => router.replace('/login'), 2000);
+    } catch (err) {
+      setLoading(false);
+      setError('Something went wrong. Please try requesting a new reset link.');
     }
-
-    setSuccess(true);
-    setTimeout(() => router.replace('/login'), 2000);
   };
 
   return (

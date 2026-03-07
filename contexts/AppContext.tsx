@@ -173,7 +173,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       const { supabase } = require('@/lib/supabase');
       const { data } = supabase.auth.onAuthStateChange(
-        async (_event: string, session: { user: User } | null) => {
+        async (event: string, session: { user: User } | null) => {
+          // Skip processing for password recovery — let the reset page handle it
+          if (event === 'PASSWORD_RECOVERY') return;
+
           if (session?.user) {
             setAuthUser(session.user);
 
