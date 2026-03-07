@@ -1,24 +1,20 @@
 import { supabase } from './supabase';
 import type { Session, User } from '@supabase/supabase-js';
 
-export async function signInWithGoogle(): Promise<void> {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    },
-  });
-  if (error) {
-    console.error('[PowerPair] Google sign-in error:', error.message);
-    throw error;
-  }
+export async function signUp(email: string, password: string): Promise<{ user: User | null; error: string | null }> {
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) return { user: null, error: error.message };
+  return { user: data.user, error: null };
+}
+
+export async function signIn(email: string, password: string): Promise<{ user: User | null; error: string | null }> {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { user: null, error: error.message };
+  return { user: data.user, error: null };
 }
 
 export async function signOut(): Promise<void> {
-  const { error } = await supabase.auth.signOut();
-  if (error) {
-    console.error('[PowerPair] Sign-out error:', error.message);
-  }
+  await supabase.auth.signOut();
 }
 
 export async function getSession(): Promise<Session | null> {
@@ -29,10 +25,4 @@ export async function getSession(): Promise<Session | null> {
 export async function getUser(): Promise<User | null> {
   const { data } = await supabase.auth.getUser();
   return data.user;
-}
-
-export function onAuthStateChange(callback: (session: Session | null) => void) {
-  return supabase.auth.onAuthStateChange((_event, session) => {
-    callback(session);
-  });
 }
