@@ -10,11 +10,10 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
-        // Check if user was in the middle of the quiz (pre-reveal signup)
         const pendingReveal = sessionStorage.getItem('pp_pending_reveal');
         if (pendingReveal) {
-          sessionStorage.removeItem('pp_pending_reveal');
-          router.replace('/reveal');
+          // Go back to assessment — it will detect auth + complete answers and proceed
+          router.replace('/assessment');
         } else {
           router.replace('/dashboard');
         }

@@ -145,20 +145,29 @@ export default function AssessmentPage() {
     }
   };
 
-  // When authUser becomes available while on sign-up gate, proceed
+  // When authUser becomes available (sign-up gate or returning from OAuth), proceed
   useEffect(() => {
-    if (showSignUpGate && authUser) {
-      setShowSignUpGate(false);
-      setIsSubmitting(true);
-      (async () => {
-        await new Promise((r) => setTimeout(r, 1300));
-        await computeAndSaveProfile();
-        setPhase('reveal');
-        router.push('/reveal');
-      })();
-    }
+    if (!mounted || !authUser || state.profile || isSubmitting) return;
+
+    // Check if all assessment answers are complete
+    const allAnswered = ASSESSMENT_QUESTIONS.every(
+      q => state.assessmentAnswers[q.id] !== undefined
+    );
+    if (!allAnswered) return;
+
+    // Clear the pending flag
+    sessionStorage.removeItem('pp_pending_reveal');
+    setShowSignUpGate(false);
+    setIsSubmitting(true);
+
+    (async () => {
+      await new Promise((r) => setTimeout(r, 1300));
+      await computeAndSaveProfile();
+      setPhase('reveal');
+      router.push('/reveal');
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authUser, showSignUpGate]);
+  }, [mounted, authUser, state.profile, isSubmitting]);
 
   if (!mounted) return null;
 
