@@ -174,9 +174,9 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       });
   }, [coupleId, hasCachedCouple]);
 
-  // Load banner preview data once couple is ready
+  // Load banner preview data once couple is ready (or loading with cache)
   useEffect(() => {
-    if (fetchState !== 'ready') return;
+    if (fetchState !== 'ready' && fetchState !== 'loading') return;
     const { date } = getTodayPrompt();
 
     Promise.all([
@@ -241,14 +241,6 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       setLinkError(error ?? 'Something went wrong. Please try again.');
     }
   };
-
-  if (fetchState === 'loading') {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
-      </div>
-    );
-  }
 
   if (fetchState === 'waiting') {
     return (
@@ -335,11 +327,10 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
     );
   }
 
-  if (!compatibility || !partner1 || !partner2) return null;
-
-  const p1Name = partner1Name ?? partner1.introContext.name ?? 'Partner 1';
-  const p2Name = partner2.introContext.name ?? 'Partner 2';
-  const score = compatibility.overallScore;
+  const isLoading = fetchState === 'loading';
+  const p1Name = partner1Name ?? partner1?.introContext.name ?? currentProfile.introContext.name ?? 'You';
+  const p2Name = partner2?.introContext.name ?? 'Partner';
+  const score = compatibility?.overallScore ?? 0;
   const scoreColor = score >= 80 ? '#34d399' : score >= 60 ? '#F6B17A' : '#7077A1';
   const { prompt } = getTodayPrompt();
 
@@ -360,10 +351,14 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
           <p className="text-sm text-white/85 font-medium leading-tight truncate">
             {p1Name} &amp; {p2Name}
           </p>
-          <span className="text-base font-bold font-display ml-2 flex-shrink-0"
-            style={{ color: scoreColor }}>
-            {score}%
-          </span>
+          {isLoading ? (
+            <span className="text-xs text-pp-text-muted ml-2 flex-shrink-0">Loading...</span>
+          ) : (
+            <span className="text-base font-bold font-display ml-2 flex-shrink-0"
+              style={{ color: scoreColor }}>
+              {score}%
+            </span>
+          )}
         </div>
       </NavBanner>
 
