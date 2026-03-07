@@ -47,6 +47,7 @@ export default function DashboardPage() {
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkSuccess, setLinkSuccess] = useState(false);
   const [resettingPartnership, setResettingPartnership] = useState(false);
+  const [partnershipResetSuccess, setPartnershipResetSuccess] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -140,7 +141,21 @@ export default function DashboardPage() {
     setResettingPartnership(false);
     if (newCoupleId) {
       setCoupleId(newCoupleId);
-      window.location.reload();
+      // Reset local partner-related state instead of full page reload
+      setPartnerArchetype(null);
+      setPairingCode(null);
+      setDatesLoaded(false);
+      setSavedDates([]);
+      setEnrollmentsLoaded(false);
+      setJourneyEnrollments([]);
+      setLinkCode('');
+      setLinkSuccess(false);
+      setLinkError('');
+      // Close drawer and show success message
+      setProfileOpen(false);
+      setPartnershipResetSuccess(true);
+      // Fetch new pairing code
+      fetchPairingCode(newCoupleId).then(code => setPairingCode(code));
     }
   };
 
@@ -314,13 +329,34 @@ export default function DashboardPage() {
   // ── Tab routing ──────────────────────────────────────────────────────────────
 
   const renderHome = () => {
+    const resetBanner = partnershipResetSuccess ? (
+      <div className="mx-5 mt-4 mb-0 rounded-2xl border border-emerald-500/25 bg-emerald-500/8 p-4 flex items-start gap-3">
+        <span className="text-xl mt-0.5">✅</span>
+        <div className="flex-1">
+          <p className="text-sm text-emerald-400 font-semibold">Partnership Reset</p>
+          <p className="text-xs text-pp-text-muted mt-1 leading-relaxed">
+            You&apos;ve been disconnected from your previous partner. Share your new pairing code below to connect with someone new.
+          </p>
+        </div>
+        <button
+          onClick={() => setPartnershipResetSuccess(false)}
+          className="text-pp-text-muted hover:text-white transition-colors text-sm mt-0.5"
+        >
+          ✕
+        </button>
+      </div>
+    ) : null;
+
     if (coupleId) {
       return (
-        <CoupleHomeTab
-          coupleId={coupleId}
-          currentProfile={profile}
-          archetypeName={primary.name}
-        />
+        <>
+          {resetBanner}
+          <CoupleHomeTab
+            coupleId={coupleId}
+            currentProfile={profile}
+            archetypeName={primary.name}
+          />
+        </>
       );
     }
     const handleLinkPartner = async () => {
@@ -340,6 +376,7 @@ export default function DashboardPage() {
 
     return (
       <div className="px-5 py-6 space-y-4">
+        {resetBanner && <div className="-mx-5 -mt-6">{resetBanner}</div>}
         {/* Invite banner */}
         <div className="rounded-2xl border border-white/10 bg-white/3 p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-pp-card border border-pp-secondary/25 flex items-center justify-center flex-shrink-0">
