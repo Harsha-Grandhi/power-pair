@@ -50,10 +50,15 @@ export async function createCoupleRecord(
 
     const coupleId = data.id as string;
 
-    await sb
+    // Update profile with couple_id (best-effort — column may not exist yet)
+    const { error: profileError } = await sb
       .from('power_pair_profiles')
-      .update({ couple_id: coupleId, partner_role: 'partner_1' })
+      .update({ couple_id: coupleId })
       .eq('id', partner1ProfileId);
+
+    if (profileError) {
+      console.warn('[PowerPair] createCoupleRecord profile update failed (non-blocking):', profileError.message);
+    }
 
     console.log('[PowerPair] Couple record created:', coupleId);
     return coupleId;
@@ -74,16 +79,24 @@ export async function linkPartner2ToCoupleRecord(
   if (!sb) return;
 
   try {
-    await Promise.all([
-      sb
-        .from('power_pair_couples')
-        .update({ partner_2_id: partner2ProfileId, completed_at: new Date().toISOString() })
-        .eq('id', coupleId),
-      sb
-        .from('power_pair_profiles')
-        .update({ couple_id: coupleId, partner_role: 'partner_2' })
-        .eq('id', partner2ProfileId),
-    ]);
+    const { error: coupleError } = await sb
+      .from('power_pair_couples')
+      .update({ partner_2_id: partner2ProfileId, completed_at: new Date().toISOString() })
+      .eq('id', coupleId);
+
+    if (coupleError) {
+      console.error('[PowerPair] linkPartner2 couple update failed:', coupleError.message);
+    }
+
+    // Best-effort profile update
+    const { error: profileError } = await sb
+      .from('power_pair_profiles')
+      .update({ couple_id: coupleId })
+      .eq('id', partner2ProfileId);
+
+    if (profileError) {
+      console.warn('[PowerPair] linkPartner2 profile update failed (non-blocking):', profileError.message);
+    }
 
     console.log('[PowerPair] Partner 2 linked to couple:', coupleId);
   } catch (e) {
@@ -224,17 +237,26 @@ export async function linkByPairingCode(
 
     const targetCoupleId = couple.id as string;
 
-    // Link joiner as partner_2
-    await Promise.all([
-      sb
-        .from('power_pair_couples')
-        .update({ partner_2_id: joinerProfileId, completed_at: new Date().toISOString() })
-        .eq('id', targetCoupleId),
-      sb
-        .from('power_pair_profiles')
-        .update({ couple_id: targetCoupleId, partner_role: 'partner_2' })
-        .eq('id', joinerProfileId),
-    ]);
+    // Link joiner as partner_2 on the couple record
+    const { error: coupleUpdateError } = await sb
+      .from('power_pair_couples')
+      .update({ partner_2_id: joinerProfileId, completed_at: new Date().toISOString() })
+      .eq('id', targetCoupleId);
+
+    if (coupleUpdateError) {
+      console.error('[PowerPair] linkByPairingCode couple update failed:', coupleUpdateError.message);
+      return null;
+    }
+
+    // Update joiner's profile (best-effort — columns may not exist yet)
+    const { error: profileUpdateError } = await sb
+      .from('power_pair_profiles')
+      .update({ couple_id: targetCoupleId })
+      .eq('id', joinerProfileId);
+
+    if (profileUpdateError) {
+      console.warn('[PowerPair] linkByPairingCode profile update failed (non-blocking):', profileUpdateError.message);
+    }
 
     // Clean up joiner's orphan couple record (if different)
     if (joinerCoupleId && joinerCoupleId !== targetCoupleId) {
