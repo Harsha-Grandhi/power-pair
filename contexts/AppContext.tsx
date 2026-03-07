@@ -125,11 +125,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       } else if (savedState?.coupleId) {
         dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
       }
-      // Profile ready — stop blocking the UI
+      // Profile ready — stop blocking the UI immediately
       setAuthLoading(false);
     } else if (savedState) {
       dispatch({ type: 'RESTORE', payload: savedState });
     }
+
+    // Safety net: never block UI for more than 3 seconds no matter what
+    const safetyTimeout = setTimeout(() => {
+      if (!cancelled) setAuthLoading(false);
+    }, 3000);
 
     // 2. Then check Supabase session in the background
     async function syncWithSupabase() {
@@ -164,7 +169,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     syncWithSupabase();
-    return () => { cancelled = true; };
+    return () => { cancelled = true; clearTimeout(safetyTimeout); };
   }, []);
 
   // Listen for auth changes (e.g. after OAuth callback)
