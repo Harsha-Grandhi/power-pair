@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [waitingForProfile, setWaitingForProfile] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -24,27 +25,55 @@ export default function LoginPage() {
     }
   }, [mounted, authLoading, authUser, state.profile, router]);
 
+  // After sign-in, wait for profile to load then redirect
+  useEffect(() => {
+    if (!waitingForProfile) return;
+
+    if (state.profile) {
+      router.replace('/dashboard');
+    } else if (authUser && !authLoading) {
+      // Auth resolved but no profile — user hasn't taken the quiz yet
+      // Give AppContext a moment to fetch, then redirect accordingly
+      const timeout = setTimeout(() => {
+        if (state.profile) {
+          router.replace('/dashboard');
+        } else {
+          // No profile found — send to quiz
+          router.replace('/onboarding');
+        }
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [waitingForProfile, state.profile, authUser, authLoading, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     const { error: authError } = await signIn(email, password);
-    setLoading(false);
 
     if (authError) {
+      setLoading(false);
       setError(authError);
       return;
     }
 
-    // After sign-in, AppContext's onAuthStateChange listener will fetch the profile
-    // and set state.profile, which triggers the useEffect redirect above.
-    // But if the profile is already loaded quickly, we can also redirect here.
-    // Give the listener a moment, then redirect.
-    router.replace('/dashboard');
+    // Sign-in succeeded — wait for AppContext to fetch the profile
+    setWaitingForProfile(true);
   };
 
   if (!mounted) return null;
+
+  // Show loading while waiting for profile after sign-in
+  if (waitingForProfile) {
+    return (
+      <main className="min-h-dvh flex flex-col items-center justify-center bg-pp-bg-dark px-6">
+        <div className="w-10 h-10 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
+        <p className="mt-4 text-sm text-pp-text-muted">Loading your profile...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="relative min-h-dvh flex flex-col overflow-hidden bg-pp-bg-dark">

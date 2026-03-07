@@ -21,7 +21,7 @@ type WheelStep = 'list' | 'time' | 'spin';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { state, resetApp } = useApp();
+  const { state, authLoading, resetApp } = useApp();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<AppTab>('home');
   const [profileOpen, setProfileOpen] = useState(false);
@@ -57,8 +57,8 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    if (mounted && !state.profile) router.replace('/');
-  }, [mounted, state.profile, router]);
+    if (mounted && !authLoading && !state.profile) router.replace('/');
+  }, [mounted, authLoading, state.profile, router]);
 
   // ── Wheel handlers — must be before early return (Rules of Hooks) ─────────────
 
