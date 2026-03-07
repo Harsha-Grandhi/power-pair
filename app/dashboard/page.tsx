@@ -21,7 +21,7 @@ type WheelStep = 'list' | 'time' | 'spin';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { state, authLoading, resetApp, setCoupleId } = useApp();
+  const { state, authLoading, resetApp, softReset, setCoupleId } = useApp();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<AppTab>('home');
   const [profileOpen, setProfileOpen] = useState(false);
@@ -123,7 +123,9 @@ export default function DashboardPage() {
   const handleSignOut = async () => {
     const { signOut } = await import('@/lib/auth');
     await signOut();
-    resetApp();
+    // Clear in-memory state so landing page doesn't redirect back.
+    // localStorage is preserved — profile restores on next login.
+    softReset();
     router.replace('/');
   };
 

@@ -98,6 +98,7 @@ interface AppContextValue {
   setCoupleId: (id: string) => void;
   setIsInvited: (value: boolean) => void;
   resetApp: () => void;
+  softReset: () => void;
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
@@ -313,6 +314,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'RESET' });
   }, []);
 
+  // Resets in-memory state only — localStorage preserved for next login
+  const softReset = useCallback(() => {
+    setAuthUser(null);
+    dispatch({ type: 'RESET' });
+  }, []);
+
   const value = useMemo(
     () => ({
       state,
@@ -330,6 +337,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setCoupleId,
       setIsInvited,
       resetApp,
+      softReset,
     }),
     [
       state,
@@ -347,6 +355,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setCoupleId,
       setIsInvited,
       resetApp,
+      softReset,
     ]
   );
 
