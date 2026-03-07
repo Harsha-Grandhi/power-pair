@@ -114,30 +114,34 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     let cancelled = false;
 
     async function init() {
-      // 1. Check for existing Supabase session
-      const session = await getSession();
+      try {
+        // 1. Check for existing Supabase session
+        const session = await getSession();
 
-      if (session?.user && !cancelled) {
-        setAuthUser(session.user);
+        if (session?.user && !cancelled) {
+          setAuthUser(session.user);
 
-        // Try to restore profile from Supabase
-        const { profile: remoteProfile, coupleId } = await fetchProfileByAuthId(session.user.id);
+          // Try to restore profile from Supabase
+          const { profile: remoteProfile, coupleId } = await fetchProfileByAuthId(session.user.id);
 
-        if (remoteProfile && !cancelled) {
-          dispatch({ type: 'SET_PROFILE', payload: remoteProfile });
-          dispatch({
-            type: 'RESTORE',
-            payload: {
-              phase: 'dashboard',
-              profile: remoteProfile,
-              coupleId: coupleId ?? undefined,
-            },
-          });
-          saveProfile(remoteProfile);
-          if (coupleId) saveAppState({ coupleId });
-          setAuthLoading(false);
-          return;
+          if (remoteProfile && !cancelled) {
+            dispatch({ type: 'SET_PROFILE', payload: remoteProfile });
+            dispatch({
+              type: 'RESTORE',
+              payload: {
+                phase: 'dashboard',
+                profile: remoteProfile,
+                coupleId: coupleId ?? undefined,
+              },
+            });
+            saveProfile(remoteProfile);
+            if (coupleId) saveAppState({ coupleId });
+            setAuthLoading(false);
+            return;
+          }
         }
+      } catch (e) {
+        console.warn('[PowerPair] Auth session check failed, falling back to localStorage:', e);
       }
 
       // 2. Fall back to localStorage
@@ -164,31 +168,38 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Listen for auth changes (e.g. after OAuth callback)
   useEffect(() => {
-    const { supabase } = require('@/lib/supabase');
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event: string, session: { user: User } | null) => {
-        if (session?.user) {
-          setAuthUser(session.user);
+    let subscription: { unsubscribe: () => void } | null = null;
 
-          // If user just signed in and has no profile yet, try fetching
-          if (!state.profile) {
-            const { profile, coupleId } = await fetchProfileByAuthId(session.user.id);
-            if (profile) {
-              dispatch({ type: 'SET_PROFILE', payload: profile });
-              dispatch({
-                type: 'RESTORE',
-                payload: { phase: 'dashboard', profile, coupleId: coupleId ?? undefined },
-              });
-              saveProfile(profile);
+    try {
+      const { supabase } = require('@/lib/supabase');
+      const { data } = supabase.auth.onAuthStateChange(
+        async (_event: string, session: { user: User } | null) => {
+          if (session?.user) {
+            setAuthUser(session.user);
+
+            // If user just signed in and has no profile yet, try fetching
+            if (!state.profile) {
+              const { profile, coupleId } = await fetchProfileByAuthId(session.user.id);
+              if (profile) {
+                dispatch({ type: 'SET_PROFILE', payload: profile });
+                dispatch({
+                  type: 'RESTORE',
+                  payload: { phase: 'dashboard', profile, coupleId: coupleId ?? undefined },
+                });
+                saveProfile(profile);
+              }
             }
+          } else {
+            setAuthUser(null);
           }
-        } else {
-          setAuthUser(null);
         }
-      }
-    );
+      );
+      subscription = data.subscription;
+    } catch (e) {
+      console.warn('[PowerPair] Auth listener setup failed:', e);
+    }
 
-    return () => subscription.unsubscribe();
+    return () => subscription?.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
