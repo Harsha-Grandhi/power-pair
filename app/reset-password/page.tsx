@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import { signOut } from '@/lib/auth';
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -15,21 +14,48 @@ export default function ResetPasswordPage() {
   const [success, setSuccess] = useState(false);
   const [ready, setReady] = useState(false);
   const [expired, setExpired] = useState(false);
-  const recoveryDetected = useRef(false);
+  const [debugInfo, setDebugInfo] = useState('');
 
-  // Wait for Supabase to detect the PASSWORD_RECOVERY event from the URL token
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        recoveryDetected.current = true;
+    let resolved = false;
+
+    // 1. Listen for PASSWORD_RECOVERY event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setDebugInfo(prev => prev + `\nEvent: ${event}`);
+      if (event === 'PASSWORD_RECOVERY' && session) {
+        resolved = true;
+        setReady(true);
+      }
+      // Also accept SIGNED_IN with a recovery type in the URL
+      if (event === 'SIGNED_IN' && session && window.location.hash.includes('type=recovery')) {
+        resolved = true;
         setReady(true);
       }
     });
 
-    // If not detected after 6 seconds, link is expired/invalid
+    // 2. Check URL hash for recovery tokens and manually exchange them
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token')) {
+      setDebugInfo(`Hash detected: ${hash.substring(0, 50)}...`);
+      // Supabase should auto-detect this, but give it a moment
+    } else {
+      setDebugInfo('No hash tokens in URL');
+    }
+
+    // 3. Timeout — if nothing fires after 8 seconds, it's expired
     const timeout = setTimeout(() => {
-      if (!recoveryDetected.current) setExpired(true);
-    }, 6000);
+      if (!resolved) {
+        // One last check — maybe the session was set without the event
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          if (session && !resolved) {
+            resolved = true;
+            setReady(true);
+          } else if (!resolved) {
+            setExpired(true);
+          }
+        });
+      }
+    }, 8000);
 
     return () => {
       subscription.unsubscribe();
@@ -51,23 +77,27 @@ export default function ResetPasswordPage() {
     }
 
     setLoading(true);
-    try {
-      const { error: updateError } = await supabase.auth.updateUser({ password });
-      if (updateError) {
-        setError(updateError.message);
-        setLoading(false);
-        return;
-      }
 
-      // Sign out the recovery session so user logs in fresh
-      await signOut();
+    // Verify we have a session before attempting update
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
       setLoading(false);
-      setSuccess(true);
-      setTimeout(() => router.replace('/login'), 2000);
-    } catch (err) {
-      setLoading(false);
-      setError('Something went wrong. Please try requesting a new reset link.');
+      setError('No active session. The reset link may have expired. Please request a new one.');
+      return;
     }
+
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    setLoading(false);
+
+    if (updateError) {
+      setError(updateError.message);
+      return;
+    }
+
+    // Sign out so user can log in with the new password
+    await supabase.auth.signOut();
+    setSuccess(true);
+    setTimeout(() => router.replace('/login'), 2000);
   };
 
   return (
@@ -94,28 +124,30 @@ export default function ResetPasswordPage() {
               <h2 className="font-display text-2xl text-white">Password updated</h2>
               <p className="text-sm text-pp-text-muted">Redirecting you to login...</p>
             </div>
-          ) : !ready ? (
+          ) : !ready && !expired ? (
             <div className="text-center space-y-4">
-              {expired ? (
-                <>
-                  <div className="text-4xl">&#x26A0;&#xFE0F;</div>
-                  <h2 className="font-display text-2xl text-white">Link expired or invalid</h2>
-                  <p className="text-sm text-pp-text-muted leading-relaxed">
-                    This reset link may have expired. Please request a new one.
-                  </p>
-                  <Link
-                    href="/forgot-password"
-                    className="inline-block mt-4 px-6 py-3 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm"
-                  >
-                    Request New Link
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <div className="w-10 h-10 mx-auto rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
-                  <p className="text-sm text-pp-text-muted">Verifying your reset link...</p>
-                </>
+              <div className="w-10 h-10 mx-auto rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
+              <p className="text-sm text-pp-text-muted">Verifying your reset link...</p>
+              {debugInfo && (
+                <p className="text-[10px] text-pp-text-muted/40 mt-4 break-all">{debugInfo}</p>
               )}
+            </div>
+          ) : expired && !ready ? (
+            <div className="text-center space-y-4">
+              <div className="text-4xl">&#x26A0;&#xFE0F;</div>
+              <h2 className="font-display text-2xl text-white">Link expired or invalid</h2>
+              <p className="text-sm text-pp-text-muted leading-relaxed">
+                This reset link may have expired. Please request a new one.
+              </p>
+              {debugInfo && (
+                <p className="text-[10px] text-pp-text-muted/40 mt-4 break-all">{debugInfo}</p>
+              )}
+              <Link
+                href="/forgot-password"
+                className="inline-block mt-4 px-6 py-3 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm"
+              >
+                Request New Link
+              </Link>
             </div>
           ) : (
             <>
