@@ -96,19 +96,38 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const [linkSuccess, setLinkSuccess] = useState(false);
 
   useEffect(() => {
-    fetchCoupleProfiles(coupleId).then(({ partner1: p1, partner2: p2, partner1Name: name }) => {
-      setPartner1(p1);
-      setPartner2(p2);
-      setPartner1Name(name);
-      if (p1 && p2) {
-        const n1 = name ?? p1.introContext.name ?? 'Partner 1';
-        const n2 = p2.introContext.name ?? 'Partner 2';
-        setCompatibility(computeCoupleCompatibility(p1, p2, n1, n2));
-        setFetchState('ready');
-      } else {
+    let done = false;
+
+    // Safety: never show loading spinner for more than 4 seconds
+    const timeout = setTimeout(() => {
+      if (!done) { done = true; setFetchState('waiting'); }
+    }, 4000);
+
+    fetchCoupleProfiles(coupleId)
+      .then(({ partner1: p1, partner2: p2, partner1Name: name }) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
+        setPartner1(p1);
+        setPartner2(p2);
+        setPartner1Name(name);
+        if (p1 && p2) {
+          const n1 = name ?? p1.introContext.name ?? 'Partner 1';
+          const n2 = p2.introContext.name ?? 'Partner 2';
+          setCompatibility(computeCoupleCompatibility(p1, p2, n1, n2));
+          setFetchState('ready');
+        } else {
+          setFetchState('waiting');
+        }
+      })
+      .catch(() => {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
         setFetchState('waiting');
-      }
-    });
+      });
+
+    return () => { clearTimeout(timeout); };
   }, [coupleId]);
 
   // Load banner preview data once couple is ready
