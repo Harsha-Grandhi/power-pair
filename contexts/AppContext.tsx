@@ -7,12 +7,15 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
+  useState,
 } from 'react';
 import { AppState, AppPhase, IntroContext, AssessmentAnswers, UserProfile } from '@/types';
-import { computeAllScores, isAllNeutral } from '@/lib/scoring';
+import { computeAllScores } from '@/lib/scoring';
 import { saveProfile, loadProfile, saveAppState, loadAppState, clearAllStorage } from '@/lib/storage';
-import { saveProfileToSupabase } from '@/lib/db';
+import { saveProfileToSupabase, fetchProfileByAuthId } from '@/lib/db';
 import { createCoupleRecord, linkPartner2ToCoupleRecord } from '@/lib/couples';
+import { getSession, getUser } from '@/lib/auth';
+import type { User } from '@supabase/supabase-js';
 
 // ─── Initial State ─────────────────────────────────────────────────────────────
 
@@ -81,6 +84,8 @@ function appReducer(state: AppState, action: AppAction): AppState {
 
 interface AppContextValue {
   state: AppState;
+  authUser: User | null;
+  authLoading: boolean;
   setPhase: (phase: AppPhase) => void;
   setIntroAnswer: (answer: Partial<IntroContext>) => void;
   setAssessmentAnswer: (answer: Partial<AssessmentAnswers>) => void;
@@ -101,23 +106,90 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // Restore persisted state on mount
+  // Check auth session and restore profile on mount
   useEffect(() => {
-    const savedProfile = loadProfile();
-    const savedState = loadAppState();
+    let cancelled = false;
 
-    if (savedProfile) {
-      dispatch({ type: 'SET_PROFILE', payload: savedProfile });
-      // If assessment was completed, restore to dashboard
-      if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
-        dispatch({ type: 'RESTORE', payload: { ...savedState, profile: savedProfile } });
-      } else if (savedState?.coupleId) {
-        dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
+    async function init() {
+      // 1. Check for existing Supabase session
+      const session = await getSession();
+
+      if (session?.user && !cancelled) {
+        setAuthUser(session.user);
+
+        // Try to restore profile from Supabase
+        const { profile: remoteProfile, coupleId } = await fetchProfileByAuthId(session.user.id);
+
+        if (remoteProfile && !cancelled) {
+          dispatch({ type: 'SET_PROFILE', payload: remoteProfile });
+          dispatch({
+            type: 'RESTORE',
+            payload: {
+              phase: 'dashboard',
+              profile: remoteProfile,
+              coupleId: coupleId ?? undefined,
+            },
+          });
+          saveProfile(remoteProfile);
+          if (coupleId) saveAppState({ coupleId });
+          setAuthLoading(false);
+          return;
+        }
       }
-    } else if (savedState) {
-      dispatch({ type: 'RESTORE', payload: savedState });
+
+      // 2. Fall back to localStorage
+      const savedProfile = loadProfile();
+      const savedState = loadAppState();
+
+      if (savedProfile && !cancelled) {
+        dispatch({ type: 'SET_PROFILE', payload: savedProfile });
+        if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
+          dispatch({ type: 'RESTORE', payload: { ...savedState, profile: savedProfile } });
+        } else if (savedState?.coupleId) {
+          dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
+        }
+      } else if (savedState && !cancelled) {
+        dispatch({ type: 'RESTORE', payload: savedState });
+      }
+
+      if (!cancelled) setAuthLoading(false);
     }
+
+    init();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Listen for auth changes (e.g. after OAuth callback)
+  useEffect(() => {
+    const { supabase } = require('@/lib/supabase');
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (_event: string, session: { user: User } | null) => {
+        if (session?.user) {
+          setAuthUser(session.user);
+
+          // If user just signed in and has no profile yet, try fetching
+          if (!state.profile) {
+            const { profile, coupleId } = await fetchProfileByAuthId(session.user.id);
+            if (profile) {
+              dispatch({ type: 'SET_PROFILE', payload: profile });
+              dispatch({
+                type: 'RESTORE',
+                payload: { phase: 'dashboard', profile, coupleId: coupleId ?? undefined },
+              });
+              saveProfile(profile);
+            }
+          }
+        } else {
+          setAuthUser(null);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Persist state changes (only after user has started onboarding)
@@ -173,8 +245,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       state.assessmentAnswers
     );
 
+    // Use auth user ID if available, otherwise generate random
+    const profileId = authUser?.id
+      ?? (typeof crypto !== 'undefined' ? crypto.randomUUID() : Date.now().toString());
+
     const profile: UserProfile = {
-      id: typeof crypto !== 'undefined' ? crypto.randomUUID() : Date.now().toString(),
+      id: profileId,
       createdAt: new Date().toISOString(),
       completedAt: new Date().toISOString(),
       introContext: state.introContext,
@@ -184,14 +260,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     };
 
     dispatch({ type: 'SET_PROFILE', payload: profile });
-    saveProfile(profile);                       // localStorage (instant, offline-first)
-    await saveProfileToSupabase(profile);       // Supabase (await so couple linking runs after)
+    saveProfile(profile);
+    await saveProfileToSupabase(profile, authUser?.id);
 
     if (state.coupleId) {
-      // Partner 2 flow — link to existing couple
       await linkPartner2ToCoupleRecord(state.coupleId, profile.id);
     } else {
-      // Partner 1 flow — create new couple record
       const newCoupleId = await createCoupleRecord(
         profile.id,
         profile.introContext.name ?? null
@@ -203,7 +277,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     return profile;
-  }, [state.assessmentAnswers, state.introContext, state.coupleId]);
+  }, [state.assessmentAnswers, state.introContext, state.coupleId, authUser]);
 
   const setCoupleId = useCallback((id: string) => {
     dispatch({ type: 'SET_COUPLE_ID', payload: id });
@@ -223,6 +297,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       state,
+      authUser,
+      authLoading,
       setPhase,
       setIntroAnswer,
       setAssessmentAnswer,
@@ -238,6 +314,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       state,
+      authUser,
+      authLoading,
       setPhase,
       setIntroAnswer,
       setAssessmentAnswer,
