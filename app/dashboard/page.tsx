@@ -120,6 +120,13 @@ export default function DashboardPage() {
     router.replace('/');
   };
 
+  const handleSignOut = async () => {
+    const { signOut } = await import('@/lib/auth');
+    await signOut();
+    resetApp();
+    router.replace('/');
+  };
+
   const handleResetPartnership = async () => {
     if (!coupleId || !profile) return;
     setResettingPartnership(true);
@@ -502,6 +509,7 @@ export default function DashboardPage() {
         onClose={() => setProfileOpen(false)}
         profile={profile}
         onReset={handleReset}
+        onSignOut={handleSignOut}
         onResetPartnership={handleResetPartnership}
         isResettingPartnership={resettingPartnership}
         hasCoupleId={!!coupleId}

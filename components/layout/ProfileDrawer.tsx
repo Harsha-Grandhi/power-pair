@@ -16,13 +16,14 @@ interface ProfileDrawerProps {
   onClose: () => void;
   profile: UserProfile;
   onReset: () => void;
+  onSignOut?: () => void;
   onResetPartnership?: () => void;
   isResettingPartnership?: boolean;
   hasCoupleId?: boolean;
   earnedBadges?: EarnedBadge[];
 }
 
-export default function ProfileDrawer({ open, onClose, profile, onReset, onResetPartnership, isResettingPartnership, hasCoupleId, earnedBadges }: ProfileDrawerProps) {
+export default function ProfileDrawer({ open, onClose, profile, onReset, onSignOut, onResetPartnership, isResettingPartnership, hasCoupleId, earnedBadges }: ProfileDrawerProps) {
   const [showPartnerResetConfirm, setShowPartnerResetConfirm] = useState(false);
   const { archetypeResult, dimensionScores, introContext } = profile;
   const { primary } = archetypeResult;
@@ -167,6 +168,16 @@ export default function ProfileDrawer({ open, onClose, profile, onReset, onReset
 
           {/* Account Actions */}
           <div className="pt-4 space-y-3 border-t border-white/8">
+            {onSignOut && (
+              <button
+                onClick={onSignOut}
+                className="w-full py-3 rounded-xl border border-white/10 bg-white/4
+                  text-white/70 text-sm font-medium hover:bg-white/8 hover:text-white transition-colors"
+              >
+                Sign Out
+              </button>
+            )}
+
             {hasCoupleId && onResetPartnership && (
               <>
                 {!showPartnerResetConfirm ? (
