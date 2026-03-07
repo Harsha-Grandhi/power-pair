@@ -1,10 +1,12 @@
 import { supabase } from './supabase';
 import type { Session, User } from '@supabase/supabase-js';
 
-export async function signUp(email: string, password: string): Promise<{ user: User | null; error: string | null }> {
+export async function signUp(email: string, password: string): Promise<{ user: User | null; session: boolean; error: string | null }> {
   const { data, error } = await supabase.auth.signUp({ email, password });
-  if (error) return { user: null, error: error.message };
-  return { user: data.user, error: null };
+  if (error) return { user: null, session: false, error: error.message };
+  // If email confirmation is disabled, Supabase returns an active session.
+  // If enabled, data.session will be null.
+  return { user: data.user, session: !!data.session, error: null };
 }
 
 export async function signIn(email: string, password: string): Promise<{ user: User | null; error: string | null }> {

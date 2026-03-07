@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useApp } from '@/contexts/AppContext';
-import { signUp } from '@/lib/auth';
+import { signUp, signIn } from '@/lib/auth';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -15,6 +15,7 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -39,18 +40,33 @@ export default function SignUpPage() {
     }
 
     setLoading(true);
-    const { error: authError } = await signUp(email, password);
-    setLoading(false);
+    const { session, error: authError } = await signUp(email, password);
 
     if (authError) {
+      setLoading(false);
       setError(authError);
       return;
     }
 
-    // After sign-up, Supabase auto-signs in the user.
-    // Start the quiz flow.
-    setPhase('onboarding');
-    router.push('/onboarding');
+    if (session) {
+      // Email confirmation disabled — user is signed in immediately
+      setLoading(false);
+      setPhase('onboarding');
+      router.push('/onboarding');
+    } else {
+      // Email confirmation required — try signing in directly
+      const { error: signInError } = await signIn(email, password);
+      setLoading(false);
+
+      if (signInError) {
+        // Can't auto-sign-in, show confirmation message
+        setNeedsConfirmation(true);
+        return;
+      }
+
+      setPhase('onboarding');
+      router.push('/onboarding');
+    }
   };
 
   if (!mounted) return null;
@@ -73,6 +89,23 @@ export default function SignUpPage() {
         </header>
 
         <section className="flex-1 flex flex-col justify-center py-12">
+          {needsConfirmation ? (
+            <div className="text-center space-y-4">
+              <div className="text-4xl">&#x2709;&#xFE0F;</div>
+              <h2 className="font-display text-2xl text-white">Check your email</h2>
+              <p className="text-sm text-pp-text-muted leading-relaxed">
+                We sent a confirmation link to <span className="text-white">{email}</span>.
+                Click the link to verify your account, then come back and log in.
+              </p>
+              <Link
+                href="/login"
+                className="inline-block mt-4 px-6 py-3 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm"
+              >
+                Go to Login
+              </Link>
+            </div>
+          ) : (
+          <>
           <div className="space-y-2 mb-8">
             <h1 className="font-display text-3xl text-white">Create your account</h1>
             <p className="text-sm text-pp-text-muted">
@@ -144,6 +177,8 @@ export default function SignUpPage() {
               Log in
             </Link>
           </p>
+          </>
+          )}
         </section>
       </div>
     </main>
