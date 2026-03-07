@@ -114,15 +114,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let cancelled = false;
 
-    async function init() {
+    // 1. Restore from localStorage FIRST (instant — no network wait)
+    const savedProfile = loadProfile();
+    const savedState = loadAppState();
+
+    if (savedProfile) {
+      dispatch({ type: 'SET_PROFILE', payload: savedProfile });
+      if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
+        dispatch({ type: 'RESTORE', payload: { ...savedState, profile: savedProfile } });
+      } else if (savedState?.coupleId) {
+        dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
+      }
+      // Profile ready — stop blocking the UI
+      setAuthLoading(false);
+    } else if (savedState) {
+      dispatch({ type: 'RESTORE', payload: savedState });
+    }
+
+    // 2. Then check Supabase session in the background
+    async function syncWithSupabase() {
       try {
-        // 1. Check for existing Supabase session
         const session = await getSession();
 
         if (session?.user && !cancelled) {
           setAuthUser(session.user);
 
-          // Try to restore profile from Supabase
           const { profile: remoteProfile, coupleId } = await fetchProfileByAuthId(session.user.id);
 
           if (remoteProfile && !cancelled) {
@@ -137,33 +153,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             });
             saveProfile(remoteProfile);
             if (coupleId) saveAppState({ coupleId });
-            setAuthLoading(false);
-            return;
           }
         }
       } catch (e) {
-        console.warn('[PowerPair] Auth session check failed, falling back to localStorage:', e);
+        console.warn('[PowerPair] Auth session check failed:', e);
       }
 
-      // 2. Fall back to localStorage
-      const savedProfile = loadProfile();
-      const savedState = loadAppState();
-
-      if (savedProfile && !cancelled) {
-        dispatch({ type: 'SET_PROFILE', payload: savedProfile });
-        if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
-          dispatch({ type: 'RESTORE', payload: { ...savedState, profile: savedProfile } });
-        } else if (savedState?.coupleId) {
-          dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
-        }
-      } else if (savedState && !cancelled) {
-        dispatch({ type: 'RESTORE', payload: savedState });
-      }
-
-      if (!cancelled) setAuthLoading(false);
+      // If localStorage had no profile, auth is the last chance — stop loading
+      if (!savedProfile && !cancelled) setAuthLoading(false);
     }
 
-    init();
+    syncWithSupabase();
     return () => { cancelled = true; };
   }, []);
 
