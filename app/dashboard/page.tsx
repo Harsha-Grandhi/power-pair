@@ -109,7 +109,15 @@ export default function DashboardPage() {
     }
   }, [mounted, state.coupleId, partnerArchetype]);
 
-  if (!mounted || !state.profile) return null;
+  if (!mounted || authLoading) {
+    return (
+      <div className="min-h-dvh bg-pp-bg-dark flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (!state.profile) return null;
 
   const { profile } = state;
   const { archetypeResult, introContext } = profile;
