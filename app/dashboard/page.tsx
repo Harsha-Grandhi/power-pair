@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useApp } from '@/contexts/AppContext';
 import BottomNav, { AppTab } from '@/components/layout/BottomNav';
 import ProfileDrawer from '@/components/layout/ProfileDrawer';
-import CoupleHomeTab from '@/components/home/CoupleHomeTab';
+import CoupleHomeTab, { clearCoupleCache } from '@/components/home/CoupleHomeTab';
 import LockedReport from '@/components/dashboard/LockedReport';
 import TimeSelector from '@/components/wheel/TimeSelector';
 import SpinWheel from '@/components/wheel/SpinWheel';
@@ -150,6 +150,7 @@ export default function DashboardPage() {
     if (newCoupleId) {
       setCoupleId(newCoupleId);
       // Reset local partner-related state instead of full page reload
+      clearCoupleCache();
       setPartnerArchetype(null);
       setPairingCode(null);
       setDatesLoaded(false);

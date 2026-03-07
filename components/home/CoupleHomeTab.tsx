@@ -12,6 +12,44 @@ import { fetchSpecialDays, daysUntil } from '@/lib/specialDays';
 import { getTodayPrompt, fetchStreak, fetchTodayAnswers } from '@/lib/dailyPrompts';
 import { fetchChallengesForCouple, Challenge } from '@/lib/challenges';
 
+// ── localStorage cache helpers ──────────────────────────────────────────────
+const COUPLE_CACHE_KEY = 'pp_couple_cache';
+
+interface CoupleCache {
+  coupleId: string;
+  partner1: UserProfile | null;
+  partner2: UserProfile | null;
+  partner1Name: string | null;
+  bannerData: {
+    daysCount: number | null;
+    nextSpecial: { title: string; daysAway: number } | null;
+    streak: number;
+    answeredToday: boolean;
+    activeChallenges: { id: string; challenge_text: string; status: string }[];
+  } | null;
+  cachedAt: number;
+}
+
+function loadCoupleCache(coupleId: string): CoupleCache | null {
+  try {
+    const raw = localStorage.getItem(COUPLE_CACHE_KEY);
+    if (!raw) return null;
+    const cache = JSON.parse(raw) as CoupleCache;
+    if (cache.coupleId !== coupleId) return null;
+    return cache;
+  } catch { return null; }
+}
+
+function saveCoupleCache(cache: CoupleCache): void {
+  try {
+    localStorage.setItem(COUPLE_CACHE_KEY, JSON.stringify(cache));
+  } catch { /* ignore */ }
+}
+
+export function clearCoupleCache(): void {
+  try { localStorage.removeItem(COUPLE_CACHE_KEY); } catch { /* ignore */ }
+}
+
 interface CoupleHomeTabProps {
   coupleId: string;
   currentProfile: UserProfile;
@@ -75,18 +113,32 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const router = useRouter();
   const { setCoupleId } = useApp();
 
-  const [fetchState, setFetchState] = useState<FetchState>('loading');
-  const [partner1, setPartner1] = useState<UserProfile | null>(null);
-  const [partner2, setPartner2] = useState<UserProfile | null>(null);
-  const [partner1Name, setPartner1Name] = useState<string | null>(null);
-  const [compatibility, setCompatibility] = useState<CoupleCompatibility | null>(null);
+  // Try to restore from cache immediately (no network)
+  const cached = typeof window !== 'undefined' ? loadCoupleCache(coupleId) : null;
+  const hasCachedCouple = !!(cached?.partner1 && cached?.partner2);
 
-  // Banner preview data
-  const [daysCount, setDaysCount] = useState<number | null>(null);
-  const [nextSpecial, setNextSpecial] = useState<{ title: string; daysAway: number } | null>(null);
-  const [streak, setStreak] = useState(0);
-  const [answeredToday, setAnsweredToday] = useState(false);
-  const [activeChallenges, setActiveChallenges] = useState<Challenge[]>([]);
+  const [fetchState, setFetchState] = useState<FetchState>(hasCachedCouple ? 'ready' : 'loading');
+  const [partner1, setPartner1] = useState<UserProfile | null>(cached?.partner1 ?? null);
+  const [partner2, setPartner2] = useState<UserProfile | null>(cached?.partner2 ?? null);
+  const [partner1Name, setPartner1Name] = useState<string | null>(cached?.partner1Name ?? null);
+  const [compatibility, setCompatibility] = useState<CoupleCompatibility | null>(() => {
+    if (cached?.partner1 && cached?.partner2) {
+      const n1 = cached.partner1Name ?? cached.partner1.introContext.name ?? 'Partner 1';
+      const n2 = cached.partner2.introContext.name ?? 'Partner 2';
+      return computeCoupleCompatibility(cached.partner1, cached.partner2, n1, n2);
+    }
+    return null;
+  });
+
+  // Banner preview data — restore from cache
+  const cb = cached?.bannerData;
+  const [daysCount, setDaysCount] = useState<number | null>(cb?.daysCount ?? null);
+  const [nextSpecial, setNextSpecial] = useState<{ title: string; daysAway: number } | null>(cb?.nextSpecial ?? null);
+  const [streak, setStreak] = useState(cb?.streak ?? 0);
+  const [answeredToday, setAnsweredToday] = useState(cb?.answeredToday ?? false);
+  const [activeChallenges, setActiveChallenges] = useState<Challenge[]>(
+    (cb?.activeChallenges as Challenge[]) ?? []
+  );
 
   // Pairing code state
   const [pairingCode, setPairingCode] = useState<string | null>(null);
@@ -95,19 +147,10 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkSuccess, setLinkSuccess] = useState(false);
 
+  // Fetch couple profiles — from Supabase (background sync if cached)
   useEffect(() => {
-    let done = false;
-
-    // Safety: never show loading spinner for more than 4 seconds
-    const timeout = setTimeout(() => {
-      if (!done) { done = true; setFetchState('waiting'); }
-    }, 4000);
-
     fetchCoupleProfiles(coupleId)
       .then(({ partner1: p1, partner2: p2, partner1Name: name }) => {
-        if (done) return;
-        done = true;
-        clearTimeout(timeout);
         setPartner1(p1);
         setPartner2(p2);
         setPartner1Name(name);
@@ -116,19 +159,20 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
           const n2 = p2.introContext.name ?? 'Partner 2';
           setCompatibility(computeCoupleCompatibility(p1, p2, n1, n2));
           setFetchState('ready');
+          // Update cache
+          saveCoupleCache({
+            coupleId, partner1: p1, partner2: p2, partner1Name: name,
+            bannerData: null, cachedAt: Date.now(),
+          });
         } else {
           setFetchState('waiting');
         }
       })
       .catch(() => {
-        if (done) return;
-        done = true;
-        clearTimeout(timeout);
-        setFetchState('waiting');
+        // Only fall to waiting if we have no cached data
+        if (!hasCachedCouple) setFetchState('waiting');
       });
-
-    return () => { clearTimeout(timeout); };
-  }, [coupleId]);
+  }, [coupleId, hasCachedCouple]);
 
   // Load banner preview data once couple is ready
   useEffect(() => {
@@ -142,16 +186,38 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       fetchTodayAnswers(coupleId, date),
       fetchChallengesForCouple(coupleId),
     ]).then(([startDate, specialDays, s, todayAnswers, challenges]) => {
-      if (startDate) setDaysCount(daysSince(startDate));
+      const newDaysCount = startDate ? daysSince(startDate) : null;
       const upcoming = specialDays
         .filter((d) => daysUntil(d.date) >= 0)
         .sort((a, b) => a.date.localeCompare(b.date));
-      if (upcoming.length > 0) {
-        setNextSpecial({ title: upcoming[0].title, daysAway: daysUntil(upcoming[0].date) });
+      const newNextSpecial = upcoming.length > 0
+        ? { title: upcoming[0].title, daysAway: daysUntil(upcoming[0].date) }
+        : null;
+      const newStreak = s;
+      const newAnsweredToday = todayAnswers.some((a) => a.author_id === currentProfile.id);
+      const newActiveChallenges = challenges.filter((c) => c.status === 'active');
+
+      setDaysCount(newDaysCount);
+      if (newNextSpecial) setNextSpecial(newNextSpecial);
+      setStreak(newStreak);
+      setAnsweredToday(newAnsweredToday);
+      setActiveChallenges(newActiveChallenges);
+
+      // Update cache with banner data
+      const existing = loadCoupleCache(coupleId);
+      if (existing) {
+        saveCoupleCache({
+          ...existing,
+          bannerData: {
+            daysCount: newDaysCount,
+            nextSpecial: newNextSpecial,
+            streak: newStreak,
+            answeredToday: newAnsweredToday,
+            activeChallenges: newActiveChallenges,
+          },
+          cachedAt: Date.now(),
+        });
       }
-      setStreak(s);
-      setAnsweredToday(todayAnswers.some((a) => a.author_id === currentProfile.id));
-      setActiveChallenges(challenges.filter((c) => c.status === 'active'));
     });
   }, [fetchState, coupleId, currentProfile.id]);
 
