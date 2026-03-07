@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserProfile } from '@/types';
 import ArchetypeCard from '@/components/dashboard/ArchetypeCard';
 import DimensionCard from '@/components/dashboard/DimensionCard';
@@ -16,10 +16,14 @@ interface ProfileDrawerProps {
   onClose: () => void;
   profile: UserProfile;
   onReset: () => void;
+  onResetPartnership?: () => void;
+  isResettingPartnership?: boolean;
+  hasCoupleId?: boolean;
   earnedBadges?: EarnedBadge[];
 }
 
-export default function ProfileDrawer({ open, onClose, profile, onReset, earnedBadges }: ProfileDrawerProps) {
+export default function ProfileDrawer({ open, onClose, profile, onReset, onResetPartnership, isResettingPartnership, hasCoupleId, earnedBadges }: ProfileDrawerProps) {
+  const [showPartnerResetConfirm, setShowPartnerResetConfirm] = useState(false);
   const { archetypeResult, dimensionScores, introContext } = profile;
   const { primary } = archetypeResult;
 
@@ -160,6 +164,52 @@ export default function ProfileDrawer({ open, onClose, profile, onReset, earnedB
               </div>
             </div>
           )}
+
+          {/* Account Actions */}
+          <div className="pt-4 space-y-3 border-t border-white/8">
+            {hasCoupleId && onResetPartnership && (
+              <>
+                {!showPartnerResetConfirm ? (
+                  <button
+                    onClick={() => setShowPartnerResetConfirm(true)}
+                    className="w-full py-3 rounded-xl border border-amber-500/30 bg-amber-500/8
+                      text-amber-400 text-sm font-medium hover:bg-amber-500/15 transition-colors"
+                  >
+                    Reset Partnership
+                  </button>
+                ) : (
+                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/8 p-4 space-y-3">
+                    <p className="text-sm text-amber-300 font-medium">Are you sure?</p>
+                    <p className="text-xs text-pp-text-muted leading-relaxed">
+                      This will disconnect you from your current partner. Your quiz results will be kept,
+                      and you&apos;ll get a new pairing code to connect with someone new.
+                    </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setShowPartnerResetConfirm(false)}
+                        className="flex-1 py-2.5 rounded-lg border border-white/10 text-sm text-pp-text-muted
+                          hover:bg-white/5 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowPartnerResetConfirm(false);
+                          onResetPartnership();
+                        }}
+                        disabled={isResettingPartnership}
+                        className="flex-1 py-2.5 rounded-lg bg-amber-500/20 border border-amber-500/30
+                          text-amber-400 text-sm font-medium hover:bg-amber-500/30 transition-colors
+                          disabled:opacity-50"
+                      >
+                        {isResettingPartnership ? 'Resetting...' : 'Yes, Reset'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
         </div>
       </div>

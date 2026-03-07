@@ -105,6 +105,58 @@ export async function linkPartner2ToCoupleRecord(
 }
 
 /**
+ * Resets partnership — leaves current couple and creates a new solo couple record.
+ * Keeps the user's profile/quiz results intact.
+ * Returns the new coupleId or null on failure.
+ */
+export async function resetPartnership(
+  profileId: string,
+  currentCoupleId: string,
+  userName: string | null
+): Promise<string | null> {
+  const sb = await getSupabase();
+  if (!sb) return null;
+
+  try {
+    // 1. Find out if user is partner_1 or partner_2
+    const { data: couple } = await sb
+      .from('power_pair_couples')
+      .select('partner_1_id, partner_2_id')
+      .eq('id', currentCoupleId)
+      .single();
+
+    if (couple) {
+      if (couple.partner_1_id === profileId) {
+        // User is partner_1 — remove partner_2 from the record
+        // (or if there's no partner_2, just delete the old record)
+        if (couple.partner_2_id) {
+          // Both partners exist — nullify partner_2
+          await sb
+            .from('power_pair_couples')
+            .update({ partner_2_id: null, completed_at: null })
+            .eq('id', currentCoupleId);
+        }
+      } else if (couple.partner_2_id === profileId) {
+        // User is partner_2 — remove self from the couple
+        await sb
+          .from('power_pair_couples')
+          .update({ partner_2_id: null, completed_at: null })
+          .eq('id', currentCoupleId);
+      }
+    }
+
+    // 2. Create a new couple record for this user
+    const newCoupleId = await createCoupleRecord(profileId, userName);
+
+    console.log('[PowerPair] Partnership reset. New couple:', newCoupleId);
+    return newCoupleId;
+  } catch (e) {
+    console.error('[PowerPair] resetPartnership failed:', e);
+    return null;
+  }
+}
+
+/**
  * Checks whether Partner 2 has completed their quiz.
  */
 export async function checkCoupleComplete(coupleId: string): Promise<boolean> {

@@ -12,7 +12,7 @@ import SpinWheel from '@/components/wheel/SpinWheel';
 import JourneysTabContainer from '@/components/journeys/JourneysTabContainer';
 import { DateDuration, getDateIdeasForCouple, DateIdea } from '@/lib/dateIdeas';
 import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
-import { fetchCoupleProfiles, fetchPairingCode, linkByPairingCode } from '@/lib/couples';
+import { fetchCoupleProfiles, fetchPairingCode, linkByPairingCode, resetPartnership } from '@/lib/couples';
 import { getAllEnrollments, JourneyEnrollment } from '@/lib/journeyProgress';
 import { Journey } from '@/lib/journeys';
 import ReflectionHistory from '@/components/coach/ReflectionHistory';
@@ -21,7 +21,7 @@ type WheelStep = 'list' | 'time' | 'spin';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { state, authLoading, resetApp } = useApp();
+  const { state, authLoading, resetApp, setCoupleId } = useApp();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<AppTab>('home');
   const [profileOpen, setProfileOpen] = useState(false);
@@ -46,6 +46,7 @@ export default function DashboardPage() {
   const [linkError, setLinkError] = useState('');
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkSuccess, setLinkSuccess] = useState(false);
+  const [resettingPartnership, setResettingPartnership] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -117,6 +118,21 @@ export default function DashboardPage() {
   const handleReset = () => {
     resetApp();
     router.replace('/');
+  };
+
+  const handleResetPartnership = async () => {
+    if (!coupleId || !profile) return;
+    setResettingPartnership(true);
+    const newCoupleId = await resetPartnership(
+      profile.id,
+      coupleId,
+      profile.introContext.name ?? null
+    );
+    setResettingPartnership(false);
+    if (newCoupleId) {
+      setCoupleId(newCoupleId);
+      window.location.reload();
+    }
   };
 
   const handleWheelBack = () => {
@@ -486,6 +502,9 @@ export default function DashboardPage() {
         onClose={() => setProfileOpen(false)}
         profile={profile}
         onReset={handleReset}
+        onResetPartnership={handleResetPartnership}
+        isResettingPartnership={resettingPartnership}
+        hasCoupleId={!!coupleId}
         earnedBadges={journeyEnrollments}
       />
     </>
