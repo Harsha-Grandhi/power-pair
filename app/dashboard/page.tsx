@@ -302,14 +302,14 @@ export default function DashboardPage() {
       if (!linkCode.trim() || linkLoading) return;
       setLinkError('');
       setLinkLoading(true);
-      const newCoupleId = await linkByPairingCode(linkCode.trim(), profile.id, coupleId ?? null);
+      const { coupleId: newCoupleId, error } = await linkByPairingCode(linkCode.trim(), profile.id, coupleId ?? null);
       setLinkLoading(false);
       if (newCoupleId) {
         setLinkSuccess(true);
         // Reload the page to show couple results
         setTimeout(() => window.location.reload(), 1200);
       } else {
-        setLinkError('Code not found or already used. Check and try again.');
+        setLinkError(error ?? 'Something went wrong. Please try again.');
       }
     };
 

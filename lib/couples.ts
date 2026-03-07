@@ -200,15 +200,15 @@ export async function fetchPairingCode(coupleId: string): Promise<string | null>
  * Links two independently-created accounts by pairing code.
  * The joiner becomes partner_2 on the code owner's couple record.
  * The joiner's orphan couple record is cleaned up.
- * Returns the new coupleId or null on failure.
+ * Returns { coupleId, error } — coupleId on success, error message on failure.
  */
 export async function linkByPairingCode(
   code: string,
   joinerProfileId: string,
   joinerCoupleId: string | null
-): Promise<string | null> {
+): Promise<{ coupleId: string | null; error: string | null }> {
   const sb = await getSupabase();
-  if (!sb) return null;
+  if (!sb) return { coupleId: null, error: 'Connection error. Please try again.' };
 
   try {
     // Find the couple with this pairing code
@@ -219,20 +219,17 @@ export async function linkByPairingCode(
       .single();
 
     if (findError || !couple) {
-      console.error('[PowerPair] linkByPairingCode: code not found');
-      return null;
+      return { coupleId: null, error: 'Code not found. Please check and try again.' };
     }
 
     // Don't link to yourself
     if (couple.partner_1_id === joinerProfileId) {
-      console.error('[PowerPair] linkByPairingCode: cannot link to own code');
-      return null;
+      return { coupleId: null, error: 'This is your own code. Ask your partner to share theirs.' };
     }
 
     // Already has a partner
     if (couple.partner_2_id) {
-      console.error('[PowerPair] linkByPairingCode: couple already complete');
-      return null;
+      return { coupleId: null, error: 'This code is already linked to another partner.' };
     }
 
     const targetCoupleId = couple.id as string;
@@ -245,7 +242,7 @@ export async function linkByPairingCode(
 
     if (coupleUpdateError) {
       console.error('[PowerPair] linkByPairingCode couple update failed:', coupleUpdateError.message);
-      return null;
+      return { coupleId: null, error: 'Failed to link accounts. Please try again.' };
     }
 
     // Update joiner's profile (best-effort — columns may not exist yet)
@@ -268,9 +265,9 @@ export async function linkByPairingCode(
     }
 
     console.log('[PowerPair] Linked by pairing code to couple:', targetCoupleId);
-    return targetCoupleId;
+    return { coupleId: targetCoupleId, error: null };
   } catch (e) {
     console.error('[PowerPair] linkByPairingCode failed:', e);
-    return null;
+    return { coupleId: null, error: 'Something went wrong. Please try again.' };
   }
 }

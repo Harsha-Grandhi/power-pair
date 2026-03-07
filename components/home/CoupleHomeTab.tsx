@@ -146,14 +146,14 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
     if (!linkCode.trim() || linkLoading) return;
     setLinkError('');
     setLinkLoading(true);
-    const newCoupleId = await linkByPairingCode(linkCode.trim(), currentProfile.id, coupleId);
+    const { coupleId: newCoupleId, error } = await linkByPairingCode(linkCode.trim(), currentProfile.id, coupleId);
     setLinkLoading(false);
     if (newCoupleId) {
       setCoupleId(newCoupleId);
       setLinkSuccess(true);
       setTimeout(() => window.location.reload(), 1200);
     } else {
-      setLinkError('Code not found or already used. Check and try again.');
+      setLinkError(error ?? 'Something went wrong. Please try again.');
     }
   };
 
