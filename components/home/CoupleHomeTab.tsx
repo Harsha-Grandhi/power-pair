@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserProfile, CoupleCompatibility } from '@/types';
 import { useApp } from '@/contexts/AppContext';
@@ -11,6 +11,7 @@ import { fetchRelationshipStart } from '@/lib/coupleExtra';
 import { fetchSpecialDays, daysUntil } from '@/lib/specialDays';
 import { getTodayPrompt, fetchStreak, fetchTodayAnswers } from '@/lib/dailyPrompts';
 import { fetchChallengesForCouple, Challenge } from '@/lib/challenges';
+import { useCoupleRealtime } from '@/lib/realtime';
 
 // ── localStorage cache helpers ──────────────────────────────────────────────
 const COUPLE_CACHE_KEY = 'pp_couple_cache';
@@ -147,8 +148,8 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkSuccess, setLinkSuccess] = useState(false);
 
-  // Fetch couple profiles — from Supabase (background sync if cached)
-  useEffect(() => {
+  // Reusable: refresh couple profiles from Supabase
+  const refreshProfiles = useCallback(() => {
     fetchCoupleProfiles(coupleId)
       .then(({ partner1: p1, partner2: p2, partner1Name: name }) => {
         setPartner1(p1);
@@ -159,26 +160,22 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
           const n2 = p2.introContext.name ?? 'Partner 2';
           setCompatibility(computeCoupleCompatibility(p1, p2, n1, n2));
           setFetchState('ready');
-          // Update cache
           saveCoupleCache({
             coupleId, partner1: p1, partner2: p2, partner1Name: name,
             bannerData: null, cachedAt: Date.now(),
           });
         } else {
-          setFetchState('waiting');
+          if (!hasCachedCouple) setFetchState('waiting');
         }
       })
       .catch(() => {
-        // Only fall to waiting if we have no cached data
         if (!hasCachedCouple) setFetchState('waiting');
       });
   }, [coupleId, hasCachedCouple]);
 
-  // Load banner preview data once couple is ready (or loading with cache)
-  useEffect(() => {
-    if (fetchState !== 'ready' && fetchState !== 'loading') return;
+  // Reusable: refresh banner data from Supabase
+  const refreshBannerData = useCallback(() => {
     const { date } = getTodayPrompt();
-
     Promise.all([
       fetchRelationshipStart(coupleId),
       fetchSpecialDays(coupleId),
@@ -198,7 +195,7 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
       const newActiveChallenges = challenges.filter((c) => c.status === 'active');
 
       setDaysCount(newDaysCount);
-      if (newNextSpecial) setNextSpecial(newNextSpecial);
+      setNextSpecial(newNextSpecial);
       setStreak(newStreak);
       setAnsweredToday(newAnsweredToday);
       setActiveChallenges(newActiveChallenges);
@@ -219,7 +216,22 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
         });
       }
     });
-  }, [fetchState, coupleId, currentProfile.id]);
+  }, [coupleId, currentProfile.id]);
+
+  // Fetch couple profiles on mount (background sync if cached)
+  useEffect(() => { refreshProfiles(); }, [refreshProfiles]);
+
+  // Load banner data on mount (or when couple becomes ready)
+  useEffect(() => {
+    if (fetchState !== 'ready' && fetchState !== 'loading') return;
+    refreshBannerData();
+  }, [fetchState, refreshBannerData]);
+
+  // Realtime: auto-refresh when partner makes changes
+  useCoupleRealtime(coupleId, useCallback(() => {
+    refreshProfiles();
+    refreshBannerData();
+  }, [refreshProfiles, refreshBannerData]));
 
   useEffect(() => {
     if (fetchState === 'waiting') {
