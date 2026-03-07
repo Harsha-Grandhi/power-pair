@@ -11,15 +11,11 @@ import FadeTransition from '@/components/ui/FadeTransition';
 // Step layout:
 // 0         → Name input
 // 1 – 7     → INTRO_QUESTIONS[0..6]  (auto-advance on tap)
-// 8         → Phone number
-// 9         → Email  →  assessment
+// 8         → Phone number  →  assessment
 
 const NAME_STEP  = 0;
 const PHONE_STEP = 1 + TOTAL_INTRO_STEPS;      // 8
-const EMAIL_STEP = 1 + TOTAL_INTRO_STEPS + 1;  // 9
-const TOTAL_ONBOARDING_STEPS = 1 + TOTAL_INTRO_STEPS + 2; // 10
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const TOTAL_ONBOARDING_STEPS = 1 + TOTAL_INTRO_STEPS + 1; // 9
 
 function isValidPhone(v: string): boolean {
   return v.replace(/\D/g, '').length >= 10;
@@ -36,8 +32,6 @@ export default function OnboardingPage() {
   // Text input local state
   const [nameValue,  setNameValue]  = useState('');
   const [phoneValue, setPhoneValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
-  const [emailError, setEmailError] = useState('');
 
   const step = state.currentIntroStep;
 
@@ -56,9 +50,6 @@ export default function OnboardingPage() {
       }
     } else if (step === PHONE_STEP) {
       setPhoneValue(state.introContext.phoneNumber ?? '');
-    } else if (step === EMAIL_STEP) {
-      setEmailValue(state.introContext.email ?? '');
-      setEmailError('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
@@ -100,26 +91,11 @@ export default function OnboardingPage() {
   const handlePhoneContinue = () => {
     if (!isValidPhone(phoneValue)) return;
     setIntroAnswer({ phoneNumber: phoneValue.trim() });
-    setIntroStep(EMAIL_STEP);
-  };
-  const handlePhoneKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handlePhoneContinue();
-  };
-
-  /* ── Email step ── */
-  const handleEmailContinue = () => {
-    const trimmed = emailValue.trim();
-    if (!EMAIL_RE.test(trimmed)) {
-      setEmailError('Please enter a valid email address.');
-      return;
-    }
-    setEmailError('');
-    setIntroAnswer({ email: trimmed });
     setPhase('assessment');
     router.push('/assessment');
   };
-  const handleEmailKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleEmailContinue();
+  const handlePhoneKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handlePhoneContinue();
   };
 
   if (!mounted) return null;
@@ -127,13 +103,11 @@ export default function OnboardingPage() {
   const isNameStep     = step === NAME_STEP;
   const isQuestionStep = step >= 1 && step <= TOTAL_INTRO_STEPS;
   const isPhoneStep    = step === PHONE_STEP;
-  const isEmailStep    = step === EMAIL_STEP;
   const currentQ       = isQuestionStep ? INTRO_QUESTIONS[step - 1] : null;
 
   const stepLabel =
     isNameStep  ? `Step 1 of ${TOTAL_ONBOARDING_STEPS} · Welcome` :
     isPhoneStep ? `Step ${step + 1} of ${TOTAL_ONBOARDING_STEPS} · Contact` :
-    isEmailStep ? `Step ${step + 1} of ${TOTAL_ONBOARDING_STEPS} · Contact` :
                   `Step ${step + 1} of ${TOTAL_ONBOARDING_STEPS} · About you`;
 
   const firstName = state.introContext.name?.split(' ')[0] ?? '';
@@ -167,7 +141,7 @@ export default function OnboardingPage() {
             total={TOTAL_ONBOARDING_STEPS}
             label={
               isQuestionStep ? 'About you' :
-              (isPhoneStep || isEmailStep) ? 'Almost done' : 'Welcome'
+              isPhoneStep ? 'Almost done' : 'Welcome'
             }
             showSteps
           />
@@ -274,64 +248,6 @@ export default function OnboardingPage() {
                 <button
                   onClick={handlePhoneContinue}
                   disabled={!isValidPhone(phoneValue)}
-                  className="w-full py-4 px-6 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold text-base
-                    hover:bg-pp-accent/90 active:scale-[0.98] transition-all duration-200
-                    disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100
-                    focus:outline-none"
-                >
-                  Continue →
-                </button>
-              </div>
-            )}
-
-            {/* ── Step 9: Email ── */}
-            {isEmailStep && (
-              <div className="flex flex-col gap-6 animate-slide-up">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-medium tracking-widest text-pp-accent uppercase">
-                    {stepLabel}
-                  </span>
-                  <div className="h-px flex-1 bg-pp-secondary/20" />
-                </div>
-
-                <div className="space-y-2">
-                  <h2 className="font-display text-2xl md:text-3xl text-white leading-tight">
-                    {firstName ? `And your email, ${firstName}?` : 'What\'s your email?'}
-                  </h2>
-                  <p className="text-sm text-pp-text-muted leading-relaxed">
-                    Your profile and results will be saved here.
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <input
-                    type="email"
-                    inputMode="email"
-                    value={emailValue}
-                    onChange={(e) => {
-                      setEmailValue(e.target.value);
-                      if (emailError) setEmailError('');
-                    }}
-                    onKeyDown={handleEmailKey}
-                    placeholder="you@example.com"
-                    autoFocus
-                    className={[
-                      'w-full px-5 py-4 rounded-2xl bg-white/5 border text-white',
-                      'placeholder:text-pp-text-muted/45 text-base',
-                      'focus:outline-none focus:bg-white/7 transition-all duration-200',
-                      emailError
-                        ? 'border-red-400/60 focus:border-red-400/80'
-                        : 'border-white/12 focus:border-pp-accent/60',
-                    ].join(' ')}
-                  />
-                  {emailError && (
-                    <p className="text-xs text-red-400 px-1 animate-fade-in">{emailError}</p>
-                  )}
-                </div>
-
-                <button
-                  onClick={handleEmailContinue}
-                  disabled={emailValue.trim().length === 0}
                   className="w-full py-4 px-6 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold text-base
                     hover:bg-pp-accent/90 active:scale-[0.98] transition-all duration-200
                     disabled:opacity-35 disabled:cursor-not-allowed disabled:active:scale-100
