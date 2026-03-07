@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 import { updatePassword } from '@/lib/auth';
 
 export default function ResetPasswordPage() {
@@ -11,6 +13,32 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [expired, setExpired] = useState(false);
+
+  // Wait for Supabase to exchange the URL token for a session
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setReady(true);
+      }
+    });
+
+    // Also check if there's already a session (token may have been exchanged before listener attached)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) setReady(true);
+    });
+
+    // If still not ready after 5 seconds, the link is likely expired/invalid
+    const timeout = setTimeout(() => {
+      setExpired(true);
+    }, 5000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,6 +89,29 @@ export default function ResetPasswordPage() {
               <div className="text-4xl">&#x2705;</div>
               <h2 className="font-display text-2xl text-white">Password updated</h2>
               <p className="text-sm text-pp-text-muted">Redirecting you to login...</p>
+            </div>
+          ) : !ready ? (
+            <div className="text-center space-y-4">
+              {expired ? (
+                <>
+                  <div className="text-4xl">&#x26A0;&#xFE0F;</div>
+                  <h2 className="font-display text-2xl text-white">Link expired or invalid</h2>
+                  <p className="text-sm text-pp-text-muted leading-relaxed">
+                    This reset link may have expired. Please request a new one.
+                  </p>
+                  <Link
+                    href="/forgot-password"
+                    className="inline-block mt-4 px-6 py-3 rounded-xl bg-pp-accent text-pp-bg-dark font-semibold text-sm"
+                  >
+                    Request New Link
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <div className="w-10 h-10 mx-auto rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
+                  <p className="text-sm text-pp-text-muted">Verifying your reset link...</p>
+                </>
+              )}
             </div>
           ) : (
             <>
