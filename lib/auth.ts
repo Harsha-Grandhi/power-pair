@@ -15,6 +15,18 @@ export async function signIn(email: string, password: string): Promise<{ user: U
   return { user: data.user, error: null };
 }
 
+export async function resetPassword(email: string, redirectTo: string): Promise<{ error: string | null }> {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
+export async function updatePassword(newPassword: string): Promise<{ error: string | null }> {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) return { error: error.message };
+  return { error: null };
+}
+
 export async function signOut(): Promise<void> {
   await supabase.auth.signOut();
 }
