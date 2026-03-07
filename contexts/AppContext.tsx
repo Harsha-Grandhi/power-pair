@@ -174,22 +174,27 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const { supabase } = require('@/lib/supabase');
       const { data } = supabase.auth.onAuthStateChange(
         async (event: string, session: { user: User } | null) => {
-          // Skip processing for password recovery — let the reset page handle it
+          // Skip all processing on reset-password page to avoid lock contention
           if (event === 'PASSWORD_RECOVERY') return;
+          if (typeof window !== 'undefined' && window.location.pathname === '/reset-password') return;
 
           if (session?.user) {
             setAuthUser(session.user);
 
             // If user just signed in and has no profile yet, try fetching
             if (!state.profile) {
-              const { profile, coupleId } = await fetchProfileByAuthId(session.user.id);
-              if (profile) {
-                dispatch({ type: 'SET_PROFILE', payload: profile });
-                dispatch({
-                  type: 'RESTORE',
-                  payload: { phase: 'dashboard', profile, coupleId: coupleId ?? undefined },
-                });
-                saveProfile(profile);
+              try {
+                const { profile, coupleId } = await fetchProfileByAuthId(session.user.id);
+                if (profile) {
+                  dispatch({ type: 'SET_PROFILE', payload: profile });
+                  dispatch({
+                    type: 'RESTORE',
+                    payload: { phase: 'dashboard', profile, coupleId: coupleId ?? undefined },
+                  });
+                  saveProfile(profile);
+                }
+              } catch (e) {
+                console.warn('[PowerPair] Profile fetch failed:', e);
               }
             }
           } else {
