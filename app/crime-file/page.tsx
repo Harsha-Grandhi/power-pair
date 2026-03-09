@@ -156,7 +156,7 @@ export default function CrimeFileHomePage() {
               onClick={() => setActiveTab('me')}
               className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 activeTab === 'me'
-                  ? 'bg-cyan-400 text-pp-bg-dark'
+                  ? 'bg-pp-accent text-pp-bg-dark'
                   : 'bg-white/5 border border-white/10 text-pp-text-muted hover:text-white'
               }`}
             >
@@ -166,7 +166,7 @@ export default function CrimeFileHomePage() {
               onClick={() => setActiveTab('partner')}
               className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 activeTab === 'partner'
-                  ? 'bg-teal-400 text-pp-bg-dark'
+                  ? 'bg-pp-accent text-pp-bg-dark'
                   : 'bg-white/5 border border-white/10 text-pp-text-muted hover:text-white'
               }`}
             >
@@ -179,8 +179,8 @@ export default function CrimeFileHomePage() {
             <div
               className={`h-full rounded-full transition-all duration-300 ${
                 activeTab === 'me'
-                  ? 'bg-gradient-to-r from-cyan-400 to-teal-400'
-                  : 'bg-gradient-to-r from-teal-400 to-cyan-400'
+                  ? 'bg-pp-accent'
+                  : 'bg-pp-accent'
               }`}
               style={{
                 width: `${((activeTab === 'me' ? myCount : partnerCount) / TOTAL_QUESTIONS) * 100}%`,
@@ -193,7 +193,7 @@ export default function CrimeFileHomePage() {
       <div className="max-w-lg mx-auto px-5 py-5 space-y-6 pb-24">
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="w-6 h-6 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
+            <div className="w-6 h-6 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
           </div>
         ) : activeTab === 'me' ? (
           /* ── My Tab: All questions, editable ── */
@@ -210,7 +210,7 @@ export default function CrimeFileHomePage() {
                 </div>
                 <div className="w-full h-1 rounded-full bg-white/8 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-cyan-400/60 transition-all duration-300"
+                    className="h-full rounded-full bg-pp-accent/60 transition-all duration-300"
                     style={{ width: `${(sectionAnswered / section.questions.length) * 100}%` }}
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function CrimeFileHomePage() {
                         onChange={(e) => handleChange(q.id, e.target.value)}
                         placeholder="Tap to answer..."
                         className="w-full bg-transparent text-sm text-white placeholder:text-white/20
-                          focus:outline-none border-b border-transparent focus:border-cyan-400/40 pb-1 transition-colors"
+                          focus:outline-none border-b border-transparent focus:border-pp-accent/40 pb-1 transition-colors"
                       />
                     </div>
                   ))}
@@ -236,7 +236,7 @@ export default function CrimeFileHomePage() {
           /* ── Partner Tab: Only answered questions, read-only ── */
           partnerCount === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-8 text-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-pp-card border border-teal-400/20 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-pp-card border border-pp-accent/20 flex items-center justify-center">
                 <span className="text-3xl">🔍</span>
               </div>
               <div className="space-y-1">
