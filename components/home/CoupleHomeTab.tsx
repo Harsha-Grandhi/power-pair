@@ -12,6 +12,8 @@ import { fetchSpecialDays, daysUntil } from '@/lib/specialDays';
 import { getTodayPrompt, fetchStreak, fetchTodayAnswers } from '@/lib/dailyPrompts';
 import { fetchChallengesForCouple, Challenge } from '@/lib/challenges';
 import { useCoupleRealtime } from '@/lib/realtime';
+import { fetchCrimeFileBoth, CrimeFileAnswers } from '@/lib/crimeFile';
+import { countAnswered, TOTAL_QUESTIONS } from '@/lib/crimeFileQuestions';
 
 // ── localStorage cache helpers ──────────────────────────────────────────────
 const COUPLE_CACHE_KEY = 'pp_couple_cache';
@@ -141,6 +143,10 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
     (cb?.activeChallenges as Challenge[]) ?? []
   );
 
+  // Crime File progress
+  const [crimeFileMyCount, setCrimeFileMyCount] = useState(0);
+  const [crimeFilePartnerCount, setCrimeFilePartnerCount] = useState(0);
+
   // Pairing code state
   const [pairingCode, setPairingCode] = useState<string | null>(null);
   const [linkCode, setLinkCode] = useState('');
@@ -218,6 +224,18 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
     });
   }, [coupleId, currentProfile.id]);
 
+  // Fetch crime file progress
+  const refreshCrimeFile = useCallback(() => {
+    fetchCrimeFileBoth(coupleId).then((all) => {
+      const myAnswers = all[currentProfile.id] ?? {};
+      setCrimeFileMyCount(countAnswered(myAnswers));
+      const partnerIds = Object.keys(all).filter((id) => id !== currentProfile.id);
+      if (partnerIds.length > 0) {
+        setCrimeFilePartnerCount(countAnswered(all[partnerIds[0]]));
+      }
+    });
+  }, [coupleId, currentProfile.id]);
+
   // Fetch couple profiles on mount (background sync if cached)
   useEffect(() => { refreshProfiles(); }, [refreshProfiles]);
 
@@ -225,13 +243,15 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
   useEffect(() => {
     if (fetchState !== 'ready' && fetchState !== 'loading') return;
     refreshBannerData();
-  }, [fetchState, refreshBannerData]);
+    refreshCrimeFile();
+  }, [fetchState, refreshBannerData, refreshCrimeFile]);
 
   // Realtime: auto-refresh when partner makes changes
   useCoupleRealtime(coupleId, useCallback(() => {
     refreshProfiles();
     refreshBannerData();
-  }, [refreshProfiles, refreshBannerData]));
+    refreshCrimeFile();
+  }, [refreshProfiles, refreshBannerData, refreshCrimeFile]));
 
   useEffect(() => {
     if (fetchState === 'waiting') {
@@ -371,6 +391,27 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
               {score}%
             </span>
           )}
+        </div>
+      </NavBanner>
+
+      {/* ── Partner in Crime File ────────────────────────────────────────── */}
+      <NavBanner
+        onClick={() => router.push('/crime-file')}
+        icon="🕵️"
+        label="Partner in Crime File"
+        labelColor="text-cyan-300"
+        borderColor="border-cyan-400/25"
+        gradientFrom="from-cyan-400/8"
+        gradientTo="to-teal-400/6"
+      >
+        <div className="mt-0.5 space-y-1">
+          <p className="text-xs text-white/60 leading-snug">All the evidence you need to love them right</p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-cyan-300">
+              {crimeFileMyCount}/{TOTAL_QUESTIONS} answered
+            </span>
+            <span className="text-[10px] text-pp-accent font-medium ml-auto">Open File →</span>
+          </div>
         </div>
       </NavBanner>
 
