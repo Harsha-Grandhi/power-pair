@@ -35,31 +35,31 @@ export default function CrimeFileHomePage() {
       fetchCoupleProfiles(coupleId),
       fetchCrimeFileBoth(coupleId),
     ]).then(([{ partner1, partner2, partner1Name }, allAnswers]) => {
-      const isP2 = state.isInvited;
-      const me = isP2 ? partner2 : partner1;
-      const them = isP2 ? partner1 : partner2;
-      const meName = isP2
-        ? (me?.introContext.name ?? 'You')
-        : (partner1Name ?? me?.introContext.name ?? 'You');
-      const themName = isP2
-        ? (partner1Name ?? them?.introContext.name ?? 'Partner')
-        : (them?.introContext.name ?? 'Partner');
+      // Determine me vs partner by matching profile IDs — not isInvited flag
+      const iAmP1 = partner1?.id === myId;
+      const me = iAmP1 ? partner1 : partner2;
+      const them = iAmP1 ? partner2 : partner1;
+      const meName = iAmP1
+        ? (partner1Name ?? me?.introContext.name ?? 'You')
+        : (me?.introContext.name ?? 'You');
+      const themName = iAmP1
+        ? (them?.introContext.name ?? 'Partner')
+        : (partner1Name ?? them?.introContext.name ?? 'Partner');
 
       setMyName(meName);
       setPartnerName(themName);
       if (them) setPartnerId(them.id);
 
-      const myAnswers = allAnswers[myId] ?? {};
-      setMyCount(countAnswered(myAnswers));
-
-      const pIds = Object.keys(allAnswers).filter((id) => id !== myId);
-      if (pIds.length > 0) {
-        setPartnerCount(countAnswered(allAnswers[pIds[0]]));
+      // Match answer counts by profile ID
+      setMyCount(countAnswered(allAnswers[myId] ?? {}));
+      const themId = them?.id;
+      if (themId && allAnswers[themId]) {
+        setPartnerCount(countAnswered(allAnswers[themId]));
       }
 
       setLoading(false);
     }).catch(() => setLoading(false));
-  }, [mounted, state.coupleId, state.profile, state.isInvited]);
+  }, [mounted, state.coupleId, state.profile]);
 
   if (!mounted) return null;
 

@@ -45,30 +45,31 @@ function CrimeFileViewContent() {
       fetchCoupleProfiles(coupleId),
       fetchCrimeFileBoth(coupleId),
     ]).then(([{ partner1, partner2, partner1Name }, allAnswers]) => {
-      const isP2 = state.isInvited;
+      // Determine me vs partner by matching profile IDs — not isInvited flag
+      const iAmP1 = partner1?.id === myId;
+      const me = iAmP1 ? partner1 : partner2;
+      const them = iAmP1 ? partner2 : partner1;
 
       if (target === 'me') {
-        const me = isP2 ? partner2 : partner1;
-        const meName = isP2
-          ? (me?.introContext.name ?? 'You')
-          : (partner1Name ?? me?.introContext.name ?? 'You');
+        const meName = iAmP1
+          ? (partner1Name ?? me?.introContext.name ?? 'You')
+          : (me?.introContext.name ?? 'You');
         setDisplayName(meName);
         setAnswers(allAnswers[myId] ?? {});
       } else {
-        const them = isP2 ? partner1 : partner2;
-        const themName = isP2
-          ? (partner1Name ?? them?.introContext.name ?? 'Partner')
-          : (them?.introContext.name ?? 'Partner');
+        const themName = iAmP1
+          ? (them?.introContext.name ?? 'Partner')
+          : (partner1Name ?? them?.introContext.name ?? 'Partner');
         setDisplayName(themName);
-        const pIds = Object.keys(allAnswers).filter((id) => id !== myId);
-        if (pIds.length > 0) {
-          setAnswers(allAnswers[pIds[0]]);
+        const themId = them?.id;
+        if (themId && allAnswers[themId]) {
+          setAnswers(allAnswers[themId]);
         }
       }
 
       setLoading(false);
     }).catch(() => setLoading(false));
-  }, [mounted, state.coupleId, state.profile, state.isInvited, target]);
+  }, [mounted, state.coupleId, state.profile, target]);
 
   if (!mounted) return null;
 
