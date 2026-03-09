@@ -106,37 +106,39 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(appReducer, initialState);
-  const [authUser, setAuthUser] = useState<User | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  // Synchronously hydrate from localStorage so profile + coupleId are
+  // available on the very first render — no useEffect delay.
+  const [state, dispatch] = useReducer(appReducer, initialState, () => {
+    const savedProfile = loadProfile();
+    const savedState = loadAppState();
+    if (savedProfile) {
+      if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
+        return { ...initialState, ...savedState, profile: savedProfile };
+      }
+      return {
+        ...initialState,
+        profile: savedProfile,
+        coupleId: savedState?.coupleId ?? null,
+        isInvited: savedState?.isInvited ?? false,
+      };
+    }
+    if (savedState) return { ...initialState, ...savedState };
+    return initialState;
+  });
 
-  // Check auth session and restore profile on mount
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  // If localStorage already has a profile, auth is non-blocking
+  const [authLoading, setAuthLoading] = useState(!state.profile);
+
+  // Sync with Supabase in the background (non-blocking if we have local data)
   useEffect(() => {
     let cancelled = false;
 
-    // 1. Restore from localStorage FIRST (instant — no network wait)
-    const savedProfile = loadProfile();
-    const savedState = loadAppState();
-
-    if (savedProfile) {
-      dispatch({ type: 'SET_PROFILE', payload: savedProfile });
-      if (savedState?.phase === 'dashboard' || savedState?.phase === 'reveal') {
-        dispatch({ type: 'RESTORE', payload: { ...savedState, profile: savedProfile } });
-      } else if (savedState?.coupleId) {
-        dispatch({ type: 'SET_COUPLE_ID', payload: savedState.coupleId });
-      }
-      // Profile ready — stop blocking the UI immediately
-      setAuthLoading(false);
-    } else if (savedState) {
-      dispatch({ type: 'RESTORE', payload: savedState });
-    }
-
-    // Safety net: never block UI for more than 3 seconds no matter what
+    // Safety net: never block UI for more than 3 seconds
     const safetyTimeout = setTimeout(() => {
       if (!cancelled) setAuthLoading(false);
     }, 3000);
 
-    // 2. Then check Supabase session in the background
     async function syncWithSupabase() {
       try {
         const session = await getSession();
@@ -164,8 +166,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         console.warn('[PowerPair] Auth session check failed:', e);
       }
 
-      // If localStorage had no profile, auth is the last chance — stop loading
-      if (!savedProfile && !cancelled) setAuthLoading(false);
+      if (!cancelled) setAuthLoading(false);
     }
 
     syncWithSupabase();

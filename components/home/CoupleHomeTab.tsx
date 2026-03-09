@@ -399,19 +399,18 @@ export default function CoupleHomeTab({ coupleId, currentProfile, archetypeName 
         onClick={() => router.push('/crime-file')}
         icon="🕵️"
         label="Partner in Crime File"
-        labelColor="text-cyan-300"
-        borderColor="border-cyan-400/25"
-        gradientFrom="from-cyan-400/8"
-        gradientTo="to-teal-400/6"
+        labelColor="text-cyan-700"
+        borderColor="border-cyan-800/25"
+        gradientFrom="from-cyan-800/8"
+        gradientTo="to-teal-800/6"
       >
-        <div className="mt-0.5 space-y-1">
-          <p className="text-xs text-white/60 leading-snug">All the evidence you need to love them right</p>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-cyan-300">
-              {crimeFileMyCount}/{TOTAL_QUESTIONS} answered
-            </span>
-            <span className="text-[10px] text-pp-accent font-medium ml-auto">Open File →</span>
-          </div>
+        <div className="flex items-center justify-between mt-0.5">
+          <p className="text-sm text-white/85 font-medium leading-tight truncate">
+            All the evidence you need to love them right
+          </p>
+          <span className="text-base font-bold font-display ml-2 flex-shrink-0 text-cyan-700">
+            {Math.round((crimeFileMyCount / TOTAL_QUESTIONS) * 100)}%
+          </span>
         </div>
       </NavBanner>
 

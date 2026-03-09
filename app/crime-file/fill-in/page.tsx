@@ -13,7 +13,7 @@ import {
 
 export default function CrimeFileFillInPage() {
   const router = useRouter();
-  const { state, authLoading } = useApp();
+  const { state } = useApp();
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<CrimeFileAnswers>({});
@@ -24,16 +24,18 @@ export default function CrimeFileFillInPage() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (mounted && !authLoading && !state.profile) router.replace('/');
-  }, [mounted, authLoading, state.profile, router]);
+    if (mounted && !state.profile) router.replace('/');
+  }, [mounted, state.profile, router]);
 
   useEffect(() => {
     if (!mounted || !state.coupleId || !state.profile) return;
-    fetchCrimeFileAnswers(state.coupleId, state.profile.id).then((data) => {
-      setAnswers(data);
-      latestAnswers.current = data;
-      setLoading(false);
-    });
+    fetchCrimeFileAnswers(state.coupleId, state.profile.id)
+      .then((data) => {
+        setAnswers(data);
+        latestAnswers.current = data;
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [mounted, state.coupleId, state.profile]);
 
   const doSave = useCallback(async (toSave: CrimeFileAnswers) => {
@@ -73,13 +75,7 @@ export default function CrimeFileFillInPage() {
     };
   }, [state.coupleId, state.profile]);
 
-  if (!mounted || authLoading) {
-    return (
-      <div className="min-h-dvh bg-pp-bg-dark flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
-      </div>
-    );
-  }
+  if (!mounted) return null;
 
   if (!state.profile || !state.coupleId) return null;
 

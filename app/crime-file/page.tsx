@@ -9,7 +9,7 @@ import { countAnswered, TOTAL_QUESTIONS } from '@/lib/crimeFileQuestions';
 
 export default function CrimeFileHomePage() {
   const router = useRouter();
-  const { state, authLoading } = useApp();
+  const { state } = useApp();
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -22,8 +22,8 @@ export default function CrimeFileHomePage() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (mounted && !authLoading && !state.profile) router.replace('/');
-  }, [mounted, authLoading, state.profile, router]);
+    if (mounted && !state.profile) router.replace('/');
+  }, [mounted, state.profile, router]);
 
   useEffect(() => {
     if (!mounted || !state.coupleId || !state.profile) return;
@@ -58,16 +58,10 @@ export default function CrimeFileHomePage() {
       }
 
       setLoading(false);
-    });
+    }).catch(() => setLoading(false));
   }, [mounted, state.coupleId, state.profile, state.isInvited]);
 
-  if (!mounted || authLoading) {
-    return (
-      <div className="min-h-dvh bg-pp-bg-dark flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
-      </div>
-    );
-  }
+  if (!mounted) return null;
 
   if (!state.profile || !state.coupleId) return null;
 
