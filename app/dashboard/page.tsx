@@ -7,17 +7,21 @@ import BottomNav, { AppTab } from '@/components/layout/BottomNav';
 import ProfileDrawer from '@/components/layout/ProfileDrawer';
 import CoupleHomeTab, { clearCoupleCache } from '@/components/home/CoupleHomeTab';
 import LockedReport from '@/components/dashboard/LockedReport';
-import TimeSelector from '@/components/wheel/TimeSelector';
-import SpinWheel from '@/components/wheel/SpinWheel';
+import SpinWheel, { SpinWheelIdea } from '@/components/wheel/SpinWheel';
+import WheelHome from '@/components/wheel/WheelHome';
+import DateIdeaCatalog from '@/components/wheel/DateIdeaCatalog';
+import CreateIdeaForm from '@/components/wheel/CreateIdeaForm';
 import JourneysTabContainer from '@/components/journeys/JourneysTabContainer';
-import { DateDuration, getDateIdeasForCouple, DateIdea } from '@/lib/dateIdeas';
+import { DateDuration } from '@/lib/dateIdeas';
 import { createDate, fetchDatesForCouple, DateRecord } from '@/lib/dates';
+import { fetchWheelIdeas, addWheelIdea, removeWheelIdea, fetchCommunityIdeas, submitCommunityIdea, WheelIdea, CommunityIdea } from '@/lib/wheelIdeas';
+import { DATE_IDEA_CATALOG, CatalogDateIdea } from '@/data/dateIdeaCatalog';
 import { fetchCoupleProfiles, fetchPairingCode, linkByPairingCode, resetPartnership } from '@/lib/couples';
 import { getAllEnrollments, JourneyEnrollment } from '@/lib/journeyProgress';
 import { Journey } from '@/lib/journeys';
 import ReflectionHistory from '@/components/coach/ReflectionHistory';
 
-type WheelStep = 'list' | 'time' | 'spin';
+type WheelStep = 'home' | 'explore' | 'create' | 'spin';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -27,14 +31,20 @@ export default function DashboardPage() {
   const [profileOpen, setProfileOpen] = useState(false);
 
   // Wheel state
-  const [wheelStep, setWheelStep] = useState<WheelStep>('list');
-  const [selectedDuration, setSelectedDuration] = useState<DateDuration | null>(null);
+  const [wheelStep, setWheelStep] = useState<WheelStep>('home');
   const [partnerArchetype, setPartnerArchetype] = useState<string | null>(null);
   const [savedDates, setSavedDates] = useState<DateRecord[]>([]);
   const [datesLoading, setDatesLoading] = useState(false);
   const [datesLoaded, setDatesLoaded] = useState(false);
-  const [wheelDurationFilter, setWheelDurationFilter] = useState<DateDuration | null>(null);
   const [creatingDate, setCreatingDate] = useState(false);
+  const [wheelIdeas, setWheelIdeas] = useState<WheelIdea[]>([]);
+  const [wheelIdeasLoaded, setWheelIdeasLoaded] = useState(false);
+  const [communityIdeas, setCommunityIdeas] = useState<CommunityIdea[]>([]);
+  const [spinIdeas, setSpinIdeas] = useState<SpinWheelIdea[]>([]);
+  const [spinFilterLabel, setSpinFilterLabel] = useState('All ideas');
+  const [addingWheelId, setAddingWheelId] = useState<string | null>(null);
+  const [removingWheelId, setRemovingWheelId] = useState<string | null>(null);
+  const [creatingIdea, setCreatingIdea] = useState(false);
 
   // Journeys state
   const [journeyEnrollments, setJourneyEnrollments] = useState<JourneyEnrollment[]>([]);
@@ -64,13 +74,7 @@ export default function DashboardPage() {
 
   // ── Wheel handlers — must be before early return (Rules of Hooks) ─────────────
 
-  const handleSelectDuration = useCallback((duration: DateDuration) => {
-    if (!state.coupleId || !state.profile) return;
-    setSelectedDuration(duration);
-    setWheelStep('spin');
-  }, [state.coupleId, state.profile]);
-
-  // Load saved dates + partner archetype when wheel tab opens
+  // Load saved dates, wheel ideas, and community ideas when wheel tab opens
   useEffect(() => {
     if (activeTab === 'wheel' && state.coupleId) {
       if (!datesLoaded && !datesLoading) {
@@ -81,16 +85,23 @@ export default function DashboardPage() {
           setDatesLoaded(true);
         });
       }
+      if (!wheelIdeasLoaded) {
+        fetchWheelIdeas(state.coupleId).then((ideas) => {
+          setWheelIdeas(ideas);
+          setWheelIdeasLoaded(true);
+        });
+        fetchCommunityIdeas().then(setCommunityIdeas);
+      }
       // Fetch partner's archetype if not yet loaded
       if (!partnerArchetype) {
         fetchCoupleProfiles(state.coupleId!).then(({ partner1, partner2 }) => {
-          const isP2 = state.isInvited;
-          const partner = isP2 ? partner1 : partner2;
+          const myId = state.profile?.id;
+          const partner = partner1?.id === myId ? partner2 : partner1;
           if (partner) setPartnerArchetype(partner.archetypeResult.primary.code);
         });
       }
     }
-  }, [activeTab, state.coupleId, datesLoaded, datesLoading, partnerArchetype, state.isInvited]);
+  }, [activeTab, state.coupleId, datesLoaded, datesLoading, partnerArchetype, wheelIdeasLoaded, state.profile?.id]);
 
   // Load journey enrollments when journeys tab opens
   useEffect(() => {
@@ -155,6 +166,10 @@ export default function DashboardPage() {
       setPairingCode(null);
       setDatesLoaded(false);
       setSavedDates([]);
+      setWheelIdeas([]);
+      setWheelIdeasLoaded(false);
+      setCommunityIdeas([]);
+      setWheelStep('home');
       setEnrollmentsLoaded(false);
       setJourneyEnrollments([]);
       setLinkCode('');
@@ -169,21 +184,114 @@ export default function DashboardPage() {
   };
 
   const handleWheelBack = () => {
-    setWheelStep('time');
-    setSelectedDuration(null);
+    setWheelStep('home');
   };
 
   const handleConfirmDate = async (idea: string) => {
-    if (!coupleId || !selectedDuration || creatingDate) return;
+    if (!coupleId || creatingDate) return;
     setCreatingDate(true);
-    const newDate = await createDate(coupleId, idea, selectedDuration);
+    const newDate = await createDate(coupleId, idea, '1 hr');
     if (newDate) {
       setSavedDates((prev) => [newDate, ...prev]);
-      setWheelStep('list');
-      setSelectedDuration(null);
+      setWheelStep('home');
       router.push(`/date/${newDate.id}?from=wheel`);
     }
     setCreatingDate(false);
+  };
+
+  // Resolve a WheelIdea to a display title/description
+  const resolveWheelIdea = (idea: WheelIdea): SpinWheelIdea => {
+    if (idea.source_type === 'catalog' && idea.source_id) {
+      const cat = DATE_IDEA_CATALOG.find((c) => c.id === idea.source_id);
+      if (cat) return { title: cat.title, description: cat.description };
+    }
+    if (idea.source_type === 'community' && idea.source_id) {
+      const comm = communityIdeas.find((c) => c.id === idea.source_id);
+      if (comm) return { title: comm.title, description: comm.description };
+    }
+    return { title: idea.custom_title ?? 'Custom Idea', description: idea.custom_description ?? '' };
+  };
+
+  const handleSpin = (ideas: WheelIdea[], filterLabel: string) => {
+    setSpinIdeas(ideas.map(resolveWheelIdea));
+    setSpinFilterLabel(filterLabel);
+    setWheelStep('spin');
+  };
+
+  const handleAddCatalogIdea = async (idea: CatalogDateIdea) => {
+    if (!coupleId || !profile) return;
+    setAddingWheelId(`catalog:${idea.id}`);
+    const added = await addWheelIdea(coupleId, profile.id, {
+      source_type: 'catalog',
+      source_id: idea.id,
+      duration: idea.duration,
+    });
+    if (added) setWheelIdeas((prev) => [added, ...prev]);
+    setAddingWheelId(null);
+  };
+
+  const handleAddCommunityIdea = async (idea: CommunityIdea) => {
+    if (!coupleId || !profile) return;
+    setAddingWheelId(`community:${idea.id}`);
+    const added = await addWheelIdea(coupleId, profile.id, {
+      source_type: 'community',
+      source_id: idea.id,
+      duration: idea.duration,
+    });
+    if (added) setWheelIdeas((prev) => [added, ...prev]);
+    setAddingWheelId(null);
+  };
+
+  const handleRemoveWheelIdea = async (idea: WheelIdea) => {
+    if (!profile) return;
+    setRemovingWheelId(idea.id);
+    const ok = await removeWheelIdea(idea.id, profile.id);
+    if (ok) setWheelIdeas((prev) => prev.filter((i) => i.id !== idea.id));
+    setRemovingWheelId(null);
+  };
+
+  const handleCreateIdea = async (data: {
+    title: string;
+    description: string;
+    duration: DateDuration;
+    shareWithCommunity: boolean;
+  }) => {
+    if (!coupleId || !profile) return;
+    setCreatingIdea(true);
+
+    // If sharing, submit to community first
+    if (data.shareWithCommunity) {
+      const community = await submitCommunityIdea(
+        coupleId,
+        profile.id,
+        profile.introContext.name ?? null,
+        data.title,
+        data.description,
+        data.duration
+      );
+      if (community) {
+        setCommunityIdeas((prev) => [community, ...prev]);
+        // Add community idea to wheel
+        const added = await addWheelIdea(coupleId, profile.id, {
+          source_type: 'community',
+          source_id: community.id,
+          duration: data.duration,
+        });
+        if (added) setWheelIdeas((prev) => [added, ...prev]);
+      }
+    } else {
+      // Custom idea, wheel only
+      const added = await addWheelIdea(coupleId, profile.id, {
+        source_type: 'custom',
+        custom_title: data.title,
+        custom_description: data.description,
+        duration: data.duration,
+      });
+      if (added) setWheelIdeas((prev) => [added, ...prev]);
+    }
+
+    setCreatingIdea(false);
+    setWheelStep('home');
   };
 
   // ── Wheel tab rendering ──────────────────────────────────────────────────────
@@ -196,142 +304,61 @@ export default function DashboardPage() {
           <div className="space-y-2">
             <h3 className="font-display text-xl text-white">Spin the Wheel</h3>
             <p className="text-sm text-pp-text-muted leading-relaxed">
-              Connect with your partner first to unlock personalised date ideas based on your archetypes.
+              Connect with your partner first to explore date ideas and spin the wheel together.
             </p>
           </div>
         </div>
       );
     }
 
-    if (wheelStep === 'time') {
+    if (wheelStep === 'explore') {
       return (
-        <TimeSelector
-          onSelect={handleSelectDuration}
+        <DateIdeaCatalog
+          wheelIdeas={wheelIdeas}
+          communityIdeas={communityIdeas}
+          onAddCatalogIdea={handleAddCatalogIdea}
+          onAddCommunityIdea={handleAddCommunityIdea}
+          onBack={handleWheelBack}
+          onCreate={() => setWheelStep('create')}
+          addingId={addingWheelId}
         />
       );
     }
 
-    if (wheelStep === 'spin' && selectedDuration) {
-      const p2Code = partnerArchetype ?? primary.code;
-      const ideas = getDateIdeasForCouple(primary.code, p2Code, selectedDuration);
-      const fallback: DateIdea[] = [
-        { title: 'Cook Together', description: 'Make a simple meal together and enjoy the process.' },
-        { title: 'Go for a Walk', description: 'Take a stroll and enjoy each other\'s company.' },
-        { title: 'Movie Night', description: 'Pick a movie and watch it together with some snacks.' },
-        { title: 'Game Night', description: 'Play a board game and get a little competitive.' },
-        { title: 'Picnic Date', description: 'Pack some treats and head to the park.' },
-        { title: 'Caf\u00E9 Hop', description: 'Visit a new caf\u00E9 and try something different.' },
-        { title: 'Love Letters', description: 'Write heartfelt letters to each other.' },
-        { title: 'Star Gaze', description: 'Find a cozy spot and look up at the night sky together.' },
-      ];
+    if (wheelStep === 'create') {
+      return (
+        <CreateIdeaForm
+          onSubmit={handleCreateIdea}
+          onBack={() => setWheelStep('explore')}
+          submitting={creatingIdea}
+        />
+      );
+    }
 
+    if (wheelStep === 'spin') {
       return (
         <SpinWheel
-          ideas={ideas.length > 0 ? ideas : fallback}
-          duration={selectedDuration}
+          ideas={spinIdeas}
+          filterLabel={spinFilterLabel}
           onBack={handleWheelBack}
           onConfirm={handleConfirmDate}
         />
       );
     }
 
-    // Default: list of saved dates + new spin button
+    // Default: home
     return (
-      <div className="px-5 py-5 space-y-5">
-        {/* Header */}
-        <div className="space-y-1">
-          <p className="text-xs text-pp-text-muted uppercase tracking-widest">Date Ideas</p>
-          <h2 className="font-display text-2xl text-white">Spin the Wheel</h2>
-          <p className="text-sm text-pp-text-muted">
-            Personalised date ideas based on your couple archetypes.
-          </p>
-        </div>
-
-        {/* New spin button */}
-        <button
-          onClick={() => setWheelStep('time')}
-          className="w-full py-4 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold text-base
-            hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]"
-        >
-          🎡 Spin for a Date Idea
-        </button>
-
-        {/* Saved dates */}
-        {!datesLoaded ? (
-          <div className="flex justify-center py-8">
-            <div className="w-6 h-6 rounded-full border-2 border-pp-accent border-t-transparent animate-spin" />
-          </div>
-        ) : savedDates.length > 0 ? (
-          <div className="space-y-3">
-            <p className="text-xs text-pp-text-muted uppercase tracking-widest">Your Dates</p>
-            {/* Duration filter tabs */}
-            <div className="flex gap-2">
-              {(['30 min', '1 hr', '3 hrs'] as DateDuration[]).map((dur) => (
-                <button
-                  key={dur}
-                  onClick={() => setWheelDurationFilter(wheelDurationFilter === dur ? null : dur)}
-                  className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
-                    wheelDurationFilter === dur
-                      ? 'bg-pp-accent text-pp-bg-dark'
-                      : 'bg-white/5 border border-white/10 text-pp-text-muted hover:text-white'
-                  }`}
-                >
-                  {dur}
-                </button>
-              ))}
-            </div>
-            {(() => {
-              const filteredDates = wheelDurationFilter ? savedDates.filter((d) => d.duration === wheelDurationFilter) : savedDates;
-              return filteredDates.length > 0 ? (
-                <>
-                  {filteredDates.map((d) => {
-                    const colonIdx = d.date_idea.indexOf(': ');
-                    const dateTitle = colonIdx > -1 ? d.date_idea.slice(0, colonIdx) : d.date_idea;
-                    const dateDesc = colonIdx > -1 ? d.date_idea.slice(colonIdx + 2) : '';
-                    return (
-                    <button
-                      key={d.id}
-                      onClick={() => router.push(`/date/${d.id}?from=wheel`)}
-                      className="w-full text-left p-4 rounded-2xl border border-white/8 bg-white/3
-                        hover:border-white/20 transition-all active:scale-[0.98]"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-pp-card border border-pp-secondary/20
-                          flex items-center justify-center flex-shrink-0 text-lg">
-                          {d.status === 'completed' ? '✅' : '💑'}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-white font-semibold leading-snug">{dateTitle}</p>
-                          {dateDesc && (
-                            <p className="text-xs text-white/55 leading-snug mt-0.5 line-clamp-2">{dateDesc}</p>
-                          )}
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-xs text-pp-text-muted">{d.duration}</span>
-                            <span className="text-pp-text-muted/40">·</span>
-                            <span className={`text-xs ${d.status === 'completed' ? 'text-emerald-400' : 'text-pp-secondary'}`}>
-                              {d.status === 'completed' ? 'Completed' : 'Planned'}
-                            </span>
-                          </div>
-                        </div>
-                        <span className="text-pp-text-muted text-sm flex-shrink-0">→</span>
-                      </div>
-                    </button>
-                    );
-                  })}
-                </>
-              ) : (
-                <div className="text-center py-6">
-                  <p className="text-sm text-pp-text-muted">No dates for this duration yet.</p>
-                </div>
-              );
-            })()}
-          </div>
-        ) : (
-          <div className="text-center py-6">
-            <p className="text-sm text-pp-text-muted">No dates planned yet. Spin the wheel!</p>
-          </div>
-        )}
-      </div>
+      <WheelHome
+        wheelIdeas={wheelIdeas}
+        communityIdeas={communityIdeas}
+        savedDates={savedDates}
+        currentUserId={profile.id}
+        onExplore={() => setWheelStep('explore')}
+        onSpin={handleSpin}
+        onRemove={handleRemoveWheelIdea}
+        removingId={removingWheelId}
+        datesLoaded={datesLoaded}
+      />
     );
   };
 

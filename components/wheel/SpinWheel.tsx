@@ -1,7 +1,11 @@
 'use client';
 
 import React, { useState, useRef, useCallback } from 'react';
-import { DateDuration, DURATION_LABELS, DURATION_ICONS, DateIdea } from '@/lib/dateIdeas';
+
+export interface SpinWheelIdea {
+  title: string;
+  description: string;
+}
 
 // Segment colours cycling through design palette
 const SEGMENT_COLORS = [
@@ -16,8 +20,8 @@ const SEGMENT_COLORS = [
 ];
 
 interface SpinWheelProps {
-  ideas: DateIdea[];
-  duration: DateDuration;
+  ideas: SpinWheelIdea[];
+  filterLabel: string;
   onBack: () => void;
   onConfirm: (idea: string) => void;
 }
@@ -36,14 +40,15 @@ function segmentPath(cx: number, cy: number, r: number, startAngle: number, endA
   return `M ${cx} ${cy} L ${s.x} ${s.y} A ${r} ${r} 0 ${large} 1 ${e.x} ${e.y} Z`;
 }
 
-export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWheelProps) {
+export default function SpinWheel({ ideas, filterLabel, onBack, onConfirm }: SpinWheelProps) {
   const [rotation, setRotation] = useState(0);
   const [spinning, setSpinning] = useState(false);
-  const [winner, setWinner] = useState<DateIdea | null>(null);
+  const [winner, setWinner] = useState<SpinWheelIdea | null>(null);
   const totalRotRef = useRef(0);
 
-  // Pick 8 ideas (or fewer if not enough)
-  const segments = ideas.slice(0, SEGMENT_COUNT);
+  // Shuffle and pick up to 8 ideas
+  const shuffled = [...ideas].sort(() => Math.random() - 0.5);
+  const segments = shuffled.slice(0, SEGMENT_COUNT);
   const segAngle = 360 / segments.length;
 
   const spin = useCallback(() => {
@@ -59,8 +64,6 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
     setRotation(newTotal);
 
     setTimeout(() => {
-      // Which segment is at the top (pointer at 0°)?
-      // The pointer is at the top. After rotation, the angle at the top is (-newTotal % 360 + 360) % 360
       const normalised = ((-(newTotal % 360)) + 360) % 360;
       const idx = Math.floor(normalised / segAngle) % segments.length;
       setWinner(segments[idx]);
@@ -70,7 +73,6 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
 
   const handleSpinAgain = () => {
     setWinner(null);
-    // Reshuffle by re-spinning
     spin();
   };
 
@@ -87,11 +89,11 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
           onClick={onBack}
           className="text-xs text-pp-text-muted hover:text-white transition-colors flex items-center gap-1 mb-2"
         >
-          ← Change time
+          ← Back to wheel
         </button>
         <div className="flex items-center justify-center gap-2">
-          <span className="text-base">{DURATION_ICONS[duration]}</span>
-          <span className="text-sm font-medium text-pp-accent">{DURATION_LABELS[duration]} date</span>
+          <span className="text-base">🎡</span>
+          <span className="text-sm font-medium text-pp-accent">{filterLabel}</span>
         </div>
         <h2 className="font-display text-2xl text-white">
           {winner ? 'Your Date Idea!' : spinning ? 'Spinning…' : 'Spin to discover your date'}
@@ -130,16 +132,13 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
               : 'none',
           }}
         >
-          {/* Segments */}
           {segments.map((idea, i) => {
             const startAngle = i * segAngle;
             const endAngle = startAngle + segAngle;
             const midAngle = startAngle + segAngle / 2;
             const color = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
             const textPos = polarToCartesian(CX, CY, R * 0.65, midAngle);
-            const rad = ((midAngle - 90) * Math.PI) / 180;
 
-            // Show short title on wheel segment
             const short = idea.title.length > 22 ? idea.title.slice(0, 20) + '\u2026' : idea.title;
 
             return (
@@ -195,10 +194,6 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
             <p className="text-xs text-pp-accent uppercase tracking-widest font-medium">Your Date Idea</p>
             <p className="text-white font-semibold text-lg leading-snug">{winner.title}</p>
             <p className="text-sm text-pp-text-muted leading-relaxed">{winner.description}</p>
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="text-xs">{DURATION_ICONS[duration]}</span>
-              <span className="text-xs text-pp-text-muted">{DURATION_LABELS[duration]}</span>
-            </div>
           </div>
 
           {/* Actions */}
@@ -207,7 +202,7 @@ export default function SpinWheel({ ideas, duration, onBack, onConfirm }: SpinWh
             className="w-full py-4 rounded-2xl bg-pp-accent text-pp-bg-dark font-semibold text-base
               hover:bg-pp-accent/90 transition-all duration-200 active:scale-[0.98]"
           >
-            ✓ Let's do this date!
+            ✓ Let&apos;s do this date!
           </button>
           <button
             onClick={handleSpinAgain}
